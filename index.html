@@ -96,7 +96,7 @@
                 </span>
                 <div>
                     <h4 class="text-sm font-semibold text-amber-900">แอปกำลังทำงานแบบ Local Storage</h4>
-                    <p class="text-xs text-amber-700" id="sync-status-text">ข้อมูลของคุณจะถูกจัดเก็บในเครื่องนี้ คุณสามารถกด "เชื่อมต่อ Google Sheet" ที่แผงควบคุมแอดมิน เพื่อผูกข้อมูลเข้ากับชีตจริงได้</p>
+                    <p class="text-xs text-amber-700 text-left" id="sync-status-text">ข้อมูลของคุณจะถูกจัดเก็บในเครื่องนี้ คุณสามารถกด "เชื่อมต่อ Google Sheet" ที่แผงควบคุมแอดมิน เพื่อผูกข้อมูลเข้ากับชีตจริงได้</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -118,10 +118,10 @@
                 <div id="apply-closed-overlay" class="hidden absolute inset-0 bg-slate-900/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-8 text-center text-white">
                     <span class="p-5 bg-white/15 rounded-full text-4xl mb-4">🚫</span>
                     <h3 class="text-xl font-extrabold">ขณะนี้ปิดระบบรับสมัครเข้าร่วมโครงการชั่วคราว</h3>
-                    <p class="text-xs text-slate-300 max-w-md mt-1.5">ผู้ดูแลระบบได้ทำการเปิดหรือปิดสิทธิ์รับสมัครตามเป้าหมายเวลาของบริษัทเรียบร้อยแล้ว</p>
+                    <p class="text-xs text-slate-300 max-w-md mt-1.5 font-sans">ผู้ดูแลระบบได้ทำการเปิดหรือปิดสิทธิ์รับสมัครตามเป้าหมายเวลาของบริษัทเรียบร้อยแล้ว</p>
                 </div>
 
-                <div class="p-6 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex justify-between items-center">
+                <div class="p-6 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex justify-between items-center text-left">
                     <div>
                         <h3 class="text-xl font-bold">กรอกใบสมัครเข้าร่วมโครงการ FIT & FIRM</h3>
                         <p class="text-xs text-emerald-100">กรอกรหัสพนักงานเพื่อค้นหารายชื่อส่วนสูง ตรวจทานข้อมูล วัดน้ำหนักครั้งแรก และตั้งเป้าหมาย</p>
@@ -131,7 +131,7 @@
                     </svg>
                 </div>
 
-                <form id="form-apply-member" onsubmit="handleApplyProjectSubmit(event)" class="p-6 space-y-6">
+                <form id="form-apply-member" onsubmit="handleApplyProjectSubmit(event)" class="p-6 space-y-6 text-left">
                     <!-- Step 1: Employee ID Lookup -->
                     <div class="space-y-4">
                         <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
@@ -141,10 +141,10 @@
                         <div>
                             <label for="apply-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">ระบุรหัสพนักงานของคุณ</label>
                             <div class="relative">
-                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 012345" oninput="handleApplyLookup(this.value)" required
+                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 004148 หรือ 084843" oninput="handleApplyLookup(this.value)" required
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <span id="apply-lookup-status" class="text-xs font-medium text-slate-400">ระบุรหัสพนักงาน</span>
+                                    <span id="apply-lookup-status" class="text-xs font-medium text-slate-400 font-sans">ระบุรหัสพนักงาน</span>
                                 </div>
                             </div>
                         </div>
@@ -194,7 +194,7 @@
 
                         <div class="bg-teal-50 rounded-2xl p-4 border border-teal-100 flex justify-between items-center text-sm mt-2">
                             <span class="font-bold text-teal-800">ค่า BMI สัปดาห์แรกรับสมัครประเมิน:</span>
-                            <span class="text-xl font-black text-teal-700" id="apply-bmi-preview">0.00</span>
+                            <span class="text-xl font-black text-teal-700" id="apply-bmi-preview font-mono">0.00</span>
                         </div>
                     </div>
 
@@ -222,7 +222,7 @@
         <!-- TAB 2: Weekly Submit (หน้าส่งผลรายสัปดาห์) -->
         <section id="tab-weekly-submit" class="tab-content hidden animate-fade-in max-w-2xl mx-auto">
             <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="p-6 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex justify-between items-center">
+                <div class="p-6 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex justify-between items-center text-left">
                     <div>
                         <h3 class="text-xl font-bold">ส่งสถิติวัดสัดส่วนร่างกายประจำสัปดาห์</h3>
                         <p class="text-xs text-emerald-100">พนักงานที่ผ่านการสมัครในขั้นตอนแรกเสร็จสิ้น สามารถอัปเดตสถิติสัปดาห์นี้ได้ที่นี่</p>
@@ -232,7 +232,7 @@
                     </svg>
                 </div>
 
-                <form id="form-weekly-log" onsubmit="handleWeeklySubmit(event)" class="p-6 space-y-6">
+                <form id="form-weekly-log" onsubmit="handleWeeklySubmit(event)" class="p-6 space-y-6 text-left">
                     <!-- Step 1: Employee Verification -->
                     <div class="space-y-4">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
@@ -240,7 +240,7 @@
                                 <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> 
                                 1. ระบุรหัสผ่านพนักงานผู้ร่วมโครงการ
                             </h4>
-                            <span class="text-xs bg-slate-100 border border-slate-200 text-slate-700 font-bold px-2.5 py-1 rounded-md" id="weekly-locked-indicator">
+                            <span class="text-xs bg-slate-100 border border-slate-200 text-slate-700 font-bold px-2.5 py-1 rounded-md font-mono" id="weekly-locked-indicator">
                                 สัปดาห์ปัจจุบันเปิดกรอก: -
                             </span>
                         </div>
@@ -250,7 +250,7 @@
                                 <input type="text" id="submit-emp-id" placeholder="ตัวอย่าง: 004148" oninput="handleEmpIdLookup(this.value)" required
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <span id="lookup-status" class="text-xs font-medium text-slate-400">ตรวจสอบรหัสพนักงาน</span>
+                                    <span id="lookup-status" class="text-xs font-medium text-slate-400 font-sans">ตรวจสอบรหัสพนักงาน</span>
                                 </div>
                             </div>
                         </div>
@@ -273,7 +273,7 @@
                     </div>
 
                     <!-- Step 2: Date and Lock notice -->
-                    <div id="submit-notice-box" class="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-1">
+                    <div id="submit-notice-box" class="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-1 text-left">
                         <p class="font-bold flex items-center gap-1.5 text-amber-950">
                             <span>📅 ข้อตกลงการกรอกผล (จันทร์-อาทิตย์):</span>
                         </p>
@@ -312,7 +312,7 @@
                                 <label for="submit-hip" class="block text-xs font-semibold text-slate-500 mb-1">รอบสะโพกสัปดาห์นี้ (นิ้ว)</label>
                                 <div class="relative">
                                     <input type="number" id="submit-hip" step="0.1" min="15" max="100" placeholder="00.0" required
-                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-12 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-12 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition font-mono">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                         <span class="text-xs text-slate-400">นิ้ว</span>
                                     </div>
@@ -323,12 +323,12 @@
                         <!-- Live BMI preview -->
                         <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-100 flex justify-between items-center">
                             <div>
-                                <p class="text-xs text-emerald-800 font-medium">ส่วนสูงคงที่เดิมของคุณ: <span id="live-height-preview" class="font-bold">-</span> ซม.</p>
+                                <p class="text-xs text-emerald-800 font-medium">ส่วนสูงคงที่เดิมของคุณ: <span id="live-height-preview" class="font-bold font-mono">-</span> ซม.</p>
                                 <p class="text-[10px] text-emerald-600/80">ระบบคัดลอกส่วนสูงเริ่มต้นมาประมวลผลดัชนี BMI ล่าสุดแบบเรียลไทม์</p>
                             </div>
-                            <div class="text-right">
-                                <span class="block text-xxs text-emerald-600/80 uppercase font-bold">BMI โดยประมาณสัปดาห์นี้</span>
-                                <span class="text-xl font-black text-emerald-700" id="live-bmi-preview">0.00</span>
+                            <div class="text-right font-mono">
+                                <span class="block text-xxs text-emerald-600/80 uppercase font-bold font-sans">BMI โดยประมาณสัปดาห์นี้</span>
+                                <span class="text-xl font-black text-emerald-700 font-mono" id="live-bmi-preview">0.00</span>
                             </div>
                         </div>
                     </div>
@@ -337,8 +337,8 @@
                     <div class="space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-150">
                         <div class="border-b border-slate-200 pb-2 flex justify-between items-center">
                             <h4 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 bg-sky-500 rounded-full"></span> 
-                                3. แบบประเมินพฤทีพฤติกรรมสุขภาพประจำสัปดาห์นี้
+                                <span class="w-2.5 h-2.5 bg-sky-500 rounded-full animate-pulse"></span> 
+                                3. แบบประเมินพฤติกรรมสุขภาพประจำสัปดาห์นี้
                             </h4>
                             <span class="text-xxs font-bold text-sky-600 uppercase tracking-wide">สำรวจสุขภาพ</span>
                         </div>
@@ -429,13 +429,13 @@
                     </div>
 
                     <!-- Actions -->
-                    <div class="pt-2 flex gap-3">
+                    <div class="pt-2 flex gap-3 font-mono">
                         <button type="button" onclick="clearWeeklyForm()"
-                            class="w-1/3 py-3 border border-slate-200 text-slate-600 rounded-xl font-semibold hover:bg-slate-50 transition">
+                            class="w-1/3 py-3 border border-slate-200 text-slate-600 rounded-xl font-semibold hover:bg-slate-50 transition font-sans text-sm">
                             ล้างแบบฟอร์ม
                         </button>
                         <button type="submit" id="btn-submit-weekly" disabled
-                            class="w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2">
+                            class="w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2 text-sm font-sans">
                             กรุณากรอกรหัสพนักงานให้ถูกต้อง
                         </button>
                     </div>
@@ -444,7 +444,7 @@
         </section>
 
         <!-- TAB 3: Home (หน้าแสดงอันดับ %BMI) -->
-        <section id="tab-home" class="tab-content hidden space-y-8 animate-fade-in">
+        <section id="tab-home" class="tab-content hidden space-y-8 animate-fade-in text-left">
             <!-- Hero Dashboard Summary Header -->
             <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl mb-6">
                 <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-emerald-500/10 blur-xl"></div>
@@ -456,7 +456,7 @@
                             โครงการ FIT & FIRM 90 DAYS
                         </span>
                         <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">ร่วมก้าวสู่วิถีชีวิตใหม่ ร่างกายแข็งแรง</h2>
-                        <p class="text-slate-300 text-xs">
+                        <p class="text-slate-300 text-xs font-sans">
                             ร่วมแข่งขันลดเปอร์เซ็นต์ BMI สะสมภายใน 90 วัน เพื่อสร้างผลงานสุขภาพพนักงานที่ดีที่สุดในองค์กร
                         </p>
                     </div>
@@ -465,19 +465,19 @@
                     <div class="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 backdrop-blur-md">
                         <div class="flex justify-between items-center text-xs">
                             <span class="font-medium text-slate-300">วันคืบหน้าโครงการ</span>
-                            <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-md font-medium" id="project-days">วันที่ 1/90</span>
+                            <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-md font-medium font-mono" id="project-days">วันที่ 1/90</span>
                         </div>
                         <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
                             <div id="project-progress-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 1%"></div>
                         </div>
-                        <div class="grid grid-cols-2 gap-3 text-center">
+                        <div class="grid grid-cols-2 gap-3 text-center font-mono">
                             <div class="p-2 bg-white/5 rounded-xl">
                                 <span class="block text-lg font-bold text-white font-mono" id="count-active-members">0</span>
-                                <span class="text-[9px] text-slate-400">สมัครแล้ว (คน)</span>
+                                <span class="text-[9px] text-slate-400 font-sans">สมัครแล้ว (คน)</span>
                             </div>
                             <div class="p-2 bg-white/5 rounded-xl">
                                 <span class="block text-lg font-bold text-emerald-400 font-mono" id="count-weight-loss">0.0</span>
-                                <span class="text-[9px] text-slate-400 font-mono">ลดรวม (กก.)</span>
+                                <span class="text-[9px] text-slate-400 font-sans">ลดรวม (กก.)</span>
                             </div>
                         </div>
                     </div>
@@ -490,21 +490,22 @@
                         <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                             <span class="p-1.5 bg-emerald-500/10 text-emerald-600 rounded-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm0 0h4m-4 0H8m12 9a4 4 0 11-8 0 4 4 0 018 0zm-8 0a4 4 0 11-8 0 4 4 0 018 0z"></svg>
-                                </span>
-                                ตารางอันดับผู้พัฒนา %BMI ลดลงสูงสุด (Leaderboard)
-                            </h3>
-                            <p class="text-xs text-slate-500">เปรียบเทียบจาก BMI แรกเริ่มในใบสมัคร คัดกรองพนักงานที่ลดเปอร์เซ็นต์ BMI ได้ดีที่สุด</p>
-                        </div>
-                    <span class="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-semibold">เรียงลำดับสุทธิเรียลไทม์</span>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm0 0h4m-4 0H8m12 9a4 4 0 11-8 0 4 4 0 018 0zm-8 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                            </span>
+                            ตารางอันดับผู้พัฒนา %BMI ลดลงสูงสุด (Leaderboard)
+                        </h3>
+                        <p class="text-xs text-slate-500 font-sans">เปรียบเทียบจาก BMI แรกเริ่มในใบสมัคร คัดกรองพนักงานที่ลดเปอร์เซ็นต์ BMI ได้ดีที่สุด</p>
+                    </div>
+                    <span class="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-semibold font-sans">เรียงลำดับสุทธิเรียลไทม์</span>
                 </div>
 
                 <div id="leaderboard-container-wrapper" class="relative flex-grow flex flex-col">
                     <!-- Lock Screen Overlay -->
                     <div id="leaderboard-lock-overlay" class="hidden absolute inset-0 bg-slate-150/90 backdrop-blur-md z-10 flex flex-col items-center justify-center p-8 text-center">
                         <span class="p-4 bg-slate-200 text-slate-600 rounded-full text-3xl mb-4">🔒</span>
-                        <h4 class="text-lg font-bold text-slate-800">ผู้ดูแลระบบปิดการแสดงตารางอันดับชั่วคราว</h4>
-                        <p class="text-xs text-slate-500 max-w-md mt-1.5 font-mono">ผู้ดูแลระบบกำลังปรับยอดสถิติหรือปรับปรุงข้อมูลตารางจัดอันดับ</p>
+                        <h4 class="text-lg font-bold text-slate-800 font-sans">ผู้ดูแลระบบปิดการแสดงตารางอันดับชั่วคราว</h4>
+                        <p class="text-xs text-slate-500 max-w-md mt-1.5 font-sans">ผู้ดูแลระบบกำลังปรับยอดสถิติหรือปรับปรุงข้อมูลตารางจัดอันดับ</p>
                     </div>
 
                     <!-- Top 3 Podium -->
@@ -516,21 +517,21 @@
                     <div class="overflow-x-auto custom-scrollbar flex-grow">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="border-b border-slate-150 text-slate-400 text-xs uppercase tracking-wider bg-slate-50">
-                                    <th class="py-3.5 px-6 font-semibold">อันดับ</th>
+                                <tr class="border-b border-slate-150 text-slate-400 text-xs uppercase tracking-wider bg-slate-50 font-mono">
+                                    <th class="py-3.5 px-6 font-semibold font-sans">อันดับ</th>
                                     <th class="py-3.5 px-6 font-semibold">รหัสพนักงาน</th>
-                                    <th class="py-3.5 px-6 font-semibold">ชื่อ-นามสกุล</th>
-                                    <th class="py-3.5 px-6 font-semibold">แผนก</th>
-                                    <th class="py-3.5 px-6 font-semibold text-center">BMI สมัครวันแรก</th>
-                                    <th class="py-3.5 px-6 font-semibold text-center">BMI สัปดาห์ปัจจุบัน</th>
-                                    <th class="py-3.5 px-6 font-semibold text-right text-emerald-700">% BMI ที่พัฒนาได้</th>
+                                    <th class="py-3.5 px-6 font-semibold font-sans">ชื่อ-นามสกุล</th>
+                                    <th class="py-3.5 px-6 font-semibold font-sans">แผนก</th>
+                                    <th class="py-3.5 px-6 font-semibold text-center font-sans">BMI สมัครวันแรก</th>
+                                    <th class="py-3.5 px-6 font-semibold text-center font-sans">BMI สัปดาห์ปัจจุบัน</th>
+                                    <th class="py-3.5 px-6 font-semibold text-right text-emerald-700 font-sans">% BMI ที่พัฒนาได้</th>
                                 </tr>
                             </thead>
                             <tbody id="leaderboard-list-body" class="divide-y divide-slate-100 text-sm text-slate-600">
                                 <!-- Dynamic rows -->
                             </tbody>
                         </table>
-                        <div id="leaderboard-empty-state" class="hidden p-8 text-center text-slate-400">
+                        <div id="leaderboard-empty-state" class="hidden p-8 text-center text-slate-400 font-sans">
                             ยังไม่มีผู้สมัครเข้าร่วมที่มีประวัติความสมบูรณ์ในตารางจัดอันดับ
                         </div>
                     </div>
@@ -539,7 +540,7 @@
         </section>
 
         <!-- TAB 4: Employee Portal (พอร์ทัลของพนักงาน) -->
-        <section id="tab-employee-portal" class="tab-content hidden animate-fade-in">
+        <section id="tab-employee-portal" class="tab-content hidden animate-fade-in text-left">
             <!-- Login Screen -->
             <div id="employee-login-screen" class="max-w-md mx-auto bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="p-6 bg-slate-900 text-white text-center relative overflow-hidden">
@@ -555,20 +556,20 @@
                         <div>
                             <label for="login-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">รหัสพนักงาน</label>
                             <input type="text" id="login-emp-id" placeholder="ตัวอย่าง: 004148" required
-                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition font-mono">
                         </div>
                         <div>
                             <label for="login-password" class="block text-xs font-semibold text-slate-500 mb-1">รหัสผ่านล็อกอิน</label>
                             <input type="password" id="login-password" placeholder="••••••••" required
                                 class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                         </div>
-                        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-emerald-600/10 transition">
+                        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-emerald-600/10 transition cursor-pointer">
                             เข้าสู่แผงประวัติและผลงาน
                         </button>
                     </form>
-                    <div class="text-center pt-2">
-                        <span class="text-xs text-slate-400 font-mono">ยังไม่ได้ยืนยันตัวตนตั้งรหัสผ่านสมัคร? </span>
-                        <button onclick="switchTab('apply-project')" class="text-xs text-emerald-600 font-bold hover:underline">คลิกหน้าสมัครที่นี่</button>
+                    <div class="text-center pt-2 font-mono">
+                        <span class="text-xs text-slate-400 font-sans">ยังไม่ได้ยืนยันตัวตนตั้งรหัสผ่านสมัคร? </span>
+                        <button onclick="switchTab('apply-project')" class="text-xs text-emerald-600 font-bold hover:underline font-sans cursor-pointer">คลิกหน้าสมัครที่นี่</button>
                     </div>
                 </div>
             </div>
@@ -586,11 +587,11 @@
                                 <h3 class="text-xl font-bold text-slate-900" id="member-fullname">ชื่อพนักงาน</h3>
                                 <span class="px-2.5 py-0.5 bg-teal-500/10 text-teal-700 rounded-full text-xxs font-bold uppercase tracking-wider font-mono" id="member-dept">แผนก</span>
                             </div>
-                            <p class="text-xs text-slate-500 mt-1">รหัสพนักงาน: <span id="member-empid" class="font-semibold font-mono">0000</span> | ส่วนสูงคงที่: <span id="member-height" class="font-bold text-emerald-600 font-mono">0</span> ซม.</p>
+                            <p class="text-xs text-slate-500 mt-1 font-mono">รหัสพนักงาน: <span id="member-empid" class="font-semibold font-mono">0000</span> | ส่วนสูงคงที่: <span id="member-height" class="font-bold text-emerald-600 font-mono">0</span> ซม.</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="handleLogout()" class="px-4 py-2 border border-slate-200 text-slate-600 text-xs rounded-xl font-semibold hover:bg-slate-50 transition flex items-center gap-2">
+                        <button onclick="handleLogout()" class="px-4 py-2 border border-slate-200 text-slate-600 text-xs rounded-xl font-semibold hover:bg-slate-50 transition flex items-center gap-2 cursor-pointer">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                             </svg>
@@ -604,19 +605,19 @@
                     <div class="md:col-span-2 space-y-2">
                         <span class="text-xs font-bold text-emerald-300 uppercase tracking-wide">เป้าหมายทองคำของคุณ (Your Weight Goal)</span>
                         <h4 class="text-xl font-extrabold" id="goal-status-text">เป้าหมายลดลง: XX กก. 🏆</h4>
-                        <p class="text-xs text-emerald-100 font-light max-w-lg leading-relaxed">
+                        <p class="text-xs text-emerald-100 font-light max-w-lg leading-relaxed font-sans">
                             ความสำเร็จเริ่มจากเป้าหมายที่แน่นอน! คุณได้ตั้งเป้าหมายลดน้ำหนักไว้ตอนลงทะเบียนสมัคร ระบบจะคำนวณอัตราความลดสะสมจากน้ำหนักตั้งต้นเพื่อเช็คระยะความก้าวหน้า
                         </p>
                     </div>
-                    <div class="bg-white/10 rounded-2xl p-4 border border-white/10 flex flex-col justify-between">
-                        <div class="flex justify-between items-center text-xs text-emerald-100">
+                    <div class="bg-white/10 rounded-2xl p-4 border border-white/10 flex flex-col justify-between font-mono">
+                        <div class="flex justify-between items-center text-xs text-emerald-100 font-sans">
                             <span>ความคืบหน้าจริง</span>
-                            <span class="font-bold text-white" id="goal-percent-text">0%</span>
+                            <span class="font-bold text-white font-mono" id="goal-percent-text">0%</span>
                         </div>
                         <div class="w-full bg-emerald-950/40 h-2.5 rounded-full overflow-hidden my-2">
                             <div id="goal-progress-bar" class="bg-white h-full rounded-full transition-all duration-500" style="width: 0%"></div>
                         </div>
-                        <div class="flex justify-between items-center text-[10px] text-emerald-200">
+                        <div class="flex justify-between items-center text-[10px] text-emerald-200 font-sans">
                             <span id="goal-loss-achieved">ลดได้แล้ว: 0 กก.</span>
                             <span id="goal-loss-remaining">เหลืออีก: 0 กก.</span>
                         </div>
@@ -624,84 +625,84 @@
                 </div>
 
                 <!-- KPI Status Grid comparing current metrics to initial metrics -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left font-mono">
                     <!-- Weight Box -->
                     <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
                         <div class="flex justify-between items-start">
-                            <span class="text-xs font-semibold text-slate-400">น้ำหนักปัจจุบัน</span>
+                            <span class="text-xs font-semibold text-slate-400 font-sans">น้ำหนักปัจจุบัน</span>
                             <span id="badge-weight-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold">0.0%</span>
                         </div>
                         <div class="my-3">
                             <span class="text-3xl font-black text-slate-900" id="current-weight-val">0.0</span>
-                            <span class="text-xs text-slate-400 ml-1">กก.</span>
+                            <span class="text-xs text-slate-400 ml-1 font-sans">กก.</span>
                         </div>
-                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between">
-                            <span>เริ่มต้นสมัคร: <b id="initial-weight-val">0</b> กก.</span>
-                            <span class="text-slate-400 font-semibold" id="weight-change-abs">-0 กก.</span>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between font-sans">
+                            <span>เริ่มต้นสมัคร: <b id="initial-weight-val" class="font-mono">0</b> กก.</span>
+                            <span class="text-slate-400 font-semibold font-mono" id="weight-change-abs">-0 กก.</span>
                         </div>
                     </div>
 
                     <!-- BMI Box -->
                     <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
                         <div class="flex justify-between items-start">
-                            <span class="text-xs font-semibold text-slate-400">BMI ปัจจุบัน</span>
+                            <span class="text-xs font-semibold text-slate-400 font-sans">BMI ปัจจุบัน</span>
                             <span id="badge-bmi-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold">0.0%</span>
                         </div>
                         <div class="my-3 flex items-center justify-between">
                             <span class="text-3xl font-black text-slate-900" id="current-bmi-val">0.00</span>
-                            <span class="text-[10px] px-2 py-0.5 rounded-md font-semibold text-center" id="bmi-status-label">ปกติ</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-md font-semibold text-center font-sans" id="bmi-status-label">ปกติ</span>
                         </div>
-                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between">
-                            <span>เริ่มต้นสมัคร: <b id="initial-bmi-val">0</b></span>
-                            <span class="text-slate-400 font-semibold" id="bmi-change-abs">-0.00</span>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between font-sans">
+                            <span>เริ่มต้นสมัคร: <b id="initial-bmi-val" class="font-mono">0</b></span>
+                            <span class="text-slate-400 font-semibold font-mono" id="bmi-change-abs">-0.00</span>
                         </div>
                     </div>
 
                     <!-- Waist Box -->
                     <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
                         <div class="flex justify-between items-start">
-                            <span class="text-xs font-semibold text-slate-400">รอบเอวปัจจุบัน</span>
+                            <span class="text-xs font-semibold text-slate-400 font-sans">รอบเอวปัจจุบัน</span>
                             <span id="badge-waist-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold">0.0%</span>
                         </div>
                         <div class="my-3">
                             <span class="text-3xl font-black text-slate-900" id="current-waist-val">0.0</span>
-                            <span class="text-xs text-slate-400 ml-1">นิ้ว</span>
+                            <span class="text-xs text-slate-400 ml-1 font-sans">นิ้ว</span>
                         </div>
-                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between">
-                            <span>เริ่มต้นสมัคร: <b id="initial-waist-val">0</b> นิ้ว</span>
-                            <span class="text-slate-400 font-semibold" id="waist-change-abs">-0 นิ้ว</span>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between font-sans">
+                            <span>เริ่มต้นสมัคร: <b id="initial-waist-val" class="font-mono">0</b> นิ้ว</span>
+                            <span class="text-slate-400 font-semibold font-mono" id="waist-change-abs">-0 นิ้ว</span>
                         </div>
                     </div>
 
                     <!-- Hip Box -->
                     <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
                         <div class="flex justify-between items-start">
-                            <span class="text-xs font-semibold text-slate-400">รอบสะโพกปัจจุบัน</span>
+                            <span class="text-xs font-semibold text-slate-400 font-sans">รอบสะโพกปัจจุบัน</span>
                             <span id="badge-hip-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold font-mono">0.0%</span>
                         </div>
                         <div class="my-3">
                             <span class="text-3xl font-black text-slate-900" id="current-hip-val">0.0</span>
-                            <span class="text-xs text-slate-400 ml-1">นิ้ว</span>
+                            <span class="text-xs text-slate-400 ml-1 font-sans">นิ้ว</span>
                         </div>
-                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between">
-                            <span>เริ่มต้นสมัคร: <b id="initial-hip-val">0</b> นิ้ว</span>
-                            <span class="text-slate-400 font-semibold" id="hip-change-abs">-0 นิ้ว</span>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between font-sans">
+                            <span>เริ่มต้นสมัคร: <b id="initial-hip-val" class="font-mono">0</b> นิ้ว</span>
+                            <span class="text-slate-400 font-semibold font-mono" id="hip-change-abs">-0 นิ้ว</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Permanent Health Calculator Widget Resource -->
-                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div class="space-y-1 text-left">
+                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-left">
+                    <div class="space-y-1">
                         <h4 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
                             <span>🥛</span> เครื่องมือความรู้สุขภาพ: คำนวณโปรตีนตามน้ำหนักตัว (Protein Calculator)
                         </h4>
-                        <p class="text-xs text-slate-500 max-w-2xl leading-relaxed">
-                            ต้องการทานโปรตีนให้เพียงพอเพื่อเสริมสร้างกล้ามเนื้อและระบบเผาผลาญ in ระหว่างการลดน้ำหนัก? คุณสามารถใช้เครื่องมือช่วยคำนวณสัดส่วนอาหารและโปรตีนต่อวันได้ฟรีตลอดเวลา
+                        <p class="text-xs text-slate-500 max-w-2xl leading-relaxed font-sans">
+                            ต้องการทานโปรตีนให้เพียงพอเพื่อเสริมสร้างกล้ามเนื้อและระบบเผาผลาญในระหว่างการลดน้ำหนัก? คุณสามารถใช้เครื่องมือช่วยคำนวณสัดส่วนอาหารและโปรตีนต่อวันได้ฟรีตลอดเวลา
                         </p>
                     </div>
                     <a href="https://hdmall.co.th/health-tools/protein-calculator.html" target="_blank"
-                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs px-5 py-3 rounded-xl shadow-sm shadow-teal-600/10 transition inline-flex items-center gap-1.5 flex-shrink-0 self-stretch sm:self-auto justify-center">
+                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs px-5 py-3 rounded-xl shadow-sm shadow-teal-600/10 transition inline-flex items-center gap-1.5 flex-shrink-0 self-stretch sm:self-auto justify-center cursor-pointer">
                         คำนวณโปรตีนทันที 🔗
                     </a>
                 </div>
@@ -720,7 +721,7 @@
                         <!-- Chart 1: BMI -->
                         <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
                             <span class="font-bold text-slate-800 text-sm block mb-4 text-left">ดัชนีมวลกายย้อนหลัง (BMI Trend)</span>
-                            <div class="h-64 relative">
+                            <div class="h-64 relative font-mono">
                                 <canvas id="chart-bmi"></canvas>
                             </div>
                         </div>
@@ -728,7 +729,7 @@
                         <!-- Chart 2: Weight -->
                         <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
                             <span class="font-bold text-slate-800 text-sm block mb-4 text-left">การลดน้ำหนักสะสม (Weight Chart - กก.)</span>
-                            <div class="h-64 relative">
+                            <div class="h-64 relative font-mono">
                                 <canvas id="chart-weight"></canvas>
                             </div>
                         </div>
@@ -736,7 +737,7 @@
                         <!-- Chart 3: Waist -->
                         <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
                             <span class="font-bold text-slate-800 text-sm block mb-4 text-left">ความกระชับขนาดเอว (Waist Chart - นิ้ว)</span>
-                            <div class="h-64 relative">
+                            <div class="h-64 relative font-mono">
                                 <canvas id="chart-waist"></canvas>
                             </div>
                         </div>
@@ -744,7 +745,7 @@
                         <!-- Chart 4: Hip -->
                         <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
                             <span class="font-bold text-slate-800 text-sm block mb-4 text-left">ความฟิตขนาดสะโพก (Hip Chart - นิ้ว)</span>
-                            <div class="h-64 relative">
+                            <div class="h-64 relative font-mono">
                                 <canvas id="chart-hip"></canvas>
                             </div>
                         </div>
@@ -761,16 +762,16 @@
                         <table class="w-full text-left">
                             <thead>
                                 <tr class="text-xs uppercase bg-slate-100 text-slate-500 border-b border-slate-200 font-mono">
-                                    <th class="py-3 px-6">สัปดาห์ที่</th>
-                                    <th class="py-3 px-6">วันที่ส่ง / ประมวลผล</th>
-                                    <th class="py-3 px-6 text-center">น้ำหนัก (กก.)</th>
+                                    <th class="py-3 px-6 font-sans">สัปดาห์ที่</th>
+                                    <th class="py-3 px-6 font-sans">วันที่ส่ง / ประมวลผล</th>
+                                    <th class="py-3 px-6 text-center font-sans">น้ำหนัก (กก.)</th>
                                     <th class="py-3 px-6 text-center">BMI</th>
-                                    <th class="py-3 px-6 text-center">รอบเอว (นิ้ว)</th>
-                                    <th class="py-3 px-6 text-center">รอบสะโพก (นิ้ว)</th>
-                                    <th class="py-3 px-6 text-right">สถานะ</th>
+                                    <th class="py-3 px-6 text-center font-sans">รอบเอว (นิ้ว)</th>
+                                    <th class="py-3 px-6 text-center font-sans">รอบสะโพก (นิ้ว)</th>
+                                    <th class="py-3 px-6 text-right font-sans">สถานะ</th>
                                 </tr>
                             </thead>
-                            <tbody id="member-records-body" class="divide-y divide-slate-150 text-xs text-slate-600">
+                            <tbody id="member-records-body" class="divide-y divide-slate-150 text-xs text-slate-600 font-mono">
                                 <!-- Dynamic user history -->
                             </tbody>
                         </table>
@@ -790,10 +791,10 @@
                 <form onsubmit="handleAdminLogin(event)" class="p-6 space-y-4">
                     <div>
                         <label for="admin-input-pass" class="block text-xs font-semibold text-slate-500 mb-1 text-left">รหัสผ่านผู้ดูแล</label>
-                        <input type="password" id="admin-input-pass" placeholder="กรอกรหัสผ่าน" required
+                        <input type="password" id="admin-input-pass" placeholder="กรอกรหัสผ่าน ad2026" required
                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition">
                     </div>
-                    <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition">
+                    <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition cursor-pointer">
                         ยืนยันสิทธิ์แอดมิน
                     </button>
                 </form>
@@ -807,7 +808,7 @@
                         <h3 class="text-xl font-extrabold text-slate-900">แผงจัดการโครงการและรายงานสรุปผู้บริหาร 🏢</h3>
                         <p class="text-xs text-slate-500">ปรับเปลี่ยนสิทธิ์ ตั้งแต่วันเริ่มต้นโครงการ และวิเคราะห์ความฟิตสะสม</p>
                     </div>
-                    <button onclick="handleAdminLogout()" class="px-3.5 py-2 border border-slate-200 text-slate-600 text-xs rounded-xl font-semibold hover:bg-slate-50 transition">
+                    <button onclick="handleAdminLogout()" class="px-3.5 py-2 border border-slate-200 text-slate-600 text-xs rounded-xl font-semibold hover:bg-slate-50 transition cursor-pointer">
                         ออกจากโหมดแอดมิน
                     </button>
                 </div>
@@ -825,8 +826,8 @@
                         <!-- Department Filter Option -->
                         <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
                             <label for="admin-dept-filter" class="text-xs font-semibold text-slate-600">กรองแผนก:</label>
-                            <select id="admin-dept-filter" onchange="filterAdminExecutiveSummary()" class="bg-white text-xs font-bold text-slate-700 rounded-lg px-2.5 py-1 border border-slate-150 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
-                                <option value="ALL" class="font-mono">ทุกแผนก (รวมทั้งหมด)</option>
+                            <select id="admin-dept-filter" onchange="filterAdminExecutiveSummary()" class="bg-white text-xs font-bold text-slate-700 rounded-lg px-2.5 py-1 border border-slate-150 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 cursor-pointer">
+                                <option value="ALL">ทุกแผนก (รวมทั้งหมด)</option>
                             </select>
                         </div>
                     </div>
@@ -835,22 +836,22 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div onclick="showAdminDrilldown('bmi')" class="bg-sky-50 border border-sky-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
                             <span class="text-xxs uppercase font-bold text-sky-600 block">BMI ลดลงเฉลี่ยรวม 🖱️</span>
-                            <span id="exec-bmi-drop" class="text-3xl font-black text-sky-950 block my-1">-%</span>
+                            <span id="exec-bmi-drop" class="text-3xl font-black text-sky-950 block my-1 font-mono">-%</span>
                             <span class="text-xxs text-sky-700 font-sans">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
                         </div>
                         <div onclick="showAdminDrilldown('weight')" class="bg-emerald-50 border border-emerald-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
                             <span class="text-xxs uppercase font-bold text-emerald-600 block">น้ำหนักลดลงเฉลี่ยรวม 🖱️</span>
-                            <span id="exec-weight-drop" class="text-3xl font-black text-emerald-950 block my-1">-%</span>
+                            <span id="exec-weight-drop" class="text-3xl font-black text-emerald-950 block my-1 font-mono">-%</span>
                             <span class="text-xxs text-emerald-700 font-sans">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
                         </div>
                         <div onclick="showAdminDrilldown('waist')" class="bg-amber-50 border border-amber-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
                             <span class="text-xxs uppercase font-bold text-amber-600 block">รอบเอวหดลงเฉลี่ยรวม 🖱️</span>
-                            <span id="exec-waist-drop" class="text-3xl font-black text-amber-950 block my-1">-%</span>
+                            <span id="exec-waist-drop" class="text-3xl font-black text-amber-950 block my-1 font-mono">-%</span>
                             <span class="text-xxs text-amber-700 font-sans">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
                         </div>
                         <div onclick="showAdminDrilldown('hip')" class="bg-violet-50 border border-violet-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
                             <span class="text-xxs uppercase font-bold text-violet-600 block">สะโพกลดลงเฉลี่ยรวม 🖱️</span>
-                            <span id="exec-hip-drop" class="text-3xl font-black text-violet-950 block my-1">-%</span>
+                            <span id="exec-hip-drop" class="text-3xl font-black text-violet-950 block my-1 font-mono">-%</span>
                             <span class="text-xxs text-violet-700 font-sans">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
                         </div>
                     </div>
@@ -865,7 +866,7 @@
                                 </h4>
                                 <p class="text-xxs text-slate-500">ตารางเรียงลำดับเปรียบเทียบความฟิตในมิติดังกล่าวทั้งหมดแยกพนักงาน</p>
                             </div>
-                            <button onclick="closeDrilldown()" class="text-xxs bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg font-bold transition font-mono">
+                            <button onclick="closeDrilldown()" class="text-xxs bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg font-bold transition font-mono cursor-pointer">
                                 ✕ ปิดข้อมูลเจาะลึก
                             </button>
                         </div>
@@ -890,27 +891,27 @@
                     </div>
 
                     <!-- Executive Charts Row -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 font-mono text-xs">
                         <!-- Chart 1: Doughnut (Participation Breakdown) -->
-                        <div class="bg-slate-50 border border-slate-150 rounded-2xl p-5 flex flex-col justify-between">
+                        <div class="bg-slate-50 border border-slate-150 rounded-2xl p-5 flex flex-col justify-between text-left">
                             <div>
-                                <span class="font-bold text-slate-800 text-xs uppercase block">1. อัตราความคืบหน้าเปิดบัญชีพนักงาน</span>
-                                <span class="text-slate-400 text-[10px] block mb-4">สัดส่วนผู้ยืนยันตัวตนสมัครจริงเทียบรายชื่อเปล่า</span>
+                                <span class="font-bold text-slate-800 text-xs uppercase block font-sans">1. อัตราความคืบหน้าเปิดบัญชีพนักงาน</span>
+                                <span class="text-slate-400 text-[10px] block mb-4 font-sans">สัดส่วนผู้ยืนยันตัวตนสมัครจริงเทียบรายชื่อเปล่า</span>
                             </div>
-                            <div class="h-44 relative flex justify-center items-center font-mono">
+                            <div class="h-44 relative flex justify-center items-center">
                                 <canvas id="chart-admin-participation"></canvas>
                             </div>
                         </div>
 
                         <!-- Chart 2: Weekly Group Performance trend (Line) -->
-                        <div class="lg:col-span-2 bg-slate-50 border border-slate-150 rounded-2xl p-5">
+                        <div class="lg:col-span-2 bg-slate-50 border border-slate-150 rounded-2xl p-5 text-left">
                             <div class="flex justify-between items-center mb-4">
                                 <div>
-                                    <span class="font-bold text-slate-800 text-xs uppercase block">2. สถิติการพัฒนาเฉลี่ยสะสมรายสัปดาห์ (%)</span>
+                                    <span class="font-bold text-slate-800 text-xs uppercase block font-sans">2. สถิติการพัฒนาเฉลี่ยสะสมรายสัปดาห์ (%)</span>
                                     <span class="text-slate-400 text-[10px] block font-sans">อัตราลดเฉลี่ยภาพรวมในทุกๆ มิติของพนักงานทั้งบริษัท</span>
                                 </div>
                             </div>
-                            <div class="h-44 relative font-mono">
+                            <div class="h-44 relative">
                                 <canvas id="chart-admin-trend"></canvas>
                             </div>
                         </div>
@@ -918,7 +919,7 @@
 
                     <!-- 🛠️ INTERACTIVE WEEKLY COMPARISON TOOL -->
                     <div class="bg-slate-50 border border-slate-150 rounded-2xl p-5 space-y-4">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-3 font-mono">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-3 font-mono text-left">
                             <div>
                                 <h5 class="font-bold text-slate-800 text-sm flex items-center gap-1.5 font-sans">
                                     <span>🔄</span> 3. เครื่องมือเปรียบเทียบค่าเฉลี่ยสัปดาห์ระบุอิสระ
@@ -929,15 +930,15 @@
                             <!-- Dropdown Selectors -->
                             <div class="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-slate-200">
                                 <div>
-                                    <label class="block text-[8px] font-bold text-slate-400 uppercase leading-none">สัปดาห์เริ่มต้น (ฐาน)</label>
-                                    <select id="compare-base-week" onchange="renderAdminComparison()" class="bg-transparent text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer mt-0.5 font-mono">
+                                    <label class="block text-[8px] font-bold text-slate-400 uppercase leading-none font-sans">สัปดาห์เริ่มต้น (ฐาน)</label>
+                                    <select id="compare-base-week" onchange="renderAdminComparison()" class="bg-transparent text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer mt-0.5">
                                         <!-- Dynamic options -->
                                     </select>
                                 </div>
                                 <div class="text-slate-300 font-bold self-center px-1 font-mono">|</div>
                                 <div>
-                                    <label class="block text-[8px] font-bold text-slate-400 uppercase leading-none">สัปดาห์เปรียบเทียบ</label>
-                                    <select id="compare-target-week" onchange="renderAdminComparison()" class="bg-transparent text-xs font-semibold text-emerald-600 focus:outline-none cursor-pointer mt-0.5 font-mono">
+                                    <label class="block text-[8px] font-bold text-slate-400 uppercase leading-none font-sans">สัปดาห์เปรียบเทียบ</label>
+                                    <select id="compare-target-week" onchange="renderAdminComparison()" class="bg-transparent text-xs font-semibold text-emerald-600 focus:outline-none cursor-pointer mt-0.5">
                                         <!-- Dynamic options -->
                                     </select>
                                 </div>
@@ -945,13 +946,13 @@
                         </div>
 
                         <!-- Metric Comparison Blocks -->
-                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="compare-metrics-grid">
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-left" id="compare-metrics-grid">
                             <!-- Dynamic comparison cards -->
                         </div>
 
                         <!-- Bar chart showing side-by-side comparison -->
-                        <div class="bg-white p-4 rounded-xl border border-slate-150">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-3">เปรียบเทียบสัดส่วนเฉลี่ยความฟิตทั้งองค์กร (Side-by-Side Bar Chart)</span>
+                        <div class="bg-white p-4 rounded-xl border border-slate-150 text-left">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-3 font-sans">เปรียบเทียบสัดส่วนเฉลี่ยความฟิตทั้งองค์กร (Side-by-Side Bar Chart)</span>
                             <div class="h-64 relative font-mono">
                                 <canvas id="chart-admin-comparison-bar"></canvas>
                             </div>
@@ -960,12 +961,12 @@
                 </div>
 
                 <!-- Admin Control Toggles and Settings -->
-                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-6 font-mono">
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-left">
                     <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
                         <span class="block text-xs font-bold text-slate-500 font-sans">ระบบรับสมัคร / ยืนยันตัวตนเปิดบัญชี</span>
                         <div class="flex items-center justify-between pt-1">
                             <span class="text-xs font-medium text-slate-700 font-sans" id="text-toggle-reg">สถานะ: เปิดรับสมัคร</span>
-                            <button onclick="toggleAdminSetting('isRegOpen')" id="btn-toggle-reg" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition font-sans font-medium">
+                            <button onclick="toggleAdminSetting('isRegOpen')" id="btn-toggle-reg" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition font-sans font-medium cursor-pointer">
                                 เปิดอยู่ (คลิกปิด)
                             </button>
                         </div>
@@ -975,7 +976,7 @@
                         <span class="block text-xs font-bold text-slate-500 font-sans">ตารางอันดับหน้าหลัก (Leaderboard)</span>
                         <div class="flex items-center justify-between pt-1">
                             <span class="text-xs font-medium text-slate-700 font-sans" id="text-toggle-board">สถานะ: เปิดแสดงผล</span>
-                            <button onclick="toggleAdminSetting('isLeaderboardOpen')" id="btn-toggle-board" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition font-sans font-medium">
+                            <button onclick="toggleAdminSetting('isLeaderboardOpen')" id="btn-toggle-board" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition font-sans font-medium cursor-pointer">
                                 เปิดอยู่ (คลิกปิด)
                             </button>
                         </div>
@@ -991,7 +992,7 @@
                 <!-- Admin Action Section split -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <!-- Form 1: Pre-register Employee directory -->
-                    <div class="lg:col-span-2 bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-4">
+                    <div class="lg:col-span-2 bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-4 text-left">
                         <h4 class="font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
                             <span class="p-1.5 bg-emerald-500/10 text-emerald-600 rounded-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -1005,12 +1006,12 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label for="reg-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">รหัสพนักงาน (เก็บเลข 0 นำหน้าเสมอ)</label>
-                                    <input type="text" id="reg-emp-id" placeholder="ระบุเช่น 012345" required
+                                    <input type="text" id="reg-emp-id" placeholder="ระบุเช่น 00123" required
                                         class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                                 </div>
                                 <div>
                                     <label for="reg-dept" class="block text-xs font-semibold text-slate-500 mb-1">แผนก / ฝ่ายงาน</label>
-                                    <input type="text" id="reg-dept" placeholder="เช่น OP1,OP2S" required
+                                    <input type="text" id="reg-dept" placeholder="เช่น ฝ่ายผลิต ฝ่ายบริการ" required
                                         class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition font-mono">
                                 </div>
                             </div>
@@ -1018,8 +1019,8 @@
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
                                     <label for="reg-firstname" class="block text-xs font-semibold text-slate-500 mb-1">ชื่อ-นามสกุลจริง</label>
-                                    <input type="text" id="reg-firstname" placeholder="เช่น แสนดี จริงใจ" required
-                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition font-mono">
+                                    <input type="text" id="reg-firstname" placeholder="เช่น วิชัย สุขประเสริฐกุล" required
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition font-sans">
                                 </div>
                                 <div>
                                     <label for="reg-height" class="block text-xs font-semibold text-slate-500 mb-1">ส่วนสูงคงที่ (ซม.) (*เว้นได้ถ้าต้องการป้อนตอนสมัคร)</label>
@@ -1028,14 +1029,14 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md shadow-emerald-600/15 transition text-xs font-mono">
+                            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md shadow-emerald-600/15 transition text-xs font-sans cursor-pointer">
                                 บันทึกพนักงานเปล่ารอวัดและสมัครครั้งแรก
                             </button>
                         </form>
                     </div>
 
                     <!-- Setup Google Sheet Cloud Sync -->
-                    <div id="section-cloud-sync" class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div id="section-cloud-sync" class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between text-left">
                         <div class="space-y-4">
                             <h4 class="font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
                                 <span class="p-1.5 bg-sky-500/10 text-sky-600 rounded-lg">
@@ -1049,20 +1050,20 @@
                                 ประสานข้อมูลให้วิ่งตรงไปยัง Google Sheet ปลายทางแบบเรียลไทม์เพื่อสอดคล้องกับพนักงานหลายเครื่องพร้อมกัน
                             </p>
                             <div class="space-y-2">
-                                <label for="cloud-api-url" class="block text-xs font-semibold text-slate-500 font-mono">URL ของ Google Web App</label>
+                                <label for="cloud-api-url" class="block text-xs font-semibold text-slate-500 font-sans">URL ของ Google Web App</label>
                                 <input type="url" id="cloud-api-url" placeholder="https://script.google.com/macros/s/.../exec" onchange="saveApiUrl(this.value)"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition font-mono">
                             </div>
                         </div>
 
-                        <div class="pt-4 space-y-2 font-mono">
-                            <button onclick="openAppsScriptModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 font-sans">
+                        <div class="pt-4 space-y-2 font-sans">
+                            <button onclick="openAppsScriptModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
                                 </svg>
                                 วิธีคัดลอกโค้ดลง Google Sheets
                             </button>
-                            <button onclick="handleTestDataSync()" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold rounded-xl transition font-sans">
+                            <button onclick="handleTestDataSync()" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold rounded-xl transition cursor-pointer">
                                 ทดสอบดึงฐานข้อมูลจากคลาวด์
                             </button>
                         </div>
@@ -1070,20 +1071,20 @@
                 </div>
 
                 <!-- Admin Detailed Table View -->
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden text-left">
                     <div class="p-6 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
                             <h4 class="text-base font-bold text-slate-900 font-sans">ฐานข้อมูลรายละเอียดการสมัครและสัดส่วนพนักงาน</h4>
                             <p class="text-xs text-slate-500 mt-1 font-sans">ตารางพนักงานทั้งหมดที่ถูกเพิ่มในสารบระบบ และสถิติความสูงตั้งต้น</p>
                         </div>
-                        <div class="flex flex-wrap gap-2 font-mono">
-                            <button onclick="exportToCsv()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 text-xs rounded-xl font-bold transition flex items-center gap-2 font-mono font-sans">
+                        <div class="flex flex-wrap gap-2 font-sans">
+                            <button onclick="exportToCsv()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 text-xs rounded-xl font-bold transition flex items-center gap-2 cursor-pointer font-sans">
                                 <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
                                 ดาวน์โหลดข้อมูลสำรอง CSV
                             </button>
-                            <button onclick="resetWholeProjectWithConfirmation()" class="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 text-xs rounded-xl font-bold transition font-sans">
+                            <button onclick="resetWholeProjectWithConfirmation()" class="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 text-xs rounded-xl font-bold transition cursor-pointer">
                                 รีเซ็ตโครงสร้างทั้งหมด
                             </button>
                         </div>
@@ -1093,10 +1094,10 @@
                         <table class="w-full text-left">
                             <thead>
                                 <tr class="text-xxs uppercase tracking-wider bg-slate-100 text-slate-500 border-b border-slate-200 font-mono">
-                                    <th class="py-3.5 px-6 font-semibold">รหัสพนักงาน</th>
-                                    <th class="py-3.5 px-6 font-semibold">ชื่อ-นามสกุล</th>
-                                    <th class="py-3.5 px-6 font-semibold">แผนก</th>
-                                    <th class="py-3.5 px-6 text-center">ความสูง (ซม.)</th>
+                                    <th class="py-3.5 px-6 font-semibold font-sans">รหัสพนักงาน</th>
+                                    <th class="py-3.5 px-6 font-semibold font-sans">ชื่อ-นามสกุล</th>
+                                    <th class="py-3.5 px-6 font-semibold font-sans">แผนก</th>
+                                    <th class="py-3.5 px-6 text-center font-sans">ความสูง (ซม.)</th>
                                     <th class="py-3.5 px-6 text-center font-sans">เป้าหมายลด (กก.)</th>
                                     <th class="py-3.5 px-6 text-center font-sans">สัดส่วนสมัครแรกเริ่ม (W1)</th>
                                     <th class="py-3.5 px-6 text-center font-sans">สัดส่วนล่าสุด (W2+)</th>
@@ -1109,7 +1110,7 @@
                                 <!-- Dynamic rows of all employees -->
                             </tbody>
                         </table>
-                        <div id="admin-empty-state" class="hidden p-12 text-center text-slate-400">
+                        <div id="admin-empty-state" class="hidden p-12 text-center text-slate-400 font-sans">
                             ไม่มีข้อมูลพนักงานที่ลงทะเบียนไว้ในระบบความดูแล
                         </div>
                     </div>
@@ -1121,24 +1122,24 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 font-mono">
         <p>© 2026 โครงการกระชับหุ่นฟิตพนักงานในองค์กร FIT & FIRM 90 Days</p>
-        <p class="mt-1 font-light">ข้อมูลเชื่อมต่อตรงกับ <span class="font-semibold text-slate-600 font-sans">Google Sheets (HTTPS Spreadsheet API)</span> แบบเรียลไทม์</p>
+        <p class="mt-1 font-light font-sans">ข้อมูลเชื่อมต่อตรงกับ <span class="font-semibold text-slate-600 font-sans">Google Sheets (HTTPS Spreadsheet API)</span> แบบเรียลไทม์</p>
     </footer>
 
     <!-- MODAL: Google Apps Script Code Setup & Spreadsheet Integration -->
-    <div id="script-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 text-left">
+    <div id="script-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 text-left font-sans">
         <div class="bg-white w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl border border-slate-150 flex flex-col max-h-[85vh]">
             <div class="p-6 bg-slate-900 text-white flex justify-between items-center">
                 <div>
                     <h3 class="text-lg font-bold">ขั้นตอนการเชื่อมต่อแบบเรียลไทม์ (Google Spreadsheet Sync)</h3>
                     <p class="text-xs text-slate-400">ใช้สำหรับลิงก์ข้อมูลตรงไปยังแผ่นงาน Google Sheet ของคุณ</p>
                 </div>
-                <button onclick="closeAppsScriptModal()" class="text-slate-400 hover:text-white font-bold text-xl">✕</button>
+                <button onclick="closeAppsScriptModal()" class="text-slate-400 hover:text-white font-bold text-xl cursor-pointer">✕</button>
             </div>
             
             <div class="p-6 overflow-y-auto space-y-6 text-sm custom-scrollbar text-slate-600 leading-relaxed">
                 <div class="space-y-2">
                     <h4 class="font-bold text-slate-800">วิธีการติดตั้งบน Google Sheets:</h4>
-                    <ol class="list-decimal list-inside space-y-1.5 text-xs font-mono">
+                    <ol class="list-decimal list-inside space-y-1.5 text-xs font-sans">
                         <li>เปิดลิงก์ Google Sheet ของคุณ (<a href="https://docs.google.com/spreadsheets/d/1ARI5modgryZUL5xCdQcfupE-5YCh2F4lkY3z_QxqUys/edit#gid=0" target="_blank" class="text-sky-600 underline font-medium">ไปที่ชีตของคุณ</a>)</li>
                         <li>กดที่แถบเมนูด้านบน <strong>"ส่วนขยาย" (Extensions)</strong> &gt; <strong>"Apps Script"</strong></li>
                         <li>ลบโค้ดเริ่มต้นในไฟล์ `Code.gs` ทั้งหมด แล้วทำการวางโค้ดด้านล่างนี้ลงไป</li>
@@ -1152,21 +1153,20 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <label class="font-bold text-slate-800 text-xs">โค้ด Google Apps Script (Copy & Paste):</label>
-                        <button onclick="copyAppsScriptCode()" class="text-xxs bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1.5 rounded font-semibold transition">คัดลอกรหัสโค้ด</button>
+                        <button onclick="copyAppsScriptCode()" class="text-xxs bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1.5 rounded font-semibold transition cursor-pointer">คัดลอกรหัสโค้ด</button>
                     </div>
                     <textarea id="apps-script-code-area" readonly class="w-full h-64 font-mono text-[11px] bg-slate-900 text-emerald-400 p-4 rounded-2xl focus:outline-none custom-scrollbar">
 /* * โค้ดหลังบ้านสำหรับเชื่อมต่อเว็บแอปและ Google Spreadsheet โดยรักษาเลข 0 นำหน้ารหัสพนักงาน
- * วางโค้ดนี้ใน Apps Script ของ Google Sheet ลิงก์ด้านล่าง:
- * https://docs.google.com/spreadsheets/d/1ARI5modgryZUL5xCdQcfupE-5YCh2F4lkY3z_QxqUys/edit
+ * และรองรับการดึงข้อมูลจากชีต "Name" ที่เป็นภาษาไทยโดยตรงอย่างอัจฉริยะ
  */
 
 function doGet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheetMembers = getOrCreateSheet(ss, "Members");
+  var sheetName = ss.getSheetByName("Name"); // ค้นหาชีตข้อมูลพนักงานหลักชื่อว่า Name
   var sheetLogs = getOrCreateSheet(ss, "WeeklyLogs");
   var sheetConfig = getOrCreateSheet(ss, "Config");
   
-  var membersData = readSheetData(sheetMembers);
+  var membersData = readNameSheetData(sheetName);
   var logsData = readSheetData(sheetLogs);
   var configData = readSheetData(sheetConfig);
   
@@ -1182,7 +1182,7 @@ function doGet(e) {
 
 function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheetMembers = getOrCreateSheet(ss, "Members");
+  var sheetName = ss.getSheetByName("Name");
   var sheetLogs = getOrCreateSheet(ss, "WeeklyLogs");
   var sheetConfig = getOrCreateSheet(ss, "Config");
   
@@ -1190,8 +1190,9 @@ function doPost(e) {
   var action = postData.action;
   
   if (action === "syncWholeState") {
-    rewriteSheet(sheetMembers, postData.members, ["empId", "fullName", "dept", "height", "initWeight", "initWaist", "initHip", "initBmi", "password", "targetWeightLossGoal"]);
-    rewriteSheet(sheetLogs, postData.logs, ["empId", "week", "date", "weight", "waist", "hip", "bmi", "q1", "q2", "q3", "q4", "q5"]);
+    // เขียนทับแผ่นงาน "Name" โดยการจับคู่หัวข้อภาษาไทยและรักษาความปลอดภัยของส่วนสูง
+    writeNameSheetData(sheetName, postData.members);
+    rewriteSheet(sheetLogs, postData.logs, ["empId", "week", "date", "weight", "waist", "hip", "bmi", "q1_5groups", "q2_leanMeat", "q3_dietPills", "q4_dinnerGap", "q5_enoughProtein"]);
     rewriteSheet(sheetConfig, [postData.config], ["isRegOpen", "isLeaderboardOpen", "projectStartDate"]);
     
     return ContentService.createTextOutput(JSON.stringify({status: "success", message: "ซิงก์ข้อมูลภาพรวมสำเร็จ"}))
@@ -1208,6 +1209,116 @@ function getOrCreateSheet(ss, name) {
     sheet = ss.insertSheet(name);
   }
   return sheet;
+}
+
+// ฟังก์ชันอ่านข้อมูลชีต Name ภาษาไทยและทำหน้าที่แปลงภาษาสำหรับ HTML App
+function readNameSheetData(sheet) {
+  if (!sheet) return [];
+  var lastRow = sheet.getLastRow();
+  var lastCol = sheet.getLastColumn();
+  if (lastRow <= 1) return [];
+  
+  var headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  var values = sheet.getRange(2, 1, lastRow - 1, lastCol).getValues();
+  
+  var list = [];
+  for (var r = 0; r < values.length; r++) {
+    var obj = {};
+    for (var c = 0; c < headers.length; c++) {
+      var header = String(headers[c]).trim();
+      var val = values[r][c];
+      
+      var key = header;
+      if (header === "รหัสพนักงาน") key = "empId";
+      else if (header === "ชื่อ-นามสกุล") key = "fullName";
+      else if (header === "แผนก") key = "dept";
+      else if (header === "ส่วนสูง") key = "height";
+      else if (header === "น้ำหนัก") key = "initWeight";
+      else if (header === "รอบเอว") key = "initWaist";
+      else if (header === "รอบสะโพก") key = "initHip";
+      else if (header === "รหัสผ่าน") key = "password";
+      else if (header === "เป้าหมายลดน้ำหนัก") key = "targetWeightLossGoal";
+      else if (header === "BMI แรกเริ่ม") key = "initBmi";
+      
+      if (key === "empId") {
+        obj[key] = String(val).trim();
+        // เติมเลข 0 ด้านหน้าหากสูญหายไปจากการประมวลผลของ Excel/Sheets
+        if (/^\d+$/.test(obj[key]) && obj[key].length < 6) {
+          obj[key] = obj[key].padStart(6, '0');
+        }
+      } else if (key === "height" || key === "initWeight" || key === "initWaist" || key === "initHip" || key === "targetWeightLossGoal" || key === "initBmi") {
+        obj[key] = (val !== "" && val !== null && !isNaN(val)) ? Number(val) : null;
+      } else {
+        obj[key] = val === "" ? null : val;
+      }
+    }
+    
+    if (!obj.empId) continue; // ข้ามบรรทัดว่าง
+    if (obj.password === undefined) obj.password = null;
+    if (obj.targetWeightLossGoal === undefined) obj.targetWeightLossGoal = null;
+    
+    list.push(obj);
+  }
+  return list;
+}
+
+// ฟังก์ชันเขียนบันทึกข้อมูลพนักงานลงในชีต "Name" โดยการจับคู่หัวภาษาไทยที่แอดมินกำหนด
+function writeNameSheetData(sheet, members) {
+  if (!sheet) return;
+  var lastCol = sheet.getLastColumn();
+  var headers = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0] : [];
+  
+  var expectedHeaders = ["รหัสพนักงาน", "ชื่อ-นามสกุล", "แผนก", "ส่วนสูง", "น้ำหนัก", "รอบเอว", "รอบสะโพก", "รหัสผ่าน", "เป้าหมายลดน้ำหนัก", "BMI แรกเริ่ม"];
+  
+  for (var i = 0; i < expectedHeaders.length; i++) {
+    var h = expectedHeaders[i];
+    if (headers.indexOf(h) === -1) {
+      sheet.getRange(1, headers.length + 1).setValue(h);
+      headers.push(h);
+    }
+  }
+  
+  lastCol = sheet.getLastColumn();
+  headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(item) { return String(item).trim(); });
+  
+  var lastRow = sheet.getLastRow();
+  if (lastRow > 1) {
+    sheet.getRange(2, 1, lastRow - 1, lastCol).clearContent();
+  }
+  
+  if (!members || members.length === 0) return;
+  
+  var rows = [];
+  for (var m = 0; m < members.length; m++) {
+    var member = members[m];
+    var row = [];
+    for (var c = 0; c < headers.length; c++) {
+      var h = headers[c];
+      var val = "";
+      
+      if (h === "รหัสพนักงาน") val = member.empId;
+      else if (h === "ชื่อ-นามสกุล") val = member.fullName;
+      else if (h === "แผนก") val = member.dept;
+      else if (h === "ส่วนสูง") val = member.height;
+      else if (h === "น้ำหนัก") val = member.initWeight;
+      else if (h === "รอบเอว") val = member.initWaist;
+      else if (h === "รอบสะโพก") val = member.initHip;
+      else if (h === "รหัสผ่าน") val = member.password;
+      else if (h === "เป้าหมายลดน้ำหนัก") val = member.targetWeightLossGoal;
+      else if (h === "BMI แรกเริ่ม") val = member.initBmi;
+      
+      row.push(val !== null && val !== undefined ? val : "");
+    }
+    rows.push(row);
+  }
+  
+  var range = sheet.getRange(2, 1, rows.length, headers.length);
+  range.setValues(rows);
+  
+  var empIdColIdx = headers.indexOf("รหัสพนักงาน");
+  if (empIdColIdx !== -1) {
+    sheet.getRange(2, empIdColIdx + 1, rows.length, 1).setNumberFormat("@");
+  }
 }
 
 function readSheetData(sheet) {
@@ -1262,8 +1373,8 @@ function rewriteSheet(sheet, dataList, headers) {
                 </div>
             </div>
             
-            <div class="p-4 bg-slate-50 border-t border-slate-150 flex justify-end">
-                <button onclick="closeAppsScriptModal()" class="px-5 py-2.5 bg-slate-900 text-white font-semibold rounded-xl text-xs hover:bg-slate-800 transition">รับทราบและปิดหน้านี้</button>
+            <div class="p-4 bg-slate-50 border-t border-slate-150 flex justify-end font-sans">
+                <button onclick="closeAppsScriptModal()" class="px-5 py-2.5 bg-slate-900 text-white font-semibold rounded-xl text-xs hover:bg-slate-800 transition cursor-pointer">รับทราบและปิดหน้านี้</button>
             </div>
         </div>
     </div>
@@ -1321,16 +1432,18 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
 
-        // 3. SMART ID MATCHING - Handles string spaces and removes stripped leading zeros from Google Sheets / Excel
+        // 3. SMART ID MATCHING - ปรับรหัสผ่านและขจัดปัญหาเลข 0 หายไป
         function matchEmpId(idA, idB) {
             if (idA === undefined || idA === null || idB === undefined || idB === null) return false;
-            const cleanA = String(idA).trim();
-            const cleanB = String(idB).trim();
+            let cleanA = String(idA).trim();
+            let cleanB = String(idB).trim();
             if (cleanA === cleanB) return true;
-            // Fallback: If both IDs are purely numeric, compare their base integer values (e.g. "084843" === "84843")
-            if (/^\d+$/.test(cleanA) && /^\d+$/.test(cleanB)) {
-                return parseInt(cleanA, 10) === parseInt(cleanB, 10);
-            }
+            
+            // เปรียบเทียบตัวเลขข้างใน (ขจัดปัญหาเลข 0 ข้างหน้าโดนกลืนหายไป)
+            let numA = cleanA.replace(/^0+/, '');
+            let numB = cleanB.replace(/^0+/, '');
+            if (numA === numB && numA !== '') return true;
+            
             return false;
         }
 
@@ -1351,7 +1464,7 @@ function rewriteSheet(sheet, dataList, headers) {
 
 
         // 4. DEFENSIVE STATE LOADER AND DECLARATION
-        // Synchronized precisely with spreadsheet image_5984e4.png (35 real employees with pre-recorded heights)
+        // บันทึกรายชื่อพนักงานทั้ง 35 คนของจริงที่มีความสอดคล้องกับแผ่นงาน Name ของสเปรดชีต
         let state = {
             members: [
                 { empId: "003049", fullName: "วิชัย สุขประเสริฐกุล", dept: "OPT", height: null, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
@@ -1399,13 +1512,13 @@ function rewriteSheet(sheet, dataList, headers) {
             }
         };
 
-        // Current authentication session bindings
+        // Session
         let session = {
             currentMember: null,
             isAdmin: false
         };
 
-        // Chart.js global pointers
+        // ChartJS bindings
         let activeCharts = {
             bmi: null,
             weight: null,
@@ -1420,7 +1533,7 @@ function rewriteSheet(sheet, dataList, headers) {
         window.onload = function() {
             loadLocalData();
             initAppUI();
-            autoFetchCloudData(); // Auto sync with Google Sheets on load!
+            autoFetchCloudData(); // เรียกใช้งานระบบซิงก์ข้อมูลอัตโนมัติทันทีที่พนักงานเปิดหน้าเว็บบนทุกอุปกรณ์!
         };
 
         function loadLocalData() {
@@ -1439,7 +1552,6 @@ function rewriteSheet(sheet, dataList, headers) {
                     state.config = { ...state.config, ...JSON.parse(savedConfig) };
                 }
 
-                // Synchronize configuration parameters safely into inputs
                 const configStartDateEl = document.getElementById('config-start-date');
                 if (configStartDateEl) {
                     configStartDateEl.value = state.config.projectStartDate;
@@ -1530,7 +1642,6 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
 
-        // Binds and routes global page tab switches safely
         function switchTab(tabId) {
             const contentSections = document.querySelectorAll('.tab-content');
             contentSections.forEach(sec => sec.classList.add('hidden'));
@@ -1552,7 +1663,6 @@ function rewriteSheet(sheet, dataList, headers) {
                 activeBtn.classList.remove('hover:bg-white/10', 'text-emerald-50');
             }
 
-            // Sync and rebuild layouts corresponding to current tab view
             if (tabId === 'home') {
                 updateDashboardCounters();
                 renderLeaderboard();
@@ -1566,7 +1676,6 @@ function rewriteSheet(sheet, dataList, headers) {
                 safeSetText('weekly-locked-indicator', `สัปดาห์ปัจจุบันเปิดกรอก: สัปดาห์ที่ ${currentWeek}`);
                 safeSetVal('submit-week-display', `สัปดาห์ที่ ${currentWeek}`);
                 
-                // Block inputs if current active date is Week 1
                 const noticeBox = document.getElementById('submit-notice-box');
                 const submitBtn = document.getElementById('btn-submit-weekly');
                 if (currentWeek <= 1) {
@@ -1616,10 +1725,10 @@ function rewriteSheet(sheet, dataList, headers) {
             const diffTime = today - start;
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
             
-            if (diffDays < 0) return 1; // Not started yet, treat as Week 1
+            if (diffDays < 0) return 1; 
             
             let week = Math.floor(diffDays / 7) + 1;
-            return Math.min(Math.max(week, 1), 13); // Clamp to Week 1-13
+            return Math.min(Math.max(week, 1), 13);
         }
 
         function getProjectDaysCount() {
@@ -1635,12 +1744,10 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
 
-        // Compiles sequential records of employee, bridging gaps with Carry-Forward virtual logs
         function getEmployeeEffectiveLogs(empId) {
             const member = findMemberById(empId);
             if (!member) return null;
 
-            // Check if member has completed initial registration
             const hasRegistered = (member.initWeight !== null && member.initWeight !== undefined);
             if (!hasRegistered) {
                 return {
@@ -1662,7 +1769,6 @@ function rewriteSheet(sheet, dataList, headers) {
             let lastHip = member.initHip || 0;
             let lastBmi = member.initBmi;
 
-            // Build virtual logs from W2 up to active calendar week
             for (let w = 2; w <= currentActiveWeek; w++) {
                 const realLog = realLogs.find(l => l.week === w);
                 if (realLog) {
@@ -1675,7 +1781,6 @@ function rewriteSheet(sheet, dataList, headers) {
                         isVirtual: false
                     });
                 } else {
-                    // Populate missing week with last known status automatically
                     const projStart = new Date(state.config.projectStartDate);
                     projStart.setDate(projStart.getDate() + (w - 1) * 7);
                     const virtualDateStr = projStart.toISOString().split('T')[0];
@@ -1732,13 +1837,11 @@ function rewriteSheet(sheet, dataList, headers) {
 
 
         function updateDashboardCounters() {
-            // Filter users who activated their records
             const registeredMembers = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined);
             const activeCount = registeredMembers.filter(m => m.password !== null && m.password !== undefined).length;
             
             safeSetText('count-active-members', activeCount);
 
-            // Sum total kilograms reduced
             let accumulatedWeightLoss = 0;
             registeredMembers.forEach(member => {
                 if (member.password) {
@@ -1750,7 +1853,6 @@ function rewriteSheet(sheet, dataList, headers) {
             });
             safeSetText('count-weight-loss', accumulatedWeightLoss.toFixed(1));
 
-            // Sync week indices
             const currentWeek = getCurrentWeekNumber();
             safeSetText('project-current-week-display', `สัปดาห์ที่ ${currentWeek}`);
             safeSetText('project-start-date-display', state.config.projectStartDate);
@@ -1783,7 +1885,6 @@ function rewriteSheet(sheet, dataList, headers) {
                 if (emptyEl) emptyEl.classList.add('hidden');
             }
 
-            // Top 3 Podium
             const podiumItems = rankedList.slice(0, 3);
             podiumItems.forEach((item, idx) => {
                 const colors = [
@@ -1811,7 +1912,6 @@ function rewriteSheet(sheet, dataList, headers) {
                 }
             });
 
-            // Blank podium items filler
             for (let i = podiumItems.length; i < 3; i++) {
                 if (podiumEl) {
                     podiumEl.innerHTML += `
@@ -1822,7 +1922,6 @@ function rewriteSheet(sheet, dataList, headers) {
                 }
             }
 
-            // Leaderboard Detailed Table
             rankedList.forEach((item, idx) => {
                 const rankNum = idx + 1;
                 const empId = item.member.empId;
@@ -1848,7 +1947,7 @@ function rewriteSheet(sheet, dataList, headers) {
                 if (tbodyEl) {
                     tbodyEl.innerHTML += `
                         <tr class="hover:bg-slate-50/80 transition border-b border-slate-100 text-left font-mono text-xs">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">${rankNum}</td>
+                            <td class="py-3.5 px-6 font-bold text-slate-900 font-sans">${rankNum}</td>
                             <td>${empId}</td>
                             <td class="font-medium text-slate-900 font-sans text-sm">${fullName}</td>
                             <td class="text-slate-500 font-sans text-xs">${dept}</td>
@@ -1888,7 +1987,7 @@ function rewriteSheet(sheet, dataList, headers) {
                 return;
             }
 
-            // SMART LOOKUP - Trims and matches regardless of leading zeros formatted in spreadsheet
+            // SMART LOOKUP - มีระบบตรวจสอบแปลงฐานและจับคู่เลขศูนย์นำหน้าหายอัตโนมัติ
             const member = findMemberById(val.trim());
 
             if (member) {
@@ -1915,13 +2014,13 @@ function rewriteSheet(sheet, dataList, headers) {
                     if (member.height && member.height > 0) {
                         preloadedHeightInput.value = member.height;
                         inputHeightField.value = member.height;
-                        inputHeightField.disabled = true; // Lock height
+                        inputHeightField.disabled = true; 
                         checkLabel.innerText = "✓ ใช้ส่วนสูงคงที่ตามฐานแอดมิน";
                         checkLabel.className = "text-[10px] mt-1 block text-emerald-600 font-semibold";
                     } else {
                         preloadedHeightInput.value = "ไม่มีข้อมูลในระบบ";
                         inputHeightField.value = "";
-                        inputHeightField.disabled = false; // Open for user input!
+                        inputHeightField.disabled = false; // เปิดช่องว่างกรณีไม่มีความสูงในฐาน Google Sheet 
                         checkLabel.innerText = "⚠ โปรดกรอกส่วนสูงของคุณ";
                         checkLabel.className = "text-[10px] mt-1 block text-amber-600 font-semibold";
                     }
@@ -1978,7 +2077,6 @@ function rewriteSheet(sheet, dataList, headers) {
             const targetWeightLossGoal = parseFloat(targetWeightField.value);
             const password = passwordField.value;
 
-            // SMART LOOKUP ID
             const memberIdx = findMemberIndexById(empId);
             if (memberIdx === -1) return;
 
@@ -2026,7 +2124,6 @@ function rewriteSheet(sheet, dataList, headers) {
                 return;
             }
 
-            // SMART LOOKUP ID
             const member = findMemberById(val.trim());
 
             if (member) {
@@ -2106,14 +2203,13 @@ function rewriteSheet(sheet, dataList, headers) {
             const week = getCurrentWeekNumber();
             const dateStr = new Date().toISOString().split('T')[0];
 
-            // SMART LOOKUP ID
             const member = findMemberById(empId);
             if (!member) return;
 
             const bmi = calculateBmi(weight, member.height);
 
             const newLog = {
-                empId: member.empId, // Standardize to database ID format
+                empId: member.empId, 
                 week,
                 date: dateStr,
                 weight,
@@ -2155,7 +2251,6 @@ function rewriteSheet(sheet, dataList, headers) {
             const empId = document.getElementById('login-emp-id').value.trim();
             const password = document.getElementById('login-password').value;
 
-            // SMART LOOKUP ID
             const member = findMemberById(empId);
             
             if (!member) {
@@ -2197,7 +2292,6 @@ function rewriteSheet(sheet, dataList, headers) {
 
             if (!stats) return;
 
-            // Goal Progression tracking values
             const targetLoss = stats.member.targetWeightLossGoal || 0;
             const realLoss = (stats.member.initWeight || 0) - stats.currentWeight;
             
@@ -2219,14 +2313,12 @@ function rewriteSheet(sheet, dataList, headers) {
             const remaining = targetLoss - realLoss;
             safeSetText('goal-loss-remaining', `เหลืออีก: ${remaining > 0 ? remaining.toFixed(1) : "0.0"} กก.`);
 
-            // Header metadata
             safeSetText('member-initial', stats.member.fullName.charAt(0));
             safeSetText('member-fullname', stats.member.fullName);
             safeSetText('member-dept', stats.member.dept);
             safeSetText('member-empid', stats.member.empId);
             safeSetText('member-height', stats.member.height);
 
-            // Load Values
             safeSetText('current-weight-val', stats.currentWeight.toFixed(1));
             safeSetText('initial-weight-val', (stats.member.initWeight || 0).toFixed(1));
             
@@ -2239,13 +2331,11 @@ function rewriteSheet(sheet, dataList, headers) {
             safeSetText('current-hip-val', stats.currentHip.toFixed(1));
             safeSetText('initial-hip-val', stats.member.initHip ? stats.member.initHip.toFixed(1) : "0.0");
 
-            // Set Pct card badges
             setMetricCardChange('badge-weight-change', 'weight-change-abs', stats.weightPct, stats.weightDiff, 'กก.');
             setMetricCardChange('badge-bmi-change', 'bmi-change-abs', stats.bmiPct, stats.bmiDiff, '');
             setMetricCardChange('badge-waist-change', 'waist-change-abs', stats.waistPct, stats.waistDiff, 'นิ้ว');
             setMetricCardChange('badge-hip-change', 'hip-change-abs', stats.hipPct, stats.hipDiff, 'นิ้ว');
 
-            // BMI class status label
             const statusLabel = document.getElementById('bmi-status-label');
             if (statusLabel) {
                 const bmi = stats.currentBmi;
@@ -2267,17 +2357,15 @@ function rewriteSheet(sheet, dataList, headers) {
                 }
             }
 
-            // Fill records history table
             const tableBody = document.getElementById('member-records-body');
             if (tableBody) {
                 tableBody.innerHTML = "";
                 safeSetText('records-count', `พบ ${stats.logs.length + 1} รายการสรุปรวมสัปดาห์ที่ 1`);
 
-                // Start base row
                 tableBody.innerHTML += `
                     <tr class="bg-emerald-50/40 font-semibold border-b border-slate-100 text-center font-mono">
-                        <td class="py-3 px-6 text-slate-800 font-sans text-left">สัปดาห์ที่ 1 (Start)</td>
-                        <td class="py-3 px-6 text-slate-400 font-sans text-left">ข้อมูลตั้งต้นสมัคร (แอดมิน)</td>
+                        <td class="py-3 px-6 text-slate-800 font-sans text-left font-sans text-xs">สัปดาห์ที่ 1 (Start)</td>
+                        <td class="py-3 px-6 text-slate-400 font-sans text-left font-sans text-xs">ข้อมูลตั้งต้นสมัคร (แอดมิน)</td>
                         <td class="py-3 px-6 text-center font-mono">${(stats.member.initWeight || 0).toFixed(1)}</td>
                         <td class="py-3 px-6 text-center font-mono text-emerald-700">${(stats.member.initBmi || 0).toFixed(2)}</td>
                         <td class="py-3 px-6 text-center font-mono">${stats.member.initWaist ? stats.member.initWaist.toFixed(1) : "-"}</td>
@@ -2286,7 +2374,6 @@ function rewriteSheet(sheet, dataList, headers) {
                     </tr>
                 `;
 
-                // Sequential Logs
                 stats.logs.forEach(log => {
                     const statusPill = log.isVirtual 
                         ? `<span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded text-[10px]" title="ไม่ได้ลงข้อมูลรายสัปดาห์ในวันดังกล่าว ระบบดึงค่าล่าสุดมาทดแทนให้อัตโนมัติ">ทดแทนอัตโนมัติ</span>`
@@ -2294,7 +2381,7 @@ function rewriteSheet(sheet, dataList, headers) {
 
                     tableBody.innerHTML += `
                         <tr class="hover:bg-slate-50 transition border-b border-slate-100 text-center font-mono">
-                            <td class="py-3 px-6 font-bold text-slate-700 font-sans text-left">สัปดาห์ที่ ${log.week}</td>
+                            <td class="py-3 px-6 font-bold text-slate-700 font-sans text-left font-sans text-xs">สัปดาห์ที่ ${log.week}</td>
                             <td class="py-3 px-6 text-slate-400 font-mono text-left">${log.date}</td>
                             <td class="py-3 px-6 text-center font-mono">${log.weight.toFixed(1)}</td>
                             <td class="py-3 px-6 text-center font-mono text-emerald-700">${log.bmi.toFixed(2)}</td>
@@ -2528,7 +2615,7 @@ function rewriteSheet(sheet, dataList, headers) {
                                     <span class="text-[11px] text-slate-500">W${targetWeek}: <b class="text-slate-950 font-mono text-xs">${metric.targetVal.toFixed(1)}</b></span>
                                 </div>
                             </div>
-                            <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                            <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center text-xs font-mono">
                                 <span class="text-[10px] text-slate-400 font-mono font-semibold">${rawDiff >= 0 ? "+" : ""}${rawDiff.toFixed(1)} ${metric.unit}</span>
                                 <span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${badgeText}</span>
                             </div>
@@ -2537,7 +2624,6 @@ function rewriteSheet(sheet, dataList, headers) {
                 });
             }
 
-            // Update Side-by-Side comparison Bar Chart
             const canvas = document.getElementById('chart-admin-comparison-bar');
             if (!canvas) return;
             const ctxBar = canvas.getContext('2d');
@@ -2599,7 +2685,6 @@ function rewriteSheet(sheet, dataList, headers) {
             const activeCount = registeredMembers.filter(m => m.password !== null && m.password !== undefined).length;
             const pendingCount = registeredMembers.length - activeCount;
 
-            // Doughnut Chart: Participation Status
             const canvasParticipation = document.getElementById('chart-admin-participation');
             if (canvasParticipation) {
                 const ctxParticipation = canvasParticipation.getContext('2d');
@@ -2631,7 +2716,6 @@ function rewriteSheet(sheet, dataList, headers) {
                 });
             }
 
-            // Line Chart: Overall Average % Reduction Week by Week
             const maxWeeks = getCurrentWeekNumber();
             let weekLabels = ["เริ่มต้น (W1)"];
             let avgWeightDrops = [0];
@@ -2752,7 +2836,6 @@ function rewriteSheet(sheet, dataList, headers) {
                 });
             }
 
-            // Ultimate Absolute Reduction KPI Widgets for Executives
             let totalInitWeight = 0, totalCurrentWeight = 0;
             let totalInitBmi = 0, totalCurrentBmi = 0;
             let totalInitWaist = 0, totalCurrentWaist = 0;
@@ -2777,508 +2860,3 @@ function rewriteSheet(sheet, dataList, headers) {
                     totalRegistered++;
                 }
             });
-
-            if (totalRegistered > 0) {
-                const totalWeightDropPct = totalInitWeight > 0 ? ((totalInitWeight - totalCurrentWeight) / totalInitWeight) * 100 : 0;
-                const totalBmiDropPct = totalInitBmi > 0 ? ((totalInitBmi - totalCurrentBmi) / totalInitBmi) * 100 : 0;
-                const totalWaistDropPct = totalInitWaist > 0 ? ((totalInitWaist - totalCurrentWaist) / totalInitWaist) * 100 : 0;
-                const totalHipDropPct = totalInitHip > 0 ? ((totalInitHip - totalCurrentHip) / totalInitHip) * 100 : 0;
-
-                setExecKpiText('exec-weight-drop', totalWeightDropPct);
-                setExecKpiText('exec-bmi-drop', totalBmiDropPct);
-                setExecKpiText('exec-waist-drop', totalWaistDropPct);
-                setExecKpiText('exec-hip-drop', totalHipDropPct);
-            }
-
-            populateComparisonDropdowns();
-            renderAdminComparison();
-            
-            // Re-render drilldown if currently opened
-            const drilldownSec = document.getElementById('admin-drilldown-section');
-            if (drilldownSec && !drilldownSec.classList.contains('hidden') && window.currentDrilldownCategory) {
-                showAdminDrilldown(window.currentDrilldownCategory);
-            }
-        }
-
-        function setExecKpiText(id, value) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            if (value > 0) {
-                el.innerText = `-${value.toFixed(2)}%`;
-                el.className = "text-3xl font-black text-emerald-600 block my-1 font-mono";
-            } else if (value < 0) {
-                el.innerText = `+${Math.abs(value).toFixed(2)}%`;
-                el.className = "text-3xl font-black text-red-500 block my-1 font-mono";
-            } else {
-                el.innerText = "0.00%";
-                el.className = "text-3xl font-black text-slate-500 block my-1 font-mono";
-            }
-        }
-
-
-        // 5. AUTO-FETCH DATA ON PAGE LOAD: If Google Sheets URL exists, fetch shared values seamlessly!
-        function autoFetchCloudData() {
-            if (!state.config.apiUrl) return;
-
-            const loader = document.getElementById('banner-sync-loader');
-            const statusText = document.getElementById('sync-status-text');
-            if (loader) loader.classList.remove('hidden');
-            if (statusText) statusText.innerText = "กำลังซิงก์ข้อมูลอัปเดตแบบเรียลไทม์จาก Google Sheets คลาวด์...";
-
-            fetch(state.config.apiUrl)
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.members && data.logs) {
-                    state.members = data.members;
-                    state.logs = data.logs;
-                    if (data.config) {
-                        state.config.isRegOpen = data.config.isRegOpen !== undefined ? (data.config.isRegOpen === true || data.config.isRegOpen === "true") : state.config.isRegOpen;
-                        state.config.isLeaderboardOpen = data.config.isLeaderboardOpen !== undefined ? (data.config.isLeaderboardOpen === true || data.config.isLeaderboardOpen === "true") : state.config.isLeaderboardOpen;
-                        state.config.projectStartDate = data.config.projectStartDate || state.config.projectStartDate;
-                    }
-                    saveToLocalStorage();
-                    initAppUI(); // Reload UI with fresh Google Sheets records!
-                    showToast("ซิงก์ข้อมูลจาก Sheets สำเร็จ ☁️", "ระบบอัปเดตฐานข้อมูลเป็นสถิติล่าสุดเรียบร้อยแล้ว", "success");
-                    if (statusText) statusText.innerText = "ซิงก์ข้อมูลตรงกับ Google Sheets เรียบร้อยแล้ว สถิติเป็นปัจจุบัน";
-                }
-            })
-            .catch(err => {
-                console.warn("Auto-sync load error (working in local fallback mode):", err);
-                if (statusText) statusText.innerText = "ไม่สามารถเชื่อมต่อ Google Sheets ในขณะนี้ กำลังแสดงผลจากข้อมูลล่าสุดในเครื่อง";
-            })
-            .finally(() => {
-                if (loader) loader.classList.add('hidden');
-            });
-        }
-
-        function showAdminDrilldown(category) {
-            window.currentDrilldownCategory = category;
-            const drilldownSec = document.getElementById('admin-drilldown-section');
-            const titleEl = document.getElementById('drilldown-title');
-            const headerBase = document.getElementById('drilldown-header-base');
-            const headerCurrent = document.getElementById('drilldown-header-current');
-            const headerDiff = document.getElementById('drilldown-header-diff');
-            const tbody = document.getElementById('drilldown-table-body');
-            
-            if (!drilldownSec || !titleEl || !headerBase || !headerCurrent || !headerDiff || !tbody) return;
-
-            drilldownSec.classList.remove('hidden');
-            tbody.innerHTML = "";
-
-            const deptFilterSelect = document.getElementById('admin-dept-filter');
-            const deptFilter = deptFilterSelect ? deptFilterSelect.value : "ALL";
-
-            let registeredMembers = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined);
-            if (deptFilter !== "ALL") {
-                registeredMembers = registeredMembers.filter(m => m.dept === deptFilter);
-            }
-
-            let catTitle = "";
-            let unit = "";
-
-            if (category === 'bmi') {
-                catTitle = "ดัชนีมวลกาย BMI";
-                headerBase.innerText = "BMI แรกเริ่ม";
-                headerCurrent.innerText = "BMI ปัจจุบัน";
-                headerDiff.innerText = "% พัฒนาการลดลง";
-            } else if (category === 'weight') {
-                catTitle = "น้ำหนักตัว (กก.)";
-                headerBase.innerText = "น้ำหนักแรกเริ่ม (กก.)";
-                headerCurrent.innerText = "น้ำหนักปัจจุบัน (กก.)";
-                headerDiff.innerText = "% น้ำหนักที่ลดได้";
-                unit = " กก.";
-            } else if (category === 'waist') {
-                catTitle = "รอบเอวพนักงาน (นิ้ว)";
-                headerBase.innerText = "รอบเอวเริ่มต้น (นิ้ว)";
-                headerCurrent.innerText = "รอบเอวปัจจุบัน (นิ้ว)";
-                headerDiff.innerText = "% รอบเอวที่กระชับได้";
-                unit = " นิ้ว";
-            } else if (category === 'hip') {
-                catTitle = "รอบสะโพกพนักงาน (นิ้ว)";
-                headerBase.innerText = "รอบสะโพกเริ่มต้น (นิ้ว)";
-                headerCurrent.innerText = "รอบสะโพกปัจจุบัน (นิ้ว)";
-                headerDiff.innerText = "% รอบสะโพกที่ลดได้";
-                unit = " นิ้ว";
-            }
-
-            titleEl.innerHTML = `<span>🔎</span> รายละเอียดเจาะลึกผู้เข้าร่วมโครงการ: <b>${catTitle}</b> (${deptFilter === "ALL" ? "รวมทุกแผนก" : `แผนก ${deptFilter}`})`;
-
-            registeredMembers.forEach(m => {
-                const stats = getEmployeeEffectiveLogs(m.empId);
-                if (!stats || !stats.hasRegistered) return;
-
-                let baseVal = 0;
-                let currVal = 0;
-                let pct = 0;
-
-                if (category === 'bmi') {
-                    baseVal = m.initBmi || 0;
-                    currVal = stats.currentBmi;
-                    pct = stats.bmiPct;
-                } else if (category === 'weight') {
-                    baseVal = m.initWeight || 0;
-                    currVal = stats.currentWeight;
-                    pct = stats.weightPct;
-                } else if (category === 'waist') {
-                    baseVal = m.initWaist || 0;
-                    currVal = stats.currentWaist;
-                    pct = stats.waistPct;
-                } else if (category === 'hip') {
-                    baseVal = m.initHip || 0;
-                    currVal = stats.currentHip;
-                    pct = stats.hipPct;
-                }
-
-                let diffClass = "text-slate-400";
-                let pctStr = "คงที่";
-
-                if (pct > 0) {
-                    diffClass = "text-emerald-600 font-bold";
-                    pctStr = `ลดลง ${pct.toFixed(1)}%`;
-                } else if (pct < 0) {
-                    diffClass = "text-red-500 font-bold";
-                    pctStr = `เพิ่มขึ้น ${Math.abs(pct).toFixed(1)}%`;
-                }
-
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition border-b border-slate-100 text-xs">
-                        <td class="py-2.5 px-4 font-mono font-bold">${m.empId}</td>
-                        <td class="py-2.5 px-4 font-sans font-medium text-slate-800 text-sm">${m.fullName}</td>
-                        <td class="py-2.5 px-4 font-sans text-slate-500 text-xs">${m.dept}</td>
-                        <td class="py-2.5 px-4 text-center font-mono text-slate-600">${baseVal > 0 ? baseVal.toFixed(1) + unit : "-"}</td>
-                        <td class="py-2.5 px-4 text-center font-mono text-slate-900 font-bold">${currVal > 0 ? currVal.toFixed(1) + unit : "-"}</td>
-                        <td class="py-2.5 px-4 text-right font-mono ${diffClass}">${pctStr}</td>
-                    </tr>
-                `;
-            });
-
-            if (tbody.children.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 font-sans">ไม่พบสมาชิกที่มีข้อมูลตามเงื่อนไขเจาะลึก</td></tr>`;
-            }
-
-            drilldownSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        function closeDrilldown() {
-            const drilldownSec = document.getElementById('admin-drilldown-section');
-            if (drilldownSec) {
-                drilldownSec.classList.add('hidden');
-            }
-            window.currentDrilldownCategory = null;
-        }
-
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            try {
-                const passField = document.getElementById('admin-input-pass');
-                if (!passField) return;
-                const password = passField.value.trim();
-
-                if (password === "ad2026") {
-                    session.isAdmin = true;
-                    showToast("ยืนยันสิทธิ์แอดมินสำเร็จ", "ยินดีต้อนรับสู่แผงควบคุมหลัก", "success");
-                    
-                    document.getElementById('admin-login-screen').classList.add('hidden');
-                    document.getElementById('admin-suite').classList.remove('hidden');
-                    
-                    renderAdminMembersTable();
-                    populateAdminDeptDropdown();
-                    renderAdminExecutiveCharts();
-                } else {
-                    showToast("ล้มเหลว", "รหัสผ่านแอดมินไม่ถูกต้อง", "error");
-                }
-            } catch (err) {
-                console.error("Admin Auth Error Boundary triggered: ", err);
-                showToast("เกิดข้อผิดพลาดในการโหลดระบบผู้บริหาร", err.message, "error");
-            }
-        }
-
-        function handleAdminLogout() {
-            session.isAdmin = false;
-            const suite = document.getElementById('admin-suite');
-            if (suite) suite.classList.add('hidden');
-            const screen = document.getElementById('admin-login-screen');
-            if (screen) screen.classList.remove('hidden');
-            const passField = document.getElementById('admin-input-pass');
-            if (passField) passField.value = "";
-            showToast("สิทธิ์ผู้ดูแลหมดลง", "ทำการล็อกเอาต์ออกจากแผงควบคุมแล้ว", "success");
-        }
-
-        function toggleAdminSetting(key) {
-            state.config[key] = !state.config[key];
-            saveToLocalStorage();
-            updateTogglesDisplay();
-            syncStateToCloud();
-            showToast("อัปเดตการตั้งค่า", "ปรับเปลี่ยนสิทธิ์ตั้งค่าระบบและซิงก์ประวัติเรียบร้อย", "success");
-        }
-
-        function handleStartDateChange(val) {
-            if (!val) return;
-            state.config.projectStartDate = val;
-            saveToLocalStorage();
-            updateDashboardCounters();
-            syncStateToCloud();
-            showToast("เปลี่ยนวันเริ่มโครงการ", `วันเริ่มต้นโครงการปรับเป็น: ${val}`, "success");
-        }
-
-        function handleEmployeePreRegistration(e) {
-            e.preventDefault();
-            const empId = document.getElementById('reg-emp-id').value.trim();
-            const fullName = document.getElementById('reg-firstname').value.trim();
-            const dept = document.getElementById('reg-dept').value.trim();
-            
-            const heightInput = document.getElementById('reg-height');
-            const height = heightInput && heightInput.value ? parseFloat(heightInput.value) : null;
-
-            // SMART ID EXIStS CHECK
-            const exists = findMemberById(empId);
-            if (exists) {
-                showToast("ผิดพลาด", `รหัสพนักงาน ${empId} มีในฐานระบบอยู่แล้ว`, "error");
-                return;
-            }
-
-            const newMember = {
-                empId, fullName, dept, height,
-                initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null
-            };
-
-            state.members.push(newMember);
-            saveToLocalStorage();
-            syncStateToCloud();
-
-            showToast("เพิ่มพนักงานสำเร็จ", `กรอกประวัติคุณ ${fullName} ในระบบ รอผลวัดวันแรกรับสมัคร`, "success");
-            
-            const form = document.getElementById('form-register-employee');
-            if (form) form.reset();
-            renderAdminMembersTable();
-            populateAdminDeptDropdown();
-            renderAdminExecutiveCharts();
-            updateDashboardCounters();
-        }
-
-        function renderAdminMembersTable() {
-            const tbody = document.getElementById('admin-members-list');
-            const empty = document.getElementById('admin-empty-state');
-            if (!tbody) return;
-            tbody.innerHTML = "";
-
-            if (state.members.length === 0) {
-                if (empty) empty.classList.remove('hidden');
-                return;
-            } else {
-                if (empty) empty.classList.add('hidden');
-            }
-
-            state.members.forEach(member => {
-                const stats = getEmployeeEffectiveLogs(member.empId);
-                if (!stats) return;
-
-                let startStr = "-";
-                let currentStr = "-";
-                let bmiStr = "-";
-                let statusPill = "";
-
-                if (member.password && member.initWeight) {
-                    statusPill = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 font-sans">สมัครเรียบร้อย</span>`;
-                } else {
-                    statusPill = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 font-sans">รอชั่งวัดตัวสมัคร</span>`;
-                }
-
-                if (stats.hasRegistered) {
-                    startStr = `${(member.initWeight || 0).toFixed(1)} กก.`;
-                    currentStr = `${stats.currentWeight.toFixed(1)} กก. | เอว ${stats.currentWaist.toFixed(1)}" | สะโพก ${stats.currentHip.toFixed(1)}"`;
-                    bmiStr = stats.currentBmi.toFixed(2);
-                } else {
-                    startStr = member.height ? `ส่วนสูง: ${member.height} ซม.` : "ไม่มีข้อมูลส่วนสูง";
-                }
-
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 border-b border-slate-100 transition text-[11px] font-mono">
-                        <td class="py-3.5 px-6 font-bold text-slate-900">${member.empId}</td>
-                        <td class="text-left font-sans">
-                            <div class="font-semibold text-slate-900 text-xs">${member.fullName}</div>
-                            <div class="text-[9px] text-slate-400">สิทธิ์ล็อกอิน: ${member.password ? "เปิดใช้งานแล้ว" : "✕ ยังไม่เปิดใช้"}</div>
-                        </td>
-                        <td class="text-slate-500 font-sans text-xs">${member.dept}</td>
-                        <td class="text-center">${member.height ? member.height + ' ซม.' : 'กรอกตอนสมัคร'}</td>
-                        <td class="text-center font-bold text-teal-700">${member.targetWeightLossGoal ? member.targetWeightLossGoal.toFixed(1) : "-"}</td>
-                        <td class="text-center text-slate-500">${startStr}</td>
-                        <td class="text-center text-slate-950 font-bold">${currentStr}</td>
-                        <td class="text-center text-emerald-800 font-bold">${bmiStr}</td>
-                        <td class="text-center">${statusPill}</td>
-                        <td class="text-right">
-                            <button onclick="deleteMemberWithConfirmation('${member.empId}')" class="text-red-500 hover:text-red-700 font-bold bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg transition text-[10px] cursor-pointer font-sans">
-                                ลบออก
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function deleteMemberWithConfirmation(empId) {
-            const member = findMemberById(empId);
-            if (!member) return;
-
-            if (confirm(`คุณต้องการลบพนักงาน คุณ ${member.fullName} (รหัส: ${member.empId}) และสถิติทั้งหมดใช่หรือไม่?`)) {
-                state.members = state.members.filter(m => !matchEmpId(m.empId, member.empId));
-                state.logs = state.logs.filter(l => !matchEmpId(l.empId, member.empId));
-
-                saveToLocalStorage();
-                syncStateToCloud();
-
-                showToast("ลบพนักงานสำเร็จ", "ทำการล้างบัญชีและสถิติเรียบร้อย", "success");
-                renderAdminMembersTable();
-                populateAdminDeptDropdown();
-                renderAdminExecutiveCharts();
-                updateDashboardCounters();
-            }
-        }
-
-        function resetWholeProjectWithConfirmation() {
-            if (confirm("แจ้งเตือนแอดมิน: คุณต้องการล้างฐานข้อมูลพนักงานและประวัติสัปดาห์ทั้งหมดในระบบเริ่มใหม่ใช่หรือไม่?")) {
-                state.members = [];
-                state.logs = [];
-                saveToLocalStorage();
-                syncStateToCloud();
-
-                showToast("ล้างระบบเรียบร้อย", "ระบบกลับมาว่างเปล่า", "success");
-                renderAdminMembersTable();
-                populateAdminDeptDropdown();
-                renderAdminExecutiveCharts();
-                updateDashboardCounters();
-            }
-        }
-
-        function exportToCsv() {
-            if (state.members.length === 0) {
-                showToast("ล้มเหลว", "ไม่มีฐานข้อมูลเพื่อจัดเก็บและดาวน์โหลด", "warning");
-                return;
-            }
-
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-            csvContent += "=== MEMBERS DATABASE ===\n";
-            csvContent += "รหัสพนักงาน,ชื่อจริง-นามสกุล,แผนก,ส่วนสูง(ซม.),น้ำหนักตั้งต้นสมัคร(กก.),เป้าหมายลดน้ำหนัก(กก.),BMIตั้งต้นสมัคร\n";
-            state.members.forEach(m => {
-                csvContent += `"${m.empId}","${m.fullName}","${m.dept}",${m.height || ""},${m.initWeight || ""},${m.targetWeightLossGoal || ""},${m.initBmi || ""}\n`;
-            });
-
-            csvContent += "\n=== WEEKLY RECORD LOGS ===\n";
-            csvContent += "รหัสพนักงาน,สัปดาห์ที่,วันที่รายงาน,น้ำหนัก(กก.),รอบเอว(นิ้ว),รอบสะโพก(นิ้ว),BMIคำนวณได้,Q1,Q2,Q3,Q4,Q5\n";
-            state.logs.forEach(l => {
-                csvContent += `"${l.empId}",${l.week},"${l.date}",${l.weight},${l.waist},${l.hip},${l.bmi},"${l.q1_5groups || "-"}","${l.q2_leanMeat || "-"}","${l.q3_dietPills || "-"}","${l.q4_dinnerGap || "-"}","${l.q5_enoughProtein || "-"}"\n`;
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `BMI_90Days_Project_Export_${new Date().toISOString().split('T')[0]}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("ดาวน์โหลดสำเร็จ", "ระบบดึงข้อมูลส่งออกเรียบร้อย", "success");
-        }
-
-        function saveApiUrl(val) {
-            state.config.apiUrl = val.trim();
-            saveToLocalStorage();
-            updateBannerStatus();
-            
-            if (val.trim()) {
-                showToast("บันทึกการซิงก์สำเร็จ", "พิกัด URL คลาวด์ของแอปได้รับการอัปเดต", "success");
-            }
-        }
-
-        function syncStateToCloud() {
-            if (!state.config.apiUrl) return;
-
-            const payload = {
-                action: "syncWholeState",
-                members: state.members,
-                logs: state.logs,
-                config: {
-                    isRegOpen: state.config.isRegOpen,
-                    isLeaderboardOpen: state.config.isLeaderboardOpen,
-                    projectStartDate: state.config.projectStartDate
-                }
-            };
-
-            fetch(state.config.apiUrl, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                showToast("ซิงก์ข้อมูลอัตโนมัติสำเร็จ", "สถิติล่าสุดสำรองขึ้นคลาวด์เรียบร้อยแล้ว", "success");
-            })
-            .catch(err => {
-                console.error("Cloud syncing error: ", err);
-                showToast("ระบบซิงก์คลาวด์ขัดข้อง", "ไม่สามารถติดต่อ Google API ได้ในขณะนี้ ข้อมูลเก็บแบบ Local ในเครื่อง", "warning");
-            });
-        }
-
-        function handleTestDataSync() {
-            if (!state.config.apiUrl) {
-                showToast("ไม่มีพิกัดเชื่อมต่อ", "โปรดกรอกพิกัด URL Google Web App เพื่อดำเนินการซิงก์", "warning");
-                return;
-            }
-
-            showToast("กำลังติดต่อ API...", "กำลังเรียกข้อมูลจากฐานสเปรดชีตมาแทนที่ข้อมูลเดิมในเบราว์เซอร์", "warning");
-
-            fetch(state.config.apiUrl)
-            .then(res => res.json())
-            .then(data => {
-                if (data.members && data.logs) {
-                    state.members = data.members;
-                    state.logs = data.logs;
-                    if (data.config) {
-                        state.config.isRegOpen = data.config.isRegOpen !== undefined ? (data.config.isRegOpen === true || data.config.isRegOpen === "true") : state.config.isRegOpen;
-                        state.config.isLeaderboardOpen = data.config.isLeaderboardOpen !== undefined ? (data.config.isLeaderboardOpen === true || data.config.isLeaderboardOpen === "true") : state.config.isLeaderboardOpen;
-                        state.config.projectStartDate = data.config.projectStartDate || state.config.projectStartDate;
-                    }
-                    saveToLocalStorage();
-                    
-                    initAppUI();
-                    showToast("ดึงฐานข้อมูลคลาวด์สำเร็จ ☁️", "สถิติล่าสุดประสานเข้ากับหน้าจอแอดมินเรียบร้อย!", "success");
-                } else {
-                    showToast("โครงสร้างขัดข้อง", "โครงสร้าง Sheets ไม่ตรงตามคอลัมน์มาตรฐาน", "warning");
-                }
-            })
-            .catch(err => {
-                console.error("Test API Connection issue: ", err);
-                showToast("เชื่อมต่อฐานคลาวด์ไม่สำเร็จ", "โปรดตรวจสอบการอนุญาตสิทธิ์เข้าถึง (Access) บนเว็บแอปเป็น Everyone", "error");
-            });
-        }
-
-        function openAppsScriptModal() {
-            const modal = document.getElementById('script-modal');
-            if (modal) {
-                modal.classList.remove('hidden');
-            }
-        }
-
-        function closeAppsScriptModal() {
-            const modal = document.getElementById('script-modal');
-            if (modal) {
-                modal.classList.add('hidden');
-            }
-        }
-
-        function copyAppsScriptCode() {
-            const textarea = document.getElementById('apps-script-code-area');
-            if (!textarea) return;
-            textarea.select();
-            textarea.setSelectionRange(0, 99999);
-            document.execCommand('copy');
-            showToast("คัดลอกสำเร็จ", "โค้ด Apps Script พร้อมสำหรับจัดวางในชีตแล้ว", "success");
-        }
-
-        function calculateBmi(weightKg, heightCm) {
-            if (!weightKg || !heightCm) return 0;
-            const heightM = heightCm / 100;
-            return parseFloat((weightKg / (heightM * heightM)).toFixed(2));
-        }
-    </script>
-</body>
-</html>

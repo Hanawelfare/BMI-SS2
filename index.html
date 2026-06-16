@@ -96,12 +96,15 @@
                 </span>
                 <div>
                     <h4 class="text-sm font-semibold text-amber-900">แอปกำลังทำงานแบบ Local Storage</h4>
-                    <p class="text-xs text-amber-700">ข้อมูลของคุณจะถูกจัดเก็บในเครื่องนี้ คุณสามารถกด "เชื่อมต่อ Google Sheet" ที่แผงควบคุมแอดมิน เพื่อผูกข้อมูลเข้ากับชีตจริงได้</p>
+                    <p class="text-xs text-amber-700" id="sync-status-text">ข้อมูลของคุณจะถูกจัดเก็บในเครื่องนี้ คุณสามารถกด "เชื่อมต่อ Google Sheet" ที่แผงควบคุมแอดมิน เพื่อผูกข้อมูลเข้ากับชีตจริงได้</p>
                 </div>
             </div>
-            <button onclick="switchTab('admin-panel'); highlightSyncSection();" class="text-xs bg-amber-600 text-white px-3 py-1.5 rounded-lg font-medium hover:bg-amber-700 transition">
-                ตั้งค่าการเชื่อมต่อ Sheet
-            </button>
+            <div class="flex items-center gap-2">
+                <div id="banner-sync-loader" class="hidden animate-spin rounded-full h-4 w-4 border-2 border-amber-600 border-t-transparent"></div>
+                <button onclick="switchTab('admin-panel'); highlightSyncSection();" class="text-xs bg-amber-600 text-white px-3 py-1.5 rounded-lg font-medium hover:bg-amber-700 transition">
+                    ตั้งค่าการเชื่อมต่อ Sheet
+                </button>
+            </div>
         </div>
 
         <!-- Notification Toast Manager -->
@@ -487,13 +490,12 @@
                         <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                             <span class="p-1.5 bg-emerald-500/10 text-emerald-600 rounded-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm0 0h4m-4 0H8m12 9a4 4 0 11-8 0 4 4 0 018 0zm-8 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                </svg>
-                            </span>
-                            ตารางอันดับผู้พัฒนา %BMI ลดลงสูงสุด (Leaderboard)
-                        </h3>
-                        <p class="text-xs text-slate-500">เปรียบเทียบจาก BMI แรกเริ่มในใบสมัคร คัดกรองพนักงานที่ลดเปอร์เซ็นต์ BMI ได้ดีที่สุด</p>
-                    </div>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm0 0h4m-4 0H8m12 9a4 4 0 11-8 0 4 4 0 018 0zm-8 0a4 4 0 11-8 0 4 4 0 018 0z"></svg>
+                                </span>
+                                ตารางอันดับผู้พัฒนา %BMI ลดลงสูงสุด (Leaderboard)
+                            </h3>
+                            <p class="text-xs text-slate-500">เปรียบเทียบจาก BMI แรกเริ่มในใบสมัคร คัดกรองพนักงานที่ลดเปอร์เซ็นต์ BMI ได้ดีที่สุด</p>
+                        </div>
                     <span class="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-semibold">เรียงลำดับสุทธิเรียลไทม์</span>
                 </div>
 
@@ -695,7 +697,7 @@
                             <span>🥛</span> เครื่องมือความรู้สุขภาพ: คำนวณโปรตีนตามน้ำหนักตัว (Protein Calculator)
                         </h4>
                         <p class="text-xs text-slate-500 max-w-2xl leading-relaxed">
-                            ต้องการทานโปรตีนให้เพียงพอเพื่อเสริมสร้างกล้ามเนื้อและระบบเผาผลาญในระหว่างการลดน้ำหนัก? คุณสามารถใช้เครื่องมือช่วยคำนวณสัดส่วนอาหารและโปรตีนต่อวันได้ฟรีตลอดเวลา
+                            ต้องการทานโปรตีนให้เพียงพอเพื่อเสริมสร้างกล้ามเนื้อและระบบเผาผลาญ in ระหว่างการลดน้ำหนัก? คุณสามารถใช้เครื่องมือช่วยคำนวณสัดส่วนอาหารและโปรตีนต่อวันได้ฟรีตลอดเวลา
                         </p>
                     </div>
                     <a href="https://hdmall.co.th/health-tools/protein-calculator.html" target="_blank"
@@ -963,7 +965,7 @@
                         <span class="block text-xs font-bold text-slate-500 font-sans">ระบบรับสมัคร / ยืนยันตัวตนเปิดบัญชี</span>
                         <div class="flex items-center justify-between pt-1">
                             <span class="text-xs font-medium text-slate-700 font-sans" id="text-toggle-reg">สถานะ: เปิดรับสมัคร</span>
-                            <button onclick="toggleAdminSetting('isRegOpen')" id="btn-toggle-reg" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition font-sans">
+                            <button onclick="toggleAdminSetting('isRegOpen')" id="btn-toggle-reg" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition font-sans font-medium">
                                 เปิดอยู่ (คลิกปิด)
                             </button>
                         </div>
@@ -973,7 +975,7 @@
                         <span class="block text-xs font-bold text-slate-500 font-sans">ตารางอันดับหน้าหลัก (Leaderboard)</span>
                         <div class="flex items-center justify-between pt-1">
                             <span class="text-xs font-medium text-slate-700 font-sans" id="text-toggle-board">สถานะ: เปิดแสดงผล</span>
-                            <button onclick="toggleAdminSetting('isLeaderboardOpen')" id="btn-toggle-board" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition font-sans">
+                            <button onclick="toggleAdminSetting('isLeaderboardOpen')" id="btn-toggle-board" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition font-sans font-medium">
                                 เปิดอยู่ (คลิกปิด)
                             </button>
                         </div>
@@ -1071,8 +1073,8 @@
                 <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="p-6 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
-                            <h4 class="text-base font-bold text-slate-900">ฐานข้อมูลรายละเอียดการสมัครและสัดส่วนพนักงาน</h4>
-                            <p class="text-xs text-slate-500 mt-1">ตารางพนักงานทั้งหมดที่ถูกเพิ่มในสารบระบบ และสถิติความสูงตั้งต้น</p>
+                            <h4 class="text-base font-bold text-slate-900 font-sans">ฐานข้อมูลรายละเอียดการสมัครและสัดส่วนพนักงาน</h4>
+                            <p class="text-xs text-slate-500 mt-1 font-sans">ตารางพนักงานทั้งหมดที่ถูกเพิ่มในสารบระบบ และสถิติความสูงตั้งต้น</p>
                         </div>
                         <div class="flex flex-wrap gap-2 font-mono">
                             <button onclick="exportToCsv()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 text-xs rounded-xl font-bold transition flex items-center gap-2 font-mono font-sans">
@@ -1268,8 +1270,7 @@ function rewriteSheet(sheet, dataList, headers) {
 
     <!-- MAIN STATE CONTROLLER & CORE CODE -->
     <script>
-        
-        
+
         // 1. GUARANTEED GLOBAL DECLARATION OF showToast TO AVOID REFERENCE ERRORS
         function showToast(title, desc, type = "success") {
             const toastContainer = document.getElementById('toast-container');
@@ -1319,7 +1320,37 @@ function rewriteSheet(sheet, dataList, headers) {
             }
         }
 
-        // 3. DEFENSIVE STATE LOADER AND DECLARATION
+
+        // 3. SMART ID MATCHING - Handles string spaces and removes stripped leading zeros from Google Sheets / Excel
+        function matchEmpId(idA, idB) {
+            if (idA === undefined || idA === null || idB === undefined || idB === null) return false;
+            const cleanA = String(idA).trim();
+            const cleanB = String(idB).trim();
+            if (cleanA === cleanB) return true;
+            // Fallback: If both IDs are purely numeric, compare their base integer values (e.g. "084843" === "84843")
+            if (/^\d+$/.test(cleanA) && /^\d+$/.test(cleanB)) {
+                return parseInt(cleanA, 10) === parseInt(cleanB, 10);
+            }
+            return false;
+        }
+
+        function findMemberById(empId) {
+            if (!empId) return null;
+            return state.members.find(m => matchEmpId(m.empId, empId));
+        }
+
+        function findMemberIndexById(empId) {
+            if (!empId) return -1;
+            return state.members.findIndex(m => matchEmpId(m.empId, empId));
+        }
+
+        function getLogsByEmpId(empId) {
+            if (!empId) return [];
+            return state.logs.filter(l => matchEmpId(l.empId, empId));
+        }
+
+
+        // 4. DEFENSIVE STATE LOADER AND DECLARATION
         // Synchronized precisely with spreadsheet image_5984e4.png (35 real employees with pre-recorded heights)
         let state = {
             members: [
@@ -1385,9 +1416,11 @@ function rewriteSheet(sheet, dataList, headers) {
             adminComparisonBar: null
         };
 
+
         window.onload = function() {
             loadLocalData();
             initAppUI();
+            autoFetchCloudData(); // Auto sync with Google Sheets on load!
         };
 
         function loadLocalData() {
@@ -1496,6 +1529,7 @@ function rewriteSheet(sheet, dataList, headers) {
             }
         }
 
+
         // Binds and routes global page tab switches safely
         function switchTab(tabId) {
             const contentSections = document.querySelectorAll('.tab-content');
@@ -1600,9 +1634,10 @@ function rewriteSheet(sheet, dataList, headers) {
             return Math.min(Math.max(diffDays, 1), 90);
         }
 
+
         // Compiles sequential records of employee, bridging gaps with Carry-Forward virtual logs
         function getEmployeeEffectiveLogs(empId) {
-            const member = state.members.find(m => m.empId === empId);
+            const member = findMemberById(empId);
             if (!member) return null;
 
             // Check if member has completed initial registration
@@ -1619,7 +1654,7 @@ function rewriteSheet(sheet, dataList, headers) {
             }
 
             const currentActiveWeek = getCurrentWeekNumber();
-            const realLogs = state.logs.filter(l => l.empId === empId);
+            const realLogs = getLogsByEmpId(empId);
             
             let effectiveLogs = [];
             let lastWeight = member.initWeight;
@@ -1646,7 +1681,7 @@ function rewriteSheet(sheet, dataList, headers) {
                     const virtualDateStr = projStart.toISOString().split('T')[0];
 
                     effectiveLogs.push({
-                        empId: empId,
+                        empId: member.empId,
                         week: w,
                         date: virtualDateStr,
                         weight: lastWeight,
@@ -1694,6 +1729,7 @@ function rewriteSheet(sheet, dataList, headers) {
                 hipPct
             };
         }
+
 
         function updateDashboardCounters() {
             // Filter users who activated their records
@@ -1825,6 +1861,7 @@ function rewriteSheet(sheet, dataList, headers) {
             });
         }
 
+
         function handleApplyLookup(val) {
             const statusEl = document.getElementById('apply-lookup-status');
             const fullnameInput = document.getElementById('apply-fullname');
@@ -1851,7 +1888,8 @@ function rewriteSheet(sheet, dataList, headers) {
                 return;
             }
 
-            const member = state.members.find(m => m.empId === val.trim());
+            // SMART LOOKUP - Trims and matches regardless of leading zeros formatted in spreadsheet
+            const member = findMemberById(val.trim());
 
             if (member) {
                 const isActivated = (member.password && member.initWeight !== null && member.initWeight !== undefined);
@@ -1940,7 +1978,8 @@ function rewriteSheet(sheet, dataList, headers) {
             const targetWeightLossGoal = parseFloat(targetWeightField.value);
             const password = passwordField.value;
 
-            const memberIdx = state.members.findIndex(m => m.empId === empId);
+            // SMART LOOKUP ID
+            const memberIdx = findMemberIndexById(empId);
             if (memberIdx === -1) return;
 
             const calculatedBmi = calculateBmi(weight, height);
@@ -1964,6 +2003,7 @@ function rewriteSheet(sheet, dataList, headers) {
             if (loginEmpIdEl) loginEmpIdEl.value = empId;
         }
 
+
         function handleEmpIdLookup(val) {
             const lookupStatus = document.getElementById('lookup-status');
             const nameEl = document.getElementById('submit-emp-name');
@@ -1986,7 +2026,8 @@ function rewriteSheet(sheet, dataList, headers) {
                 return;
             }
 
-            const member = state.members.find(m => m.empId === val.trim());
+            // SMART LOOKUP ID
+            const member = findMemberById(val.trim());
 
             if (member) {
                 const isActivated = (member.password && member.initWeight !== null && member.initWeight !== undefined);
@@ -2065,13 +2106,14 @@ function rewriteSheet(sheet, dataList, headers) {
             const week = getCurrentWeekNumber();
             const dateStr = new Date().toISOString().split('T')[0];
 
-            const member = state.members.find(m => m.empId === empId);
+            // SMART LOOKUP ID
+            const member = findMemberById(empId);
             if (!member) return;
 
             const bmi = calculateBmi(weight, member.height);
 
             const newLog = {
-                empId,
+                empId: member.empId, // Standardize to database ID format
                 week,
                 date: dateStr,
                 weight,
@@ -2085,7 +2127,7 @@ function rewriteSheet(sheet, dataList, headers) {
                 q5_enoughProtein
             };
 
-            const existingLogIdx = state.logs.findIndex(l => l.empId === empId && l.week === week);
+            const existingLogIdx = state.logs.findIndex(l => matchEmpId(l.empId, member.empId) && l.week === week);
             if (existingLogIdx !== -1) {
                 state.logs[existingLogIdx] = newLog;
                 showToast("อัปเดตสถิติสำเร็จ", `ปรับปรุงสถิติของสัปดาห์ที่ ${week} เรียบร้อยแล้ว`, "success");
@@ -2107,12 +2149,14 @@ function rewriteSheet(sheet, dataList, headers) {
             handleEmpIdLookup("");
         }
 
+
         function handleEmployeeLogin(e) {
             e.preventDefault();
             const empId = document.getElementById('login-emp-id').value.trim();
             const password = document.getElementById('login-password').value;
 
-            const member = state.members.find(m => m.empId === empId);
+            // SMART LOOKUP ID
+            const member = findMemberById(empId);
             
             if (!member) {
                 showToast("ไม่พบข้อมูล", "ไม่พบรหัสพนักงานนี้ในระบบ", "error");
@@ -2285,6 +2329,7 @@ function rewriteSheet(sheet, dataList, headers) {
             }
         }
 
+
         function renderCharts(stats) {
             const labels = ["เริ่มต้น", ...stats.logs.map(l => `สัปดาห์ที่ ${l.week}`)];
             
@@ -2438,6 +2483,7 @@ function rewriteSheet(sheet, dataList, headers) {
             baseSelect.value = prevBase && parseInt(prevBase) <= 13 ? prevBase : "1";
             targetSelect.value = prevTarget && parseInt(prevTarget) <= 13 ? prevTarget : String(currentWeek);
         }
+
 
         function renderAdminComparison() {
             const baseWeek = parseInt(document.getElementById('compare-base-week').value || 1);
@@ -2603,7 +2649,7 @@ function rewriteSheet(sheet, dataList, headers) {
                 let validCount = 0;
 
                 registeredMembers.forEach(m => {
-                    const realLogs = state.logs.filter(l => l.empId === m.empId);
+                    const realLogs = getLogsByEmpId(m.empId);
                     let wWeight = m.initWeight;
                     let wBmi = m.initBmi;
                     let wWaist = m.initWaist || 0;
@@ -2767,6 +2813,42 @@ function rewriteSheet(sheet, dataList, headers) {
                 el.innerText = "0.00%";
                 el.className = "text-3xl font-black text-slate-500 block my-1 font-mono";
             }
+        }
+
+
+        // 5. AUTO-FETCH DATA ON PAGE LOAD: If Google Sheets URL exists, fetch shared values seamlessly!
+        function autoFetchCloudData() {
+            if (!state.config.apiUrl) return;
+
+            const loader = document.getElementById('banner-sync-loader');
+            const statusText = document.getElementById('sync-status-text');
+            if (loader) loader.classList.remove('hidden');
+            if (statusText) statusText.innerText = "กำลังซิงก์ข้อมูลอัปเดตแบบเรียลไทม์จาก Google Sheets คลาวด์...";
+
+            fetch(state.config.apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.members && data.logs) {
+                    state.members = data.members;
+                    state.logs = data.logs;
+                    if (data.config) {
+                        state.config.isRegOpen = data.config.isRegOpen !== undefined ? (data.config.isRegOpen === true || data.config.isRegOpen === "true") : state.config.isRegOpen;
+                        state.config.isLeaderboardOpen = data.config.isLeaderboardOpen !== undefined ? (data.config.isLeaderboardOpen === true || data.config.isLeaderboardOpen === "true") : state.config.isLeaderboardOpen;
+                        state.config.projectStartDate = data.config.projectStartDate || state.config.projectStartDate;
+                    }
+                    saveToLocalStorage();
+                    initAppUI(); // Reload UI with fresh Google Sheets records!
+                    showToast("ซิงก์ข้อมูลจาก Sheets สำเร็จ ☁️", "ระบบอัปเดตฐานข้อมูลเป็นสถิติล่าสุดเรียบร้อยแล้ว", "success");
+                    if (statusText) statusText.innerText = "ซิงก์ข้อมูลตรงกับ Google Sheets เรียบร้อยแล้ว สถิติเป็นปัจจุบัน";
+                }
+            })
+            .catch(err => {
+                console.warn("Auto-sync load error (working in local fallback mode):", err);
+                if (statusText) statusText.innerText = "ไม่สามารถเชื่อมต่อ Google Sheets ในขณะนี้ กำลังแสดงผลจากข้อมูลล่าสุดในเครื่อง";
+            })
+            .finally(() => {
+                if (loader) loader.classList.add('hidden');
+            });
         }
 
         function showAdminDrilldown(category) {
@@ -2948,7 +3030,8 @@ function rewriteSheet(sheet, dataList, headers) {
             const heightInput = document.getElementById('reg-height');
             const height = heightInput && heightInput.value ? parseFloat(heightInput.value) : null;
 
-            const exists = state.members.some(m => m.empId === empId);
+            // SMART ID EXIStS CHECK
+            const exists = findMemberById(empId);
             if (exists) {
                 showToast("ผิดพลาด", `รหัสพนักงาน ${empId} มีในฐานระบบอยู่แล้ว`, "error");
                 return;
@@ -3034,12 +3117,12 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         function deleteMemberWithConfirmation(empId) {
-            const member = state.members.find(m => m.empId === empId);
+            const member = findMemberById(empId);
             if (!member) return;
 
-            if (confirm(`คุณต้องการลบพนักงาน คุณ ${member.fullName} (รหัส: ${empId}) และสถิติทั้งหมดใช่หรือไม่?`)) {
-                state.members = state.members.filter(m => m.empId !== empId);
-                state.logs = state.logs.filter(l => l.empId !== empId);
+            if (confirm(`คุณต้องการลบพนักงาน คุณ ${member.fullName} (รหัส: ${member.empId}) และสถิติทั้งหมดใช่หรือไม่?`)) {
+                state.members = state.members.filter(m => !matchEmpId(m.empId, member.empId));
+                state.logs = state.logs.filter(l => !matchEmpId(l.empId, member.empId));
 
                 saveToLocalStorage();
                 syncStateToCloud();
@@ -3189,6 +3272,12 @@ function rewriteSheet(sheet, dataList, headers) {
             textarea.setSelectionRange(0, 99999);
             document.execCommand('copy');
             showToast("คัดลอกสำเร็จ", "โค้ด Apps Script พร้อมสำหรับจัดวางในชีตแล้ว", "success");
+        }
+
+        function calculateBmi(weightKg, heightCm) {
+            if (!weightKg || !heightCm) return 0;
+            const heightM = heightCm / 100;
+            return parseFloat((weightKg / (heightM * heightM)).toFixed(2));
         }
     </script>
 </body>

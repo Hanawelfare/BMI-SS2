@@ -1,0 +1,3068 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90-Day BMI Tracker - ระบบติดตามสุขภาพและ BMI พนักงาน</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-slate-800">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold leading-tight tracking-wider font-mono">FIT & FIRM 90 DAYS</h1>
+                        <p class="text-xs text-emerald-100 font-light">ระบบติดตามและประเมินผลค่า BMI พนักงาน</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-1">
+                    <button onclick="switchTab('apply-project')" id="btn-tab-apply-project" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition duration-200 bg-white/10 text-white">1. สมัครเข้าโครงการ</button>
+                    <button onclick="switchTab('weekly-submit')" id="btn-tab-weekly-submit" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition duration-200 hover:bg-white/10 text-emerald-50">2. ส่งผลรายสัปดาห์</button>
+                    <button onclick="switchTab('home')" id="btn-tab-home" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition duration-200 hover:bg-white/10 text-emerald-50">3. ตารางอันดับ %BMI</button>
+                    <button onclick="switchTab('employee-portal')" id="btn-tab-employee-portal" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition duration-200 hover:bg-white/10 text-emerald-50">4. แดชบอร์ดพนักงาน</button>
+                    <button onclick="switchTab('admin-panel')" id="btn-tab-admin-panel" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition duration-200 hover:bg-white/10 text-emerald-50">5. แผงควบคุมแอดมิน</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-emerald-100 hover:text-white focus:outline-none p-1">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-teal-850 border-t border-teal-700 transition duration-300">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-sm">
+                <button onclick="switchTab('apply-project'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-white hover:bg-teal-700">1. สมัครเข้าโครงการ</button>
+                <button onclick="switchTab('weekly-submit'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-white hover:bg-teal-700">2. ส่งผลรายสัปดาห์</button>
+                <button onclick="switchTab('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-white hover:bg-teal-700">3. ตารางอันดับ %BMI</button>
+                <button onclick="switchTab('employee-portal'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-white hover:bg-teal-700">4. แดชบอร์ดพนักงาน</button>
+                <button onclick="switchTab('admin-panel'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-white hover:bg-teal-700">5. แผงควบคุมแอดมิน</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Banner แจ้งเตือนสถานะการเชื่อมต่อ -->
+        <div id="sync-banner" class="mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <span class="p-2 bg-amber-500/10 text-amber-600 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </span>
+                <div>
+                    <h4 class="text-sm font-semibold text-amber-900">แอปกำลังทำงานแบบ Local Storage</h4>
+                    <p class="text-xs text-amber-700">ข้อมูลของคุณจะถูกจัดเก็บในเครื่องนี้ คุณสามารถกด "เชื่อมต่อ Google Sheet" ที่แผงควบคุมแอดมิน เพื่อผูกข้อมูลเข้ากับชีตจริงได้</p>
+                </div>
+            </div>
+            <button onclick="switchTab('admin-panel'); highlightSyncSection();" class="text-xs bg-amber-600 text-white px-3 py-1.5 rounded-lg font-medium hover:bg-amber-700 transition">
+                ตั้งค่าการเชื่อมต่อ Sheet
+            </button>
+        </div>
+
+        <!-- Notification Toast Manager -->
+        <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2 pointer-events-none text-slate-800"></div>
+
+        <!-- TAB 1: Apply Project (หน้าสมัครเข้าโครงการ) -->
+        <section id="tab-apply-project" class="tab-content block animate-fade-in max-w-3xl mx-auto">
+            <div id="apply-screen-wrapper" class="relative bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                
+                <!-- Registration Closed Overlay -->
+                <div id="apply-closed-overlay" class="hidden absolute inset-0 bg-slate-900/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-8 text-center text-white">
+                    <span class="p-5 bg-white/15 rounded-full text-4xl mb-4">🚫</span>
+                    <h3 class="text-xl font-extrabold">ขณะนี้ปิดระบบรับสมัครเข้าร่วมโครงการชั่วคราว</h3>
+                    <p class="text-xs text-slate-300 max-w-md mt-1.5">ผู้ดูแลระบบได้ทำการเปิดหรือปิดสิทธิ์รับสมัครตามเป้าหมายเวลาของบริษัทเรียบร้อยแล้ว</p>
+                </div>
+
+                <div class="p-6 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-bold">กรอกใบสมัครเข้าร่วมโครงการ FIT & FIRM</h3>
+                        <p class="text-xs text-emerald-100">กรอกรหัสพนักงานเพื่อค้นหารายชื่อส่วนสูง ตรวจทานข้อมูล วัดน้ำหนักครั้งแรก และตั้งเป้าหมาย</p>
+                    </div>
+                    <svg class="w-12 h-12 text-white/10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                    </svg>
+                </div>
+
+                <form id="form-apply-member" onsubmit="handleApplyProjectSubmit(event)" class="p-6 space-y-6">
+                    <!-- Step 1: Employee ID Lookup -->
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span> 
+                            1. ค้นหารหัสพนักงานและประวัติส่วนสูง
+                        </h4>
+                        <div>
+                            <label for="apply-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">ระบุรหัสพนักงานของคุณ</label>
+                            <div class="relative">
+                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 012345" oninput="handleApplyLookup(this.value)" required
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <span id="apply-lookup-status" class="text-xs font-medium text-slate-400">ระบุรหัสพนักงาน</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Autofilled Employee Info -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">ชื่อพนักงาน</label>
+                                <input type="text" id="apply-fullname" disabled placeholder="-" class="w-full bg-slate-100/85 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">แผนก</label>
+                                <input type="text" id="apply-dept" disabled placeholder="-" class="w-full bg-slate-100/85 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">ส่วนสูงคงที่เดิมในระบบ (ซม.)</label>
+                                <input type="text" id="apply-preloaded-height" disabled placeholder="-" class="w-full bg-slate-100/85 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-500 font-bold text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Employee Inputs Measurements for Validation & Setup -->
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span> 
+                            2. ยืนยันข้อมูลสัดส่วนและเป้าหมายของคุณ
+                        </h4>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label for="apply-input-height" class="block text-xs font-semibold text-slate-500 mb-1">ส่วนสูงที่ใช้วัดผล (ซม.)</label>
+                                <input type="number" id="apply-input-height" step="0.1" required placeholder="00.0" oninput="calculateApplyBmi()"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition">
+                                <span id="height-check-match" class="text-[10px] mt-1 block"></span>
+                            </div>
+                            <div>
+                                <label for="apply-input-weight" class="block text-xs font-semibold text-slate-500 mb-1">น้ำหนักวัดครั้งแรก (กก.)</label>
+                                <input type="number" id="apply-input-weight" step="0.1" required placeholder="00.0" oninput="calculateApplyBmi()"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition">
+                            </div>
+                            <div>
+                                <label for="apply-target-goal" class="block text-xs font-semibold text-slate-500 mb-1">เป้าหมายน้ำหนักที่ต้องการลดลง (กก.)</label>
+                                <input type="number" id="apply-target-goal" step="0.1" min="1" max="50" required placeholder="เช่น 5.0"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 placeholder-slate-400 font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition">
+                            </div>
+                        </div>
+
+                        <div class="bg-teal-50 rounded-2xl p-4 border border-teal-100 flex justify-between items-center text-sm mt-2">
+                            <span class="font-bold text-teal-800">ค่า BMI สัปดาห์แรกรับสมัครประเมิน:</span>
+                            <span class="text-xl font-black text-teal-700" id="apply-bmi-preview">0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Password setup -->
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span> 
+                            3. กำหนดรหัสผ่านสำหรับการเข้าพอร์ทัลส่วนบุคคล
+                        </h4>
+                        <div>
+                            <label for="apply-password" class="block text-xs font-semibold text-slate-500 mb-1">กำหนดรหัสผ่านของคุณ (ไม่ต่ำกว่า 4 หลัก)</label>
+                            <input type="password" id="apply-password" placeholder="••••••••" minlength="4" required
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-apply-submit" disabled
+                        class="w-full py-3.5 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex justify-center items-center gap-2 text-sm">
+                        กรุณาระบุรหัสพนักงานให้ถูกต้องก่อนลงทะเบียนสมัคร
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- TAB 2: Weekly Submit (หน้าส่งผลรายสัปดาห์) -->
+        <section id="tab-weekly-submit" class="tab-content hidden animate-fade-in max-w-2xl mx-auto">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-6 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-bold">ส่งสถิติวัดสัดส่วนร่างกายประจำสัปดาห์</h3>
+                        <p class="text-xs text-emerald-100">พนักงานที่ผ่านการสมัครในขั้นตอนแรกเสร็จสิ้น สามารถอัปเดตสถิติสัปดาห์นี้ได้ที่นี่</p>
+                    </div>
+                    <svg class="w-10 h-10 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                    </svg>
+                </div>
+
+                <form id="form-weekly-log" onsubmit="handleWeeklySubmit(event)" class="p-6 space-y-6">
+                    <!-- Step 1: Employee Verification -->
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                            <h4 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> 
+                                1. ระบุรหัสผ่านพนักงานผู้ร่วมโครงการ
+                            </h4>
+                            <span class="text-xs bg-slate-100 border border-slate-200 text-slate-700 font-bold px-2.5 py-1 rounded-md" id="weekly-locked-indicator">
+                                สัปดาห์ปัจจุบันเปิดกรอก: -
+                            </span>
+                        </div>
+                        <div>
+                            <label for="submit-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">รหัสพนักงานของคุณ</label>
+                            <div class="relative">
+                                <input type="text" id="submit-emp-id" placeholder="ตัวอย่าง: 004148" oninput="handleEmpIdLookup(this.value)" required
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <span id="lookup-status" class="text-xs font-medium text-slate-400">ตรวจสอบรหัสพนักงาน</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Autofill fields -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">ชื่อพนักงาน</label>
+                                <input type="text" id="submit-emp-name" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">แผนก</label>
+                                <input type="text" id="submit-emp-dept" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">รอบส่งผลสัปดาห์นี้</label>
+                                <input type="text" id="submit-week-display" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-emerald-700 font-bold text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Date and Lock notice -->
+                    <div id="submit-notice-box" class="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-1">
+                        <p class="font-bold flex items-center gap-1.5 text-amber-950">
+                            <span>📅 ข้อตกลงการกรอกผล (จันทร์-อาทิตย์):</span>
+                        </p>
+                        <p>1. ระบบอนุญาตให้ส่งสถิติล่าสุดในสัปดาห์ปฏิทินปัจจุบันเท่านั้น</p>
+                        <p>2. **หากคุณลืมลงสถิติในรอบสัปดาห์:** เพื่อรักษาความต่อเนื่องของเส้นกราฟ ระบบจะก๊อปปี้ค่าล่าสุดสัปดาห์ที่แล้วมาลงสวมแทนให้อาทิตย์ถัดไปโดยอัตโนมัติ</p>
+                    </div>
+
+                    <!-- Step 3: Current Metrics Inputs -->
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> 
+                            2. ระบุสถิติสัดส่วนร่างกายปัจจุบันประจำสัปดาห์
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label for="submit-weight" class="block text-xs font-semibold text-slate-500 mb-1">น้ำหนักสัปดาห์นี้ (กก.)</label>
+                                <div class="relative">
+                                    <input type="number" id="submit-weight" step="0.1" min="20" max="300" placeholder="00.0" required oninput="calculateLiveBmi()"
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-10 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <span class="text-xs text-slate-400">กก.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="submit-waist" class="block text-xs font-semibold text-slate-500 mb-1">รอบเอวสัปดาห์นี้ (นิ้ว)</label>
+                                <div class="relative">
+                                    <input type="number" id="submit-waist" step="0.1" min="15" max="100" placeholder="00.0" required
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-12 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <span class="text-xs text-slate-400">นิ้ว</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="submit-hip" class="block text-xs font-semibold text-slate-500 mb-1">รอบสะโพกสัปดาห์นี้ (นิ้ว)</label>
+                                <div class="relative">
+                                    <input type="number" id="submit-hip" step="0.1" min="15" max="100" placeholder="00.0" required
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-12 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <span class="text-xs text-slate-400">นิ้ว</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live BMI preview -->
+                        <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-100 flex justify-between items-center">
+                            <div>
+                                <p class="text-xs text-emerald-800 font-medium">ส่วนสูงคงที่เดิมของคุณ: <span id="live-height-preview" class="font-bold">-</span> ซม.</p>
+                                <p class="text-[10px] text-emerald-600/80">ระบบคัดลอกส่วนสูงเริ่มต้นมาประมวลผลดัชนี BMI ล่าสุดแบบเรียลไทม์</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-xxs text-emerald-600/80 uppercase font-bold">BMI โดยประมาณสัปดาห์นี้</span>
+                                <span class="text-xl font-black text-emerald-700" id="live-bmi-preview">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Health Evaluation Surveys -->
+                    <div class="space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-150">
+                        <div class="border-b border-slate-200 pb-2 flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 bg-sky-500 rounded-full"></span> 
+                                3. แบบประเมินพฤติกรรมสุขภาพประจำสัปดาห์นี้
+                            </h4>
+                            <span class="text-xxs font-bold text-sky-600 uppercase tracking-wide">สำรวจสุขภาพ</span>
+                        </div>
+
+                        <!-- Survey Q1 -->
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-white rounded-xl border border-slate-200/60">
+                            <p class="text-xs font-semibold text-slate-700">1. ทานอาหารครบ 5 หมู่ (ข้าว แป้ง ผัก ผลไม้ เนื้อสัตว์ นม)</p>
+                            <div class="flex items-center gap-1.5 self-end sm:self-auto">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="survey-q1" value="yes" required class="sr-only peer">
+                                    <span class="px-3 py-1 bg-slate-100 peer-checked:bg-emerald-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ใช่</span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="survey-q1" value="no" class="sr-only peer">
+                                    <span class="px-3 py-1 bg-slate-100 peer-checked:bg-red-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ไม่ใช่</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Survey Q2 -->
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-white rounded-xl border border-slate-200/60">
+                            <p class="text-xs font-semibold text-slate-700">2. เลือกกินเนื้อสัตว์แบบไม่ติดมัน สัปดาห์ละ 2-3 มื้อขึ้นไป</p>
+                            <div class="flex items-center gap-1.5 self-end sm:self-auto">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="survey-q2" value="yes" required class="sr-only peer">
+                                    <span class="px-3 py-1 bg-slate-100 peer-checked:bg-emerald-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ใช่</span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="survey-q2" value="no" class="sr-only peer">
+                                    <span class="px-3 py-1 bg-slate-100 peer-checked:bg-red-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ไม่ใช่</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Survey Q3 -->
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-white rounded-xl border border-slate-200/60">
+                            <p class="text-xs font-semibold text-slate-700">3. ทานยาลดความอ้วนหรือผลิตภัณฑ์สลายไขมันทางเคมีเป็นตัวช่วย</p>
+                            <div class="flex items-center gap-1.5 self-end sm:self-auto">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="survey-q3" value="yes" required class="sr-only peer">
+                                    <span class="px-3 py-1 bg-slate-100 peer-checked:bg-emerald-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ใช่</span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="survey-q3" value="no" class="sr-only peer">
+                                    <span class="px-3 py-1 bg-slate-100 peer-checked:bg-red-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ไม่ใช่</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Survey Q4 -->
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-white rounded-xl border border-slate-200/60">
+                            <p class="text-xs font-semibold text-slate-700">4. กินอาหารมื้อเย็นห่างจากเวลานอนหลับจริงไม่น้อยกว่า 4 ชั่วโมง</p>
+                            <div class="flex items-center gap-1.5 self-end sm:self-auto">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="survey-q4" value="yes" required class="sr-only peer">
+                                    <span class="px-3 py-1 bg-slate-100 peer-checked:bg-emerald-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ใช่</span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="survey-q4" value="no" class="sr-only peer">
+                                    <span class="px-3 py-1 bg-slate-100 peer-checked:bg-red-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ไม่ใช่</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Survey Q5 -->
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-white rounded-xl border border-slate-200/60">
+                            <div class="space-y-1 pr-2 text-left">
+                                <p class="text-xs font-semibold text-slate-700">5. มั่นใจว่ากินโปรตีนได้ปริมาณเพียงพอตามความต้องการจริงของร่างกาย</p>
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="text-[10px] text-slate-500">เช่น น้ำหนัก 70 กก. ควรได้รับโปรตีน 70-84 กรัม/วัน</span>
+                                    <a href="https://hdmall.co.th/health-tools/protein-calculator.html" target="_blank"
+                                        class="inline-flex items-center gap-1 text-[10px] text-sky-600 font-bold hover:underline">
+                                        🔗 คลิกเปิดคำนวณสัดส่วนโปรตีน
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1.5 self-end sm:self-auto">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="survey-q5" value="yes" required class="sr-only peer">
+                                    <span class="px-3 py-1 bg-slate-100 peer-checked:bg-emerald-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ใช่</span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="survey-q5" value="no" class="sr-only peer">
+                                    <span class="px-3 py-1 bg-slate-100 peer-checked:bg-red-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ไม่ใช่</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="pt-2 flex gap-3">
+                        <button type="button" onclick="clearWeeklyForm()"
+                            class="w-1/3 py-3 border border-slate-200 text-slate-600 rounded-xl font-semibold hover:bg-slate-50 transition">
+                            ล้างแบบฟอร์ม
+                        </button>
+                        <button type="submit" id="btn-submit-weekly" disabled
+                            class="w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2">
+                            กรุณากรอกรหัสพนักงานให้ถูกต้อง
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- TAB 3: Home (หน้าแสดงอันดับ %BMI) -->
+        <section id="tab-home" class="tab-content hidden space-y-8 animate-fade-in">
+            <!-- Hero Dashboard Summary Header -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl mb-6">
+                <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-emerald-500/10 blur-xl"></div>
+                <div class="absolute right-1/4 -top-10 w-36 h-36 rounded-full bg-teal-500/10 blur-xl"></div>
+                
+                <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <div class="md:col-span-2 space-y-2 text-left">
+                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full border border-emerald-500/30">
+                            โครงการ FIT & FIRM 90 DAYS
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">ร่วมก้าวสู่วิถีชีวิตใหม่ ร่างกายแข็งแรง</h2>
+                        <p class="text-slate-300 text-xs">
+                            ร่วมแข่งขันลดเปอร์เซ็นต์ BMI สะสมภายใน 90 วัน เพื่อสร้างผลงานสุขภาพพนักงานที่ดีที่สุดในองค์กร
+                        </p>
+                    </div>
+                    
+                    <!-- Stats widget -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 backdrop-blur-md">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-medium text-slate-300">วันคืบหน้าโครงการ</span>
+                            <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-md font-medium" id="project-days">วันที่ 1/90</span>
+                        </div>
+                        <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                            <div id="project-progress-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 1%"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-center">
+                            <div class="p-2 bg-white/5 rounded-xl">
+                                <span class="block text-lg font-bold text-white" id="count-active-members">0</span>
+                                <span class="text-[9px] text-slate-400">สมัครแล้ว (คน)</span>
+                            </div>
+                            <div class="p-2 bg-white/5 rounded-xl">
+                                <span class="block text-lg font-bold text-emerald-400" id="count-weight-loss">0.0</span>
+                                <span class="text-[9px] text-slate-400">ลดรวม (กก.)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col min-h-[450px]">
+                <div class="p-6 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div class="text-left">
+                        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <span class="p-1.5 bg-emerald-500/10 text-emerald-600 rounded-lg">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm0 0h4m-4 0H8m12 9a4 4 0 11-8 0 4 4 0 018 0zm-8 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                            </span>
+                            ตารางอันดับผู้พัฒนา %BMI ลดลงสูงสุด (Leaderboard)
+                        </h3>
+                        <p class="text-xs text-slate-500">เปรียบเทียบจาก BMI แรกเริ่มในใบสมัคร คัดกรองพนักงานที่ลดเปอร์เซ็นต์ BMI ได้ดีที่สุด</p>
+                    </div>
+                    <span class="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-semibold">เรียงลำดับสุทธิเรียลไทม์</span>
+                </div>
+
+                <div id="leaderboard-container-wrapper" class="relative flex-grow flex flex-col">
+                    <!-- Lock Screen Overlay -->
+                    <div id="leaderboard-lock-overlay" class="hidden absolute inset-0 bg-slate-150/90 backdrop-blur-md z-10 flex flex-col items-center justify-center p-8 text-center">
+                        <span class="p-4 bg-slate-200 text-slate-600 rounded-full text-3xl mb-4">🔒</span>
+                        <h4 class="text-lg font-bold text-slate-800">ผู้ดูแลระบบปิดการแสดงตารางอันดับชั่วคราว</h4>
+                        <p class="text-xs text-slate-500 max-w-md mt-1.5">ผู้ดูแลระบบกำลังปรับยอดสถิติหรือปรับปรุงข้อมูลตารางจัดอันดับ</p>
+                    </div>
+
+                    <!-- Top 3 Podium -->
+                    <div class="p-6 bg-slate-50/50 border-b border-slate-100 grid grid-cols-3 gap-3 text-center" id="leaderboard-podium">
+                        <!-- Podium HTML generated dynamically -->
+                    </div>
+
+                    <!-- Detailed Leaderboard Table -->
+                    <div class="overflow-x-auto custom-scrollbar flex-grow">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-150 text-slate-400 text-xs uppercase tracking-wider bg-slate-50">
+                                    <th class="py-3.5 px-6 font-semibold">อันดับ</th>
+                                    <th class="py-3.5 px-6 font-semibold">รหัสพนักงาน</th>
+                                    <th class="py-3.5 px-6 font-semibold">ชื่อ-นามสกุล</th>
+                                    <th class="py-3.5 px-6 font-semibold">แผนก</th>
+                                    <th class="py-3.5 px-6 font-semibold text-center">BMI สมัครวันแรก</th>
+                                    <th class="py-3.5 px-6 font-semibold text-center">BMI สัปดาห์ปัจจุบัน</th>
+                                    <th class="py-3.5 px-6 font-semibold text-right text-emerald-700">% BMI ที่พัฒนาได้</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-list-body" class="divide-y divide-slate-100 text-sm text-slate-600">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                        <div id="leaderboard-empty-state" class="hidden p-8 text-center text-slate-400">
+                            ยังไม่มีผู้สมัครเข้าร่วมที่มีประวัติความสมบูรณ์ในตารางจัดอันดับ
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: Employee Portal (พอร์ทัลของพนักงาน) -->
+        <section id="tab-employee-portal" class="tab-content hidden animate-fade-in">
+            <!-- Login Screen -->
+            <div id="employee-login-screen" class="max-w-md mx-auto bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-6 bg-slate-900 text-white text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-700 opacity-90"></div>
+                    <div class="relative z-10 space-y-2">
+                        <h3 class="text-xl font-bold">ล็อกอินเข้าพอร์ทัลพนักงาน</h3>
+                        <p class="text-xs text-emerald-100">โปรดระบุรหัสพนักงานและรหัสผ่านเพื่อส่องดูประวัตกราฟสะสมย้อนหลัง</p>
+                    </div>
+                </div>
+
+                <div class="p-6 space-y-4" id="box-login-form">
+                    <form onsubmit="handleEmployeeLogin(event)" class="space-y-4">
+                        <div>
+                            <label for="login-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">รหัสพนักงาน</label>
+                            <input type="text" id="login-emp-id" placeholder="ตัวอย่าง: 004148" required
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                        </div>
+                        <div>
+                            <label for="login-password" class="block text-xs font-semibold text-slate-500 mb-1">รหัสผ่านล็อกอิน</label>
+                            <input type="password" id="login-password" placeholder="••••••••" required
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                        </div>
+                        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-emerald-600/10 transition">
+                            เข้าสู่แผงประวัติและผลงาน
+                        </button>
+                    </form>
+                    <div class="text-center pt-2">
+                        <span class="text-xs text-slate-400">ยังไม่ได้ยืนยันตัวตนตั้งรหัสผ่านสมัคร? </span>
+                        <button onclick="switchTab('apply-project')" class="text-xs text-emerald-600 font-bold hover:underline">คลิกหน้าสมัครที่นี่</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logged In State: Employee Dashboard -->
+            <div id="employee-dashboard-screen" class="hidden space-y-8 animate-fade-in text-left">
+                <!-- User Meta Header -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-xl font-black">
+                            <span id="member-initial">?</span>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-xl font-bold text-slate-900" id="member-fullname">ชื่อพนักงาน</h3>
+                                <span class="px-2.5 py-0.5 bg-teal-500/10 text-teal-700 rounded-full text-xxs font-bold uppercase tracking-wider" id="member-dept">แผนก</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">รหัสพนักงาน: <span id="member-empid" class="font-semibold font-mono">0000</span> | ส่วนสูงคงที่: <span id="member-height" class="font-bold text-emerald-600">0</span> ซม.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="handleLogout()" class="px-4 py-2 border border-slate-200 text-slate-600 text-xs rounded-xl font-semibold hover:bg-slate-50 transition flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            ออกจากระบบ
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Goal Progression Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gradient-to-br from-emerald-650 to-teal-750 text-white rounded-3xl p-6 shadow-md text-left">
+                    <div class="md:col-span-2 space-y-2">
+                        <span class="text-xs font-bold text-emerald-300 uppercase tracking-wide">เป้าหมายทองคำของคุณ (Your Weight Goal)</span>
+                        <h4 class="text-xl font-extrabold" id="goal-status-text">เป้าหมายลดลง: XX กก. 🏆</h4>
+                        <p class="text-xs text-emerald-100 font-light max-w-lg leading-relaxed">
+                            ความสำเร็จเริ่มจากเป้าหมายที่แน่นอน! คุณได้ตั้งเป้าหมายลดน้ำหนักไว้ตอนลงทะเบียนสมัคร ระบบจะคำนวณอัตราความลดสะสมจากน้ำหนักตั้งต้นเพื่อเช็คระยะความก้าวหน้า
+                        </p>
+                    </div>
+                    <div class="bg-white/10 rounded-2xl p-4 border border-white/10 flex flex-col justify-between">
+                        <div class="flex justify-between items-center text-xs text-emerald-100">
+                            <span>ความคืบหน้าจริง</span>
+                            <span class="font-bold text-white" id="goal-percent-text">0%</span>
+                        </div>
+                        <div class="w-full bg-emerald-950/40 h-2.5 rounded-full overflow-hidden my-2">
+                            <div id="goal-progress-bar font-bold" class="bg-white h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <div class="flex justify-between items-center text-[10px] text-emerald-200">
+                            <span id="goal-loss-achieved">ลดได้แล้ว: 0 กก.</span>
+                            <span id="goal-loss-remaining">เหลืออีก: 0 กก.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Status Grid comparing current metrics to initial metrics -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left">
+                    <!-- Weight Box -->
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold text-slate-400">น้ำหนักปัจจุบัน</span>
+                            <span id="badge-weight-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold">0.0%</span>
+                        </div>
+                        <div class="my-3">
+                            <span class="text-3xl font-black text-slate-900" id="current-weight-val">0.0</span>
+                            <span class="text-xs text-slate-400 ml-1">กก.</span>
+                        </div>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between">
+                            <span>เริ่มต้นสมัคร: <b id="initial-weight-val">0</b> กก.</span>
+                            <span class="text-slate-400 font-semibold" id="weight-change-abs">-0 กก.</span>
+                        </div>
+                    </div>
+
+                    <!-- BMI Box -->
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold text-slate-400">BMI ปัจจุบัน</span>
+                            <span id="badge-bmi-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold">0.0%</span>
+                        </div>
+                        <div class="my-3 flex items-center justify-between">
+                            <span class="text-3xl font-black text-slate-900" id="current-bmi-val">0.00</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-md font-semibold text-center" id="bmi-status-label">ปกติ</span>
+                        </div>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between">
+                            <span>เริ่มต้นสมัคร: <b id="initial-bmi-val">0</b></span>
+                            <span class="text-slate-400 font-semibold" id="bmi-change-abs">-0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Waist Box -->
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold text-slate-400">รอบเอวปัจจุบัน</span>
+                            <span id="badge-waist-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold">0.0%</span>
+                        </div>
+                        <div class="my-3">
+                            <span class="text-3xl font-black text-slate-900" id="current-waist-val">0.0</span>
+                            <span class="text-xs text-slate-400 ml-1">นิ้ว</span>
+                        </div>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between">
+                            <span>เริ่มต้นสมัคร: <b id="initial-waist-val">0</b> นิ้ว</span>
+                            <span class="text-slate-400 font-semibold" id="waist-change-abs">-0 นิ้ว</span>
+                        </div>
+                    </div>
+
+                    <!-- Hip Box -->
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-semibold text-slate-400">รอบสะโพกปัจจุบัน</span>
+                            <span id="badge-hip-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold font-mono">0.0%</span>
+                        </div>
+                        <div class="my-3">
+                            <span class="text-3xl font-black text-slate-900" id="current-hip-val">0.0</span>
+                            <span class="text-xs text-slate-400 ml-1">นิ้ว</span>
+                        </div>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between">
+                            <span>เริ่มต้นสมัคร: <b id="initial-hip-val">0</b> นิ้ว</span>
+                            <span class="text-slate-400 font-semibold" id="hip-change-abs">-0 นิ้ว</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permanent Health Calculator Widget Resource -->
+                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div class="space-y-1 text-left">
+                        <h4 class="text-sm font-bold text-slate-950 flex items-center gap-1.5">
+                            <span>🥛</span> เครื่องมือความรู้สุขภาพ: คำนวณโปรตีนตามน้ำหนักตัว (Protein Calculator)
+                        </h4>
+                        <p class="text-xs text-slate-500 max-w-2xl leading-relaxed">
+                            ต้องการทานโปรตีนให้เพียงพอเพื่อเสริมสร้างกล้ามเนื้อและระบบเผาผลาญในระหว่างการลดน้ำหนัก? คุณสามารถใช้เครื่องมือช่วยคำนวณสัดส่วนอาหารและโปรตีนต่อวันได้ฟรีตลอดเวลา
+                        </p>
+                    </div>
+                    <a href="https://hdmall.co.th/health-tools/protein-calculator.html" target="_blank"
+                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs px-5 py-3 rounded-xl shadow-sm shadow-teal-600/10 transition inline-flex items-center gap-1.5 flex-shrink-0 self-stretch sm:self-auto justify-center">
+                        คำนวณโปรตีนทันที 🔗
+                    </a>
+                </div>
+
+                <!-- Charts Section: 4 Line Charts -->
+                <div class="space-y-4">
+                    <h4 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="p-1.5 bg-emerald-500/10 text-emerald-600 rounded-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm0 0h4m-4 0H8m12 9a4 4 0 11-8 0 4 4 0 018 0zm-8 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                        </span>
+                        กราฟเส้นพัฒนาการส่วนสัดรายพนักงาน (สเกลเทียบวันสมัคร W1 เป็นหลัก)
+                    </h4>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Chart 1: BMI -->
+                        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
+                            <span class="font-bold text-slate-800 text-sm block mb-4 text-left">ดัชนีมวลกายย้อนหลัง (BMI Trend)</span>
+                            <div class="h-64 relative">
+                                <canvas id="chart-bmi"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 2: Weight -->
+                        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
+                            <span class="font-bold text-slate-800 text-sm block mb-4 text-left">การลดน้ำหนักสะสม (Weight Chart - กก.)</span>
+                            <div class="h-64 relative">
+                                <canvas id="chart-weight"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 3: Waist -->
+                        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
+                            <span class="font-bold text-slate-800 text-sm block mb-4 text-left">ความกระชับขนาดเอว (Waist Chart - นิ้ว)</span>
+                            <div class="h-64 relative">
+                                <canvas id="chart-waist"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 4: Hip -->
+                        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
+                            <span class="font-bold text-slate-800 text-sm block mb-4 text-left">ความฟิตขนาดสะโพก (Hip Chart - นิ้ว)</span>
+                            <div class="h-64 relative">
+                                <canvas id="chart-hip"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Records Table -->
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h4 class="font-bold text-slate-800 text-sm">ประวัติบันทึกข้อมูลส่วนตัวรายสัปดาห์ในระบบ</h4>
+                        <span class="text-xxs text-slate-400 font-mono" id="records-count">พบ 0 สถิติ</span>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-xs uppercase bg-slate-100 text-slate-500 border-b border-slate-200">
+                                    <th class="py-3 px-6">สัปดาห์ที่</th>
+                                    <th class="py-3 px-6">วันที่ส่ง / ประมวลผล</th>
+                                    <th class="py-3 px-6 text-center">น้ำหนัก (กก.)</th>
+                                    <th class="py-3 px-6 text-center">BMI</th>
+                                    <th class="py-3 px-6 text-center">รอบเอว (นิ้ว)</th>
+                                    <th class="py-3 px-6 text-center">รอบสะโพก (นิ้ว)</th>
+                                    <th class="py-3 px-6 text-right">สถานะ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="member-records-body" class="divide-y divide-slate-150 text-xs text-slate-600">
+                                <!-- Dynamic user history -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: Admin Panel (แผงควบคุมแอดมิน) -->
+        <section id="tab-admin-panel" class="tab-content hidden animate-fade-in space-y-8">
+            <!-- Non Logged In State: Admin Password Verification -->
+            <div id="admin-login-screen" class="max-w-md mx-auto bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-6 bg-slate-900 text-white text-center">
+                    <h3 class="text-xl font-bold">เข้าสู่แผงจัดการควบคุม (แอดมิน)</h3>
+                    <p class="text-xs text-slate-400 mt-2">โปรดกรอกรหัสแอดมินเพื่อเรียกดูฐานพนักงานและผลวิเคราะห์เปรียบเทียบสัปดาห์</p>
+                </div>
+                <form onsubmit="handleAdminLogin(event)" class="p-6 space-y-4">
+                    <div>
+                        <label for="admin-input-pass" class="block text-xs font-semibold text-slate-500 mb-1 text-left">รหัสผ่านผู้ดูแล</label>
+                        <input type="password" id="admin-input-pass" placeholder="กรอกรหัสผ่าน" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition">
+                    </div>
+                    <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition">
+                        ยืนยันสิทธิ์แอดมิน
+                    </button>
+                </form>
+            </div>
+
+            <!-- Logged In State: Admin Suite Container -->
+            <div id="admin-suite" class="hidden space-y-8 animate-fade-in text-left">
+                <!-- Suite Header -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-xl font-extrabold text-slate-900">แผงจัดการโครงการและรายงานสรุปผู้บริหาร 🏢</h3>
+                        <p class="text-xs text-slate-500">ปรับเปลี่ยนสิทธิ์ ตั้งแต่วันเริ่มต้นโครงการ และวิเคราะห์ความฟิตสะสม</p>
+                    </div>
+                    <button onclick="handleAdminLogout()" class="px-3.5 py-2 border border-slate-200 text-slate-600 text-xs rounded-xl font-semibold hover:bg-slate-50 transition">
+                        ออกจากโหมดแอดมิน
+                    </button>
+                </div>
+
+                <!-- EXECUTIVE REPORT PANEL -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-6">
+                    <div class="border-b border-slate-100 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h4 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <span>📊</span> สถิติสรุปเสนอผู้บริหารระดับสูง (Executive Summaries)
+                            </h4>
+                            <p class="text-xs text-slate-500 mt-0.5">ผลลัพธ์ลดลงสุทธิเฉลี่ยของภาพรวมพนักงานทั้งองค์กรรวบรวมแบบสะสม</p>
+                        </div>
+                        
+                        <!-- Department Filter Option -->
+                        <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                            <label for="admin-dept-filter" class="text-xs font-semibold text-slate-600">กรองแผนก:</label>
+                            <select id="admin-dept-filter" onchange="filterAdminExecutiveSummary()" class="bg-white text-xs font-bold text-slate-700 rounded-lg px-2.5 py-1 border border-slate-150 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+                                <option value="ALL">ทุกแผนก (รวมทั้งหมด)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Total reduction percentage metrics -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div onclick="showAdminDrilldown('bmi')" class="bg-sky-50 border border-sky-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
+                            <span class="text-xxs uppercase font-bold text-sky-600 block">BMI ลดลงเฉลี่ยรวม 🖱️</span>
+                            <span id="exec-bmi-drop" class="text-3xl font-black text-sky-950 block my-1">-%</span>
+                            <span class="text-xxs text-sky-700">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
+                        </div>
+                        <div onclick="showAdminDrilldown('weight')" class="bg-emerald-50 border border-emerald-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
+                            <span class="text-xxs uppercase font-bold text-emerald-600 block">น้ำหนักลดลงเฉลี่ยรวม 🖱️</span>
+                            <span id="exec-weight-drop" class="text-3xl font-black text-emerald-950 block my-1">-%</span>
+                            <span class="text-xxs text-emerald-700">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
+                        </div>
+                        <div onclick="showAdminDrilldown('waist')" class="bg-amber-50 border border-amber-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
+                            <span class="text-xxs uppercase font-bold text-amber-600 block">รอบเอวหดลงเฉลี่ยรวม 🖱️</span>
+                            <span id="exec-waist-drop" class="text-3xl font-black text-amber-950 block my-1">-%</span>
+                            <span class="text-xxs text-amber-700">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
+                        </div>
+                        <div onclick="showAdminDrilldown('hip')" class="bg-violet-50 border border-violet-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
+                            <span class="text-xxs uppercase font-bold text-violet-600 block">สะโพกลดลงเฉลี่ยรวม 🖱️</span>
+                            <span id="exec-hip-drop" class="text-3xl font-black text-violet-950 block my-1">-%</span>
+                            <span class="text-xxs text-violet-700">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
+                        </div>
+                    </div>
+
+                    <!-- DRILL DOWN LIST -->
+                    <div id="admin-drilldown-section" class="bg-white rounded-2xl p-5 border-2 border-emerald-500/20 shadow-inner hidden animate-fade-in space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-2.5">
+                            <div>
+                                <h4 id="drilldown-title" class="text-sm font-bold text-emerald-950 flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping"></span> 
+                                    รายละเอียดเจาะลึกผู้เข้าร่วมโครงการ
+                                </h4>
+                                <p class="text-xxs text-slate-500">ตารางเรียงลำดับเปรียบเทียบความฟิตในมิติดังกล่าวทั้งหมดแยกพนักงาน</p>
+                            </div>
+                            <button onclick="closeDrilldown()" class="text-xxs bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg font-bold transition">
+                                ✕ ปิดข้อมูลเจาะลึก
+                            </button>
+                        </div>
+                        
+                        <div class="overflow-x-auto custom-scrollbar max-h-80">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="text-xxs bg-emerald-50/50 text-emerald-800 border-b border-emerald-100">
+                                        <th class="py-2 px-4">รหัสพนักงาน</th>
+                                        <th class="py-2 px-4">ชื่อพนักงาน</th>
+                                        <th class="py-2 px-4">แผนก</th>
+                                        <th class="py-2 px-4 text-center" id="drilldown-header-base">ค่าเริ่มต้น (W1)</th>
+                                        <th class="py-2 px-4 text-center" id="drilldown-header-current">ค่าปัจจุบันล่าสุด</th>
+                                        <th class="py-2 px-4 text-right" id="drilldown-header-diff">% การพัฒนาได้</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="drilldown-table-body" class="divide-y divide-slate-100 text-xs">
+                                    <!-- Drilled Rows dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Executive Charts Row -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Chart 1: Doughnut (Participation Breakdown) -->
+                        <div class="bg-slate-50 border border-slate-150 rounded-2xl p-5 flex flex-col justify-between">
+                            <div>
+                                <span class="font-bold text-slate-800 text-xs uppercase block">1. อัตราความคืบหน้าเปิดบัญชีพนักงาน</span>
+                                <span class="text-slate-400 text-[10px] block mb-4">สัดส่วนผู้ยืนยันตัวตนสมัครจริงเทียบรายชื่อเปล่า</span>
+                            </div>
+                            <div class="h-44 relative flex justify-center items-center">
+                                <canvas id="chart-admin-participation"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 2: Weekly Group Performance trend (Line) -->
+                        <div class="lg:col-span-2 bg-slate-50 border border-slate-150 rounded-2xl p-5">
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <span class="font-bold text-slate-800 text-xs uppercase block">2. สถิติการพัฒนาเฉลี่ยสะสมรายสัปดาห์ (%)</span>
+                                    <span class="text-slate-400 text-[10px] block">อัตราลดเฉลี่ยภาพรวมในทุกๆ มิติของพนักงานทั้งบริษัท</span>
+                                </div>
+                            </div>
+                            <div class="h-44 relative">
+                                <canvas id="chart-admin-trend"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 🛠️ INTERACTIVE WEEKLY COMPARISON TOOL -->
+                    <div class="bg-slate-50 border border-slate-150 rounded-2xl p-5 space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-3">
+                            <div>
+                                <h5 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                                    <span>🔄</span> 3. เครื่องมือเปรียบเทียบค่าเฉลี่ยสัปดาห์ระบุอิสระ
+                                </h5>
+                                <p class="text-slate-400 text-[10px]">เลือกจับคู่สัปดาห์ใดๆ เพื่อให้ระบบทำการประมวลผล เปรียบเทียบ และพลอตกราฟแท่งผลต่าง</p>
+                            </div>
+                            
+                            <!-- Dropdown Selectors -->
+                            <div class="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-slate-200">
+                                <div>
+                                    <label class="block text-[8px] font-bold text-slate-400 uppercase leading-none">สัปดาห์เริ่มต้น (ฐาน)</label>
+                                    <select id="compare-base-week" onchange="renderAdminComparison()" class="bg-transparent text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer mt-0.5">
+                                        <!-- Dynamic options -->
+                                    </select>
+                                </div>
+                                <div class="text-slate-300 font-bold self-center px-1">|</div>
+                                <div>
+                                    <label class="block text-[8px] font-bold text-slate-400 uppercase leading-none">สัปดาห์เปรียบเทียบ</label>
+                                    <select id="compare-target-week" onchange="renderAdminComparison()" class="bg-transparent text-xs font-semibold text-emerald-600 focus:outline-none cursor-pointer mt-0.5">
+                                        <!-- Dynamic options -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Metric Comparison Blocks -->
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="compare-metrics-grid">
+                            <!-- Dynamic comparison cards -->
+                        </div>
+
+                        <!-- Bar chart showing side-by-side comparison -->
+                        <div class="bg-white p-4 rounded-xl border border-slate-150">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-3">เปรียบเทียบสัดส่วนเฉลี่ยความฟิตทั้งองค์กร (Side-by-Side Bar Chart)</span>
+                            <div class="h-64 relative">
+                                <canvas id="chart-admin-comparison-bar"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Control Toggles and Settings -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                        <span class="block text-xs font-bold text-slate-500">ระบบรับสมัคร / ยืนยันตัวตนเปิดบัญชี</span>
+                        <div class="flex items-center justify-between pt-1">
+                            <span class="text-xs font-medium text-slate-700" id="text-toggle-reg">สถานะ: เปิดรับสมัคร</span>
+                            <button onclick="toggleAdminSetting('isRegOpen')" id="btn-toggle-reg" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition">
+                                เปิดอยู่ (คลิกปิด)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                        <span class="block text-xs font-bold text-slate-500">ตารางอันดับหน้าหลัก (Leaderboard)</span>
+                        <div class="flex items-center justify-between pt-1">
+                            <span class="text-xs font-medium text-slate-700" id="text-toggle-board">สถานะ: เปิดแสดงผล</span>
+                            <button onclick="toggleAdminSetting('isLeaderboardOpen')" id="btn-toggle-board" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition">
+                                เปิดอยู่ (คลิกปิด)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                        <label for="config-start-date" class="block text-xs font-bold text-slate-500 mb-1">วันเริ่มโครงการจริง (ปฏิทินขององค์กร)</label>
+                        <input type="date" id="config-start-date" onchange="handleStartDateChange(this.value)"
+                            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-700 font-mono focus:outline-none focus:ring-2 focus:ring-slate-500/20">
+                    </div>
+                </div>
+
+                <!-- Admin Action Section split -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Form 1: Pre-register Employee directory -->
+                    <div class="lg:col-span-2 bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-4">
+                        <h4 class="font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+                            <span class="p-1.5 bg-emerald-500/10 text-emerald-600 rounded-lg">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                            </span>
+                            บันทึกพจนานุกรมรายชื่อพนักงานล่วงหน้า (ระบุส่วนสูงล่วงหน้า)
+                        </h4>
+                        
+                        <form id="form-register-employee" onsubmit="handleEmployeePreRegistration(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="reg-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">รหัสพนักงาน (เก็บเลข 0 นำหน้าเสมอ)</label>
+                                    <input type="text" id="reg-emp-id" placeholder="ระบุเช่น 00123" required
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                                </div>
+                                <div>
+                                    <label for="reg-dept" class="block text-xs font-semibold text-slate-500 mb-1">แผนก / ฝ่ายงาน</label>
+                                    <input type="text" id="reg-dept" placeholder="เช่น ฝ่ายผลิต ฝ่ายบริการ" required
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label for="reg-firstname" class="block text-xs font-semibold text-slate-500 mb-1">ชื่อ-นามสกุลจริง</label>
+                                    <input type="text" id="reg-firstname" placeholder="เช่น วิชัย สุขประเสริฐกุล" required
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                                </div>
+                                <div>
+                                    <label for="reg-height" class="block text-xs font-semibold text-slate-500 mb-1">ส่วนสูงคงที่ (ซม.) (*เว้นได้ถ้าต้องการป้อนตอนสมัคร)</label>
+                                    <input type="number" id="reg-height" step="0.1" min="100" max="250" placeholder="ว่างไว้หากยังไม่มีข้อมูล"
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md shadow-emerald-600/15 transition text-xs">
+                                บันทึกพนักงานเปล่ารอวัดและสมัครครั้งแรก
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Setup Google Sheet Cloud Sync -->
+                    <div id="section-cloud-sync" class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <h4 class="font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+                                <span class="p-1.5 bg-sky-500/10 text-sky-600 rounded-lg">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                                    </svg>
+                                </span>
+                                เชื่อมโยง Google Sheet
+                            </h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                ประสานข้อมูลให้วิ่งตรงไปยัง Google Sheet ปลายทางแบบเรียลไทม์เพื่อสอดคล้องกับพนักงานหลายเครื่องพร้อมกัน
+                            </p>
+                            <div class="space-y-2">
+                                <label for="cloud-api-url" class="block text-xs font-semibold text-slate-500">URL ของ Google Web App</label>
+                                <input type="url" id="cloud-api-url" placeholder="https://script.google.com/macros/s/.../exec" onchange="saveApiUrl(this.value)"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition">
+                            </div>
+                        </div>
+
+                        <div class="pt-4 space-y-2">
+                            <button onclick="openAppsScriptModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                                วิธีคัดลอกโค้ดลง Google Sheets
+                            </button>
+                            <button onclick="handleTestDataSync()" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold rounded-xl transition">
+                                ทดสอบดึงฐานข้อมูลจากคลาวด์
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Detailed Table View -->
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h4 class="text-base font-bold text-slate-900">ฐานข้อมูลรายละเอียดการสมัครและสัดส่วนพนักงาน</h4>
+                            <p class="text-xs text-slate-500 mt-1">ตารางพนักงานทั้งหมดที่ถูกเพิ่มในสารบระบบ และสถิติความสูงตั้งต้น</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="exportToCsv()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 text-xs rounded-xl font-bold transition flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                ดาวน์โหลดข้อมูลสำรอง CSV
+                            </button>
+                            <button onclick="resetWholeProjectWithConfirmation()" class="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 text-xs rounded-xl font-bold transition">
+                                รีเซ็ตโครงสร้างทั้งหมด
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-xxs uppercase tracking-wider bg-slate-100 text-slate-500 border-b border-slate-200">
+                                    <th class="py-3.5 px-6 font-semibold">รหัสพนักงาน</th>
+                                    <th class="py-3.5 px-6 font-semibold">ชื่อ-นามสกุล</th>
+                                    <th class="py-3.5 px-6 font-semibold">แผนก</th>
+                                    <th class="py-3.5 px-6 text-center">ความสูง (ซม.)</th>
+                                    <th class="py-3.5 px-6 text-center">เป้าหมายลด (กก.)</th>
+                                    <th class="py-3.5 px-6 text-center">สัดส่วนสมัครแรกเริ่ม (W1)</th>
+                                    <th class="py-3.5 px-6 text-center">สัดส่วนล่าสุด (W2+)</th>
+                                    <th class="py-3.5 px-6 text-center">ดัชนี BMI ล่าสุด</th>
+                                    <th class="py-3.5 px-6 text-center">สถานะใช้งานบัญชี</th>
+                                    <th class="py-3.5 px-6 text-right">ดำเนินการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-members-list" class="divide-y divide-slate-150 text-xs text-slate-600">
+                                <!-- Dynamic rows of all employees -->
+                            </tbody>
+                        </table>
+                        <div id="admin-empty-state" class="hidden p-12 text-center text-slate-400">
+                            ไม่มีข้อมูลพนักงานที่ลงทะเบียนไว้ในระบบความดูแล
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MAIN STATE CONTROLLER & CORE CODE -->
+    <script>
+        // Global showToast definition near top for absolute safety
+        function showToast(title, desc, type = "success") {
+            const toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) return;
+            
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-2xl shadow-xl flex items-start gap-3 border transition duration-300 pointer-events-auto max-w-sm ${
+                type === "success" ? "bg-emerald-50 border-emerald-200 text-emerald-900" :
+                type === "warning" ? "bg-amber-50 border-amber-200 text-amber-900" :
+                "bg-red-50 border-red-200 text-red-900"
+            }`;
+            
+            toast.innerHTML = `
+                <div class="flex-shrink-0 font-bold">${type === "success" ? "✓" : "⚠"}</div>
+                <div>
+                    <h5 class="text-xs font-bold">${title}</h5>
+                    <p class="text-xxs mt-0.5 opacity-80">${desc}</p>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-10');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // State variables pre-filled with real names from screenshot (image_5984e4.png)
+        let state = {
+            members: [
+                { empId: "003049", fullName: "วิชัย สุขประเสริฐกุล", dept: "OPT", height: null, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "004148", fullName: "ประภาพร ศรีประดู่", dept: "HRDS", height: 153.0, initWeight: 68.2, initWaist: 33.0, initHip: 38.5, initBmi: 29.13, password: "1111", targetWeightLossGoal: 5.0 },
+                { empId: "004379", fullName: "ประคอง อ้อยงาม", dept: "QM", height: 145.0, initWeight: 84.5, initWaist: 36.5, initHip: 40.0, initBmi: 40.19, password: "1234", targetWeightLossGoal: 6.0 },
+                { empId: "004766", fullName: "พวงเพชร มณียาย", dept: "CADT", height: 152.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "005933", fullName: "ระเบียบ ปาละรัตน์", dept: "QM", height: 142.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "006078", fullName: "อดิเรก อ่อนพรม", dept: "OP2S", height: 165.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "006125", fullName: "ยุทธนา สุยะนันทน์", dept: "OP2S", height: 172.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "006585", fullName: "มะลิ ยอดสิงห์", dept: "OP4", height: 156.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "006665", fullName: "กุหลาบ ศรไชย", dept: "OP4", height: 157.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "006704", fullName: "เยี่ยมน้อง โดยอาษา", dept: "QM", height: 154.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null }
+            ],
+            logs: [
+                // Week 2 real logs
+                { empId: "004148", week: 2, date: "2026-06-15", weight: 67.1, waist: 32.5, hip: 38.0, bmi: 28.66 },
+                { empId: "004379", week: 2, date: "2026-06-15", weight: 83.2, waist: 35.8, hip: 39.5, bmi: 39.57 }
+            ],
+            config: {
+                isRegOpen: true,
+                isLeaderboardOpen: true,
+                projectStartDate: "2026-06-08",
+                apiUrl: ""
+            }
+        };
+
+        // Session
+        let session = {
+            currentMember: null,
+            isAdmin: false
+        };
+
+        // ChartJS bindings
+        let activeCharts = {
+            bmi: null,
+            weight: null,
+            waist: null,
+            hip: null,
+            adminParticipation: null,
+            adminTrend: null,
+            adminComparisonBar: null
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLocalData();
+            initAppUI();
+        });
+
+        function loadLocalData() {
+            try {
+                const savedMembers = localStorage.getItem("bmi_members");
+                const savedLogs = localStorage.getItem("bmi_weekly_logs");
+                const savedConfig = localStorage.getItem("bmi_config");
+
+                if (savedMembers) {
+                    state.members = JSON.parse(savedMembers);
+                }
+                if (savedLogs) {
+                    state.logs = JSON.parse(savedLogs);
+                }
+                if (savedConfig) {
+                    state.config = { ...state.config, ...JSON.parse(savedConfig) };
+                }
+
+                const configStartDateEl = document.getElementById('config-start-date');
+                if (configStartDateEl) configStartDateEl.value = state.config.projectStartDate;
+
+                const cloudApiUrlEl = document.getElementById('cloud-api-url');
+                if (cloudApiUrlEl) cloudApiUrlEl.value = state.config.apiUrl || "";
+                
+                updateBannerStatus();
+            } catch (err) {
+                console.error("Local Storage Loading Error: ", err);
+            }
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem("bmi_members", JSON.stringify(state.members));
+            localStorage.setItem("bmi_weekly_logs", JSON.stringify(state.logs));
+            localStorage.setItem("bmi_config", JSON.stringify(state.config));
+        }
+
+        function updateBannerStatus() {
+            const banner = document.getElementById('sync-banner');
+            const bannerTitle = document.querySelector('#sync-banner h4');
+            const bannerDesc = document.querySelector('#sync-banner p');
+            if (!banner || !bannerTitle || !bannerDesc) return;
+
+            if (state.config.apiUrl) {
+                banner.classList.add('bg-emerald-50', 'border-emerald-500');
+                banner.classList.remove('bg-amber-50', 'border-amber-500');
+                bannerTitle.innerText = "เชื่อมต่อระบบคลาวด์ภายนอกแล้ว";
+                bannerDesc.innerText = "ข้อมูลของคุณได้รับการตั้งค่าให้ผูกโดยตรงกับ API Google Sheets";
+            } else {
+                banner.classList.add('bg-amber-50', 'border-amber-500');
+                banner.classList.remove('bg-emerald-50', 'border-emerald-500');
+                bannerTitle.innerText = "แอปกำลังทำงานแบบ Local Storage";
+                bannerDesc.innerText = "ข้อมูลของคุณจะถูกจัดเก็บในเครื่องนี้ คุณสามารถกด 'เชื่อมต่อ Google Sheet' ในแผงควบคุมแอดมิน เพื่อส่งค่าขึ้นชีตจริงได้";
+            }
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Creating robust initialization UI flows...
+         * =========================================
+         */
+        function initAppUI() {
+            // Run on load with complete defensive element-checking
+            updateDashboardCounters();
+            renderLeaderboard();
+            renderAdminMembersTable();
+            updateTogglesDisplay();
+        }
+
+        // Toggles display on admin UI
+        function updateTogglesDisplay() {
+            const btnReg = document.getElementById('btn-toggle-reg');
+            const txtReg = document.getElementById('text-toggle-reg');
+            const applyClosedOverlay = document.getElementById('apply-closed-overlay');
+
+            if (btnReg && txtReg && applyClosedOverlay) {
+                if (state.config.isRegOpen) {
+                    btnReg.className = "px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition cursor-pointer";
+                    btnReg.innerText = "เปิดอยู่ (คลิกปิด)";
+                    txtReg.innerText = "สถานะ: เปิดรับสมัคร";
+                    applyClosedOverlay.classList.add('hidden');
+                } else {
+                    btnReg.className = "px-4 py-1.5 bg-slate-500 text-white rounded-lg text-xs font-bold hover:bg-slate-600 transition cursor-pointer";
+                    btnReg.innerText = "ปิดอยู่ (คลิกเปิด)";
+                    txtReg.innerText = "สถานะ: ปิดรับสมัคร";
+                    applyClosedOverlay.classList.remove('hidden');
+                }
+            }
+
+            const btnBoard = document.getElementById('btn-toggle-board');
+            const txtBoard = document.getElementById('text-toggle-board');
+            const leaderboardLockOverlay = document.getElementById('leaderboard-lock-overlay');
+
+            if (btnBoard && txtBoard && leaderboardLockOverlay) {
+                if (state.config.isLeaderboardOpen) {
+                    btnBoard.className = "px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition cursor-pointer";
+                    btnBoard.innerText = "เปิดอยู่ (คลิกปิด)";
+                    txtBoard.innerText = "สถานะ: เปิดแสดงผล";
+                    leaderboardLockOverlay.classList.add('hidden');
+                } else {
+                    btnBoard.className = "px-4 py-1.5 bg-slate-500 text-white rounded-lg text-xs font-bold hover:bg-slate-600 transition cursor-pointer";
+                    btnBoard.innerText = "ปิดอยู่ (คลิกเปิด)";
+                    txtBoard.innerText = "สถานะ: ปิดแสดงผล";
+                    leaderboardLockOverlay.classList.remove('hidden');
+                }
+            }
+        }
+
+        // Tab routing switcher with tab button highlight bindings
+        function switchTab(tabId) {
+            const contentSections = document.querySelectorAll('.tab-content');
+            contentSections.forEach(sec => sec.classList.add('hidden'));
+            
+            const navButtons = document.querySelectorAll('.tab-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('bg-white/10', 'text-white');
+                btn.classList.add('hover:bg-white/10', 'text-emerald-50');
+            });
+
+            const activeSec = document.getElementById(`tab-${tabId}`);
+            if (activeSec) {
+                activeSec.classList.remove('hidden');
+            }
+
+            const activeBtn = document.getElementById(`btn-tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white/10', 'text-white');
+                activeBtn.classList.remove('hover:bg-white/10', 'text-emerald-50');
+            }
+
+            // Subcomponent refresh
+            if (tabId === 'home') {
+                updateDashboardCounters();
+                renderLeaderboard();
+            } else if (tabId === 'employee-portal' && session.currentMember) {
+                updateEmployeeDashboard();
+            } else if (tabId === 'admin-panel' && session.isAdmin) {
+                renderAdminMembersTable();
+                renderAdminExecutiveCharts();
+            } else if (tabId === 'weekly-submit') {
+                const currentWeek = getCurrentWeekNumber();
+                const weeklyLockedIndicator = document.getElementById('weekly-locked-indicator');
+                if (weeklyLockedIndicator) weeklyLockedIndicator.innerText = `สัปดาห์ปัจจุบันเปิดกรอก: สัปดาห์ที่ ${currentWeek}`;
+                const submitWeekDisplay = document.getElementById('submit-week-display');
+                if (submitWeekDisplay) submitWeekDisplay.value = `สัปดาห์ที่ ${currentWeek}`;
+                
+                // If it is week 1, warn employee that they submit starting week 2
+                const noticeBox = document.getElementById('submit-notice-box');
+                const submitBtn = document.getElementById('btn-submit-weekly');
+                if (currentWeek <= 1) {
+                    if (noticeBox) {
+                        noticeBox.className = "bg-red-50 rounded-2xl p-4 border border-red-200 text-xs text-red-900 leading-relaxed space-y-1 text-left";
+                        noticeBox.innerHTML = `
+                            <p class="font-bold text-red-950">🚫 ระบบยังไม่เปิดให้ส่งผลสัปดาห์ที่ 1:</p>
+                            <p>สัปดาห์ที่ 1 เป็นสัปดาห์แรกรับตั้งต้นที่แอดมินบันทึกเข้าสู่ฐานข้อมูลแล้ว พนักงานจะมีสิทธิ์กรอกสถิติของตัวเองได้ตั้งแต่ **สัปดาห์ที่ 2** เป็นต้นไป</p>
+                        `;
+                    }
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2";
+                        submitBtn.innerText = "เปิดลงข้อมูลตั้งแต่สัปดาห์ที่ 2";
+                    }
+                } else {
+                    if (noticeBox) {
+                        noticeBox.className = "bg-amber-50 rounded-2xl p-4 border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-1 text-left";
+                        noticeBox.innerHTML = `
+                            <p class="font-bold text-amber-900">📅 ข้อกำหนดการกรอกผล (จันทร์ - อาทิตย์):</p>
+                            <p>1. น้ำหนักและรอบตัวเริ่มต้น ถูกลงบันทึกโดยแอดมินแล้วในสัปดาห์ที่ 1</p>
+                            <p>2. ระบบเปิดให้กรอกผลลัพธ์ย้อนหลังสวมทับได้เฉพาะ **สัปดาห์ปัจจุบัน (ขณะนี้: สัปดาห์ที่ ${currentWeek})** เพื่อป้องกันการกรอกผิดความจริง</p>
+                            <p>3. **หากลืมลงบันทึก:** ระบบจะนำตัวเลขสถิติล่าสุดมาสวมและคำนวณผลแทนอัตโนมัติเมื่อพ้นสัปดาห์</p>
+                        `;
+                    }
+                }
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Date, weight calculations, and carry-forward logic...
+         * =========================================
+         */
+        function getCurrentWeekNumber() {
+            const startStr = state.config.projectStartDate;
+            if (!startStr) return 1;
+            
+            const start = new Date(startStr);
+            const today = new Date();
+            
+            start.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+            
+            const diffTime = today - start;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 0) return 1; // Not started yet, treat as Week 1
+            
+            let week = Math.floor(diffDays / 7) + 1;
+            return Math.min(Math.max(week, 1), 13); // Clamp to Week 1-13
+        }
+
+        function getProjectDaysCount() {
+            const startStr = state.config.projectStartDate;
+            if (!startStr) return 1;
+            const start = new Date(startStr);
+            const today = new Date();
+            start.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+            const diffTime = today - start;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            return Math.min(Math.max(diffDays, 1), 90);
+        }
+
+        // Calculates effective logs (real logs + synthetic virtual replacements for skipped weeks)
+        function getEmployeeEffectiveLogs(empId) {
+            const member = state.members.find(m => m.empId === empId);
+            if (!member) return null;
+
+            // Check if member has completed initial registration
+            const hasRegistered = (member.initWeight !== null && member.initWeight !== undefined);
+            if (!hasRegistered) {
+                return {
+                    member,
+                    hasRegistered: false,
+                    logs: [],
+                    currentWeight: 0, currentBmi: 0, currentWaist: 0, currentHip: 0,
+                    weightDiff: 0, bmiDiff: 0, waistDiff: 0, hipDiff: 0,
+                    weightPct: 0, bmiPct: 0, waistPct: 0, hipPct: 0
+                };
+            }
+
+            const currentActiveWeek = getCurrentWeekNumber();
+            const realLogs = state.logs.filter(l => l.empId === empId);
+            
+            let effectiveLogs = [];
+            let lastWeight = member.initWeight;
+            let lastWaist = member.initWaist || 0;
+            let lastHip = member.initHip || 0;
+            let lastBmi = member.initBmi;
+
+            // Generate sequence up to current active week (Week 2 onwards for logging, week 1 is starting baseline)
+            for (let w = 2; w <= currentActiveWeek; w++) {
+                const realLog = realLogs.find(l => l.week === w);
+                if (realLog) {
+                    lastWeight = realLog.weight;
+                    lastWaist = realLog.waist;
+                    lastHip = realLog.hip;
+                    lastBmi = realLog.bmi;
+                    effectiveLogs.push({
+                        ...realLog,
+                        isVirtual: false
+                    });
+                } else {
+                    // Generate a virtual log copying last known values
+                    const projStart = new Date(state.config.projectStartDate);
+                    projStart.setDate(projStart.getDate() + (w - 1) * 7);
+                    const virtualDateStr = projStart.toISOString().split('T')[0];
+
+                    effectiveLogs.push({
+                        empId: empId,
+                        week: w,
+                        date: virtualDateStr,
+                        weight: lastWeight,
+                        waist: lastWaist,
+                        hip: lastHip,
+                        bmi: lastBmi,
+                        isVirtual: true // Flagged as virtual
+                    });
+                }
+            }
+
+            const latest = effectiveLogs[effectiveLogs.length - 1] || {
+                weight: member.initWeight,
+                waist: member.initWaist || 0,
+                hip: member.initHip || 0,
+                bmi: member.initBmi
+            };
+
+            const weightDiff = latest.weight - member.initWeight;
+            const bmiDiff = latest.bmi - member.initBmi;
+            const waistDiff = member.initWaist > 0 ? latest.waist - member.initWaist : 0;
+            const hipDiff = member.initHip > 0 ? latest.hip - member.initHip : 0;
+
+            const weightPct = member.initWeight > 0 ? ((member.initWeight - latest.weight) / member.initWeight) * 100 : 0;
+            const bmiPct = member.initBmi > 0 ? ((member.initBmi - latest.bmi) / member.initBmi) * 100 : 0;
+            const waistPct = member.initWaist > 0 ? ((member.initWaist - latest.waist) / member.initWaist) * 100 : 0;
+            const hipPct = member.initHip > 0 ? ((member.initHip - latest.hip) / member.initHip) * 100 : 0;
+
+            return {
+                member,
+                hasRegistered: true,
+                logs: effectiveLogs,
+                latestLog: latest,
+                currentWeight: latest.weight,
+                currentBmi: latest.bmi,
+                currentWaist: latest.waist,
+                currentHip: latest.hip,
+                weightDiff,
+                bmiDiff,
+                waistDiff,
+                hipDiff,
+                weightPct,
+                bmiPct,
+                waistPct,
+                hipPct
+            };
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Updating KPI metrics dashboard counters defensively...
+         * =========================================
+         */
+        function updateDashboardCounters() {
+            // Count actual registered members (those who set password)
+            const registeredMembers = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined);
+            const activeCount = registeredMembers.filter(m => m.password !== null && m.password !== undefined).length;
+            
+            const activeCountEl = document.getElementById('count-active-members');
+            if (activeCountEl) activeCountEl.innerText = activeCount;
+
+            // Sum up weight reductions of activated users
+            let accumulatedWeightLoss = 0;
+            registeredMembers.forEach(member => {
+                if (member.password) {
+                    const stats = getEmployeeEffectiveLogs(member.empId);
+                    if (stats && stats.hasRegistered && stats.weightDiff < 0) {
+                        accumulatedWeightLoss += Math.abs(stats.weightDiff);
+                    }
+                }
+            });
+            const countWeightLossEl = document.getElementById('count-weight-loss');
+            if (countWeightLossEl) countWeightLossEl.innerText = accumulatedWeightLoss.toFixed(1);
+
+            // Display active date boundaries
+            const currentWeek = getCurrentWeekNumber();
+            const currentWeekEl = document.getElementById('project-current-week-display');
+            if (currentWeekEl) currentWeekEl.innerText = `สัปดาห์ที่ ${currentWeek}`;
+            
+            const startDateDisplay = document.getElementById('project-start-date-display');
+            if (startDateDisplay) startDateDisplay.innerText = state.config.projectStartDate;
+
+            const daysPassed = getProjectDaysCount();
+            const projectDaysEl = document.getElementById('project-days');
+            if (projectDaysEl) projectDaysEl.innerText = `วันที่ ${daysPassed}/90`;
+            
+            // Progress bar mapping
+            const progressPercentage = Math.min((daysPassed / 90) * 100, 100);
+            const progressBarEl = document.getElementById('project-progress-bar');
+            if (progressBarEl) progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Rendering leaderboard ranking podium...
+         * =========================================
+         */
+        function renderLeaderboard() {
+            // Only query members who have completed activation (set passwords)
+            const activeMembers = state.members.filter(m => m.password !== null && m.password !== undefined);
+            
+            const rankedList = activeMembers.map(member => {
+                return getEmployeeEffectiveLogs(member.empId);
+            }).sort((a, b) => b.bmiPct - a.bmiPct); // Descending sorting of BMI Reduction %
+
+            const podiumEl = document.getElementById('leaderboard-podium');
+            const tbodyEl = document.getElementById('leaderboard-list-body');
+            const emptyEl = document.getElementById('leaderboard-empty-state');
+
+            if (podiumEl) podiumEl.innerHTML = "";
+            if (tbodyEl) tbodyEl.innerHTML = "";
+
+            if (rankedList.length === 0) {
+                if (emptyEl) emptyEl.classList.remove('hidden');
+                return;
+            } else {
+                if (emptyEl) emptyEl.classList.add('hidden');
+            }
+
+            // Top 3 Podium
+            const podiumItems = rankedList.slice(0, 3);
+            podiumItems.forEach((item, idx) => {
+                const colors = [
+                    { bg: "from-amber-400 to-yellow-500", border: "border-amber-300", text: "text-amber-950", medal: "🥇" },
+                    { bg: "from-slate-300 to-slate-400", border: "border-slate-200", text: "text-slate-950", medal: "🥈" },
+                    { bg: "from-amber-600 to-amber-700", border: "border-amber-500", text: "text-amber-100", medal: "🥉" }
+                ][idx] || { bg: "from-emerald-50 to-emerald-100", border: "border-emerald-200", text: "text-emerald-950", medal: "" };
+
+                const pctStr = item.bmiPct > 0 ? `ลดได้ ${item.bmiPct.toFixed(1)}%` : (item.bmiPct < 0 ? `เพิ่ม ${Math.abs(item.bmiPct).toFixed(1)}%` : 'คงที่');
+
+                if (podiumEl) {
+                    podiumEl.innerHTML += `
+                        <div class="bg-gradient-to-br ${colors.bg} rounded-2xl p-4 shadow-sm border ${colors.border} flex flex-col justify-between items-center relative overflow-hidden text-center">
+                            <div class="absolute -top-3 -right-3 text-4xl opacity-15">${colors.medal}</div>
+                            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-black ${colors.text} text-xs mb-1 mx-auto">
+                                #${idx + 1}
+                            </div>
+                            <h4 class="font-extrabold text-sm truncate w-full ${colors.text}">${item.member.fullName}</h4>
+                            <p class="text-[10px] opacity-80 ${colors.text} truncate w-full">${item.member.dept}</p>
+                            <div class="mt-2.5 bg-white/35 backdrop-blur-sm px-2.5 py-1 rounded-full text-xxs font-black ${colors.text} inline-block">
+                                ${pctStr}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            // Fill empty spaces if needed
+            for (let i = podiumItems.length; i < 3; i++) {
+                if (podiumEl) {
+                    podiumEl.innerHTML += `
+                        <div class="bg-slate-50 rounded-2xl p-4 shadow-inner border border-slate-100 flex flex-col justify-center items-center text-slate-300 min-h-[120px] text-center">
+                            <span class="text-xs">รอผู้สมัคร</span>
+                        </div>
+                    `;
+                }
+            }
+
+            // Leaderboard Table Body
+            rankedList.forEach((item, idx) => {
+                const rankNum = idx + 1;
+                const empId = item.member.empId;
+                const fullName = item.member.fullName;
+                const dept = item.member.dept;
+                const initBmi = item.member.initBmi ? item.member.initBmi.toFixed(2) : "0.00";
+                const currBmi = item.currentBmi ? item.currentBmi.toFixed(2) : "0.00";
+                
+                let changeStr = "";
+                let changeClass = "";
+                
+                if (item.bmiPct > 0) {
+                    changeStr = `-${item.bmiPct.toFixed(1)}%`;
+                    changeClass = "text-emerald-600 font-bold";
+                } else if (item.bmiPct < 0) {
+                    changeStr = `+${Math.abs(item.bmiPct).toFixed(1)}%`;
+                    changeClass = "text-red-500 font-bold";
+                } else {
+                    changeStr = "0.0%";
+                    changeClass = "text-slate-400";
+                }
+
+                if (tbodyEl) {
+                    tbodyEl.innerHTML += `
+                        <tr class="hover:bg-slate-50/80 transition border-b border-slate-100 text-left">
+                            <td class="py-3.5 px-6 font-bold text-slate-900">${rankNum}</td>
+                            <td class="py-3.5 px-6 font-mono">${empId}</td>
+                            <td class="py-3.5 px-6 font-medium text-slate-900">${fullName}</td>
+                            <td class="py-3.5 px-6 text-slate-500">${dept}</td>
+                            <td class="py-3.5 px-6 text-center font-mono">${initBmi}</td>
+                            <td class="py-3.5 px-6 text-center font-mono">${currBmi}</td>
+                            <td class="py-3.5 px-6 text-right font-mono ${changeClass}">${changeStr}</td>
+                        </tr>
+                    `;
+                }
+            });
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Controlling lookups for registration sheets...
+         * =========================================
+         */
+        function handleApplyLookup(val) {
+            const statusEl = document.getElementById('apply-lookup-status');
+            const fullnameInput = document.getElementById('apply-fullname');
+            const deptInput = document.getElementById('apply-dept');
+            const preloadedHeightInput = document.getElementById('apply-preloaded-height');
+            const inputHeightField = document.getElementById('apply-input-height');
+            const submitBtn = document.getElementById('btn-apply-submit');
+            const checkLabel = document.getElementById('height-check-match');
+
+            if (!statusEl || !fullnameInput || !deptInput || !preloadedHeightInput || !inputHeightField || !submitBtn || !checkLabel) return;
+
+            if (!val) {
+                statusEl.innerText = "ระบุรหัสพนักงาน";
+                statusEl.className = "text-xs font-medium text-slate-400";
+                fullnameInput.value = "-";
+                deptInput.value = "-";
+                preloadedHeightInput.value = "-";
+                inputHeightField.value = "";
+                inputHeightField.disabled = false;
+                checkLabel.innerText = "";
+                submitBtn.disabled = true;
+                submitBtn.className = "w-full py-3.5 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex justify-center items-center gap-2 text-sm";
+                submitBtn.innerText = "กรุณาระบุรหัสพนักงานให้ถูกต้องก่อนลงทะเบียนสมัคร";
+                return;
+            }
+
+            const member = state.members.find(m => m.empId === val.trim());
+
+            if (member) {
+                const isActivated = (member.password && member.initWeight !== null && member.initWeight !== undefined);
+                if (isActivated) {
+                    statusEl.innerText = "✓ สมัครเข้าร่วมแล้ว";
+                    statusEl.className = "text-xs font-semibold text-amber-600";
+                    fullnameInput.value = member.fullName;
+                    deptInput.value = member.dept;
+                    preloadedHeightInput.value = member.height || "ไม่มีข้อมูล";
+                    inputHeightField.value = member.height || "";
+                    inputHeightField.disabled = true;
+                    checkLabel.innerText = "✓ ลงทะเบียนเรียบร้อยแล้ว";
+                    checkLabel.className = "text-[10px] mt-1 block text-emerald-600 font-semibold";
+                    submitBtn.disabled = true;
+                    submitBtn.className = "w-full py-3.5 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex justify-center items-center gap-2 text-sm";
+                    submitBtn.innerText = "พนักงานรหัสนี้สมัครเข้าร่วมโครงการไปแล้ว";
+                } else {
+                    statusEl.innerText = "✓ ตรวจพบรหัสพนักงาน";
+                    statusEl.className = "text-xs font-semibold text-emerald-600";
+                    fullnameInput.value = member.fullName;
+                    deptInput.value = member.dept;
+                    
+                    if (member.height && member.height > 0) {
+                        preloadedHeightInput.value = member.height;
+                        inputHeightField.value = member.height;
+                        inputHeightField.disabled = true; // Lock height
+                        checkLabel.innerText = "✓ ใช้ส่วนสูงคงที่ตามฐานแอดมิน";
+                        checkLabel.className = "text-[10px] mt-1 block text-emerald-600 font-semibold";
+                    } else {
+                        preloadedHeightInput.value = "ไม่มีข้อมูลในระบบ";
+                        inputHeightField.value = "";
+                        inputHeightField.disabled = false; // Open for input!
+                        checkLabel.innerText = "⚠ โปรดกรอกส่วนสูงของคุณ";
+                        checkLabel.className = "text-[10px] mt-1 block text-amber-600 font-semibold";
+                    }
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-teal-500 to-emerald-600 hover:shadow-lg hover:shadow-teal-600/10 text-white rounded-xl font-bold transition flex justify-center items-center gap-2 text-sm cursor-pointer";
+                    submitBtn.innerText = "ยืนยันการสมัครเข้าร่วมโครงการ";
+                }
+            } else {
+                statusEl.innerText = "✕ ไม่พบสิทธิ์พนักงาน";
+                statusEl.className = "text-xs font-semibold text-red-500";
+                fullnameInput.value = "-";
+                deptInput.value = "-";
+                preloadedHeightInput.value = "-";
+                inputHeightField.value = "";
+                inputHeightField.disabled = false;
+                checkLabel.innerText = "";
+                submitBtn.disabled = true;
+                submitBtn.className = "w-full py-3.5 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex justify-center items-center gap-2 text-sm";
+                submitBtn.innerText = "ไม่พบรายชื่อในระบบ (โปรดติดต่อแอดมิน)";
+            }
+        }
+
+        function calculateApplyBmi() {
+            const inputHeightField = document.getElementById('apply-input-height');
+            const inputWeightField = document.getElementById('apply-input-weight');
+            const applyBmiPreview = document.getElementById('apply-bmi-preview');
+
+            if (!inputHeightField || !inputWeightField || !applyBmiPreview) return;
+
+            const height = parseFloat(inputHeightField.value);
+            const weight = parseFloat(inputWeightField.value);
+
+            if (height && weight) {
+                const bmi = calculateBmi(weight, height);
+                applyBmiPreview.innerText = bmi.toFixed(2);
+            } else {
+                applyBmiPreview.innerText = "0.00";
+            }
+        }
+
+        function handleApplyProjectSubmit(e) {
+            e.preventDefault();
+            const empId = document.getElementById('apply-emp-id').value.trim();
+            const inputHeightField = document.getElementById('apply-input-height');
+            const inputWeightField = document.getElementById('apply-input-weight');
+            const targetWeightField = document.getElementById('apply-target-goal');
+            const passwordField = document.getElementById('apply-password');
+
+            if (!inputHeightField || !inputWeightField || !targetWeightField || !passwordField) return;
+
+            const height = parseFloat(inputHeightField.value);
+            const weight = parseFloat(inputWeightField.value);
+            const targetWeightLossGoal = parseFloat(targetWeightField.value);
+            const password = passwordField.value;
+
+            const memberIdx = state.members.findIndex(m => m.empId === empId);
+            if (memberIdx === -1) return;
+
+            const calculatedBmi = calculateBmi(weight, height);
+
+            state.members[memberIdx].height = height;
+            state.members[memberIdx].initWeight = weight;
+            state.members[memberIdx].initBmi = calculatedBmi;
+            state.members[memberIdx].password = password;
+            state.members[memberIdx].targetWeightLossGoal = targetWeightLossGoal;
+
+            saveToLocalStorage();
+            syncStateToCloud();
+
+            showToast("สมัครเข้าร่วมโครงการสำเร็จ! 🎉", `ยินดีต้อนรับคุณ ${state.members[memberIdx].fullName} และตั้งเป้าหมายลดน้ำหนัก ${targetWeightLossGoal} กก. เรียบร้อย`, "success");
+            
+            document.getElementById('form-apply-member').reset();
+            handleApplyLookup("");
+
+            switchTab('employee-portal');
+            const loginEmpIdEl = document.getElementById('login-emp-id');
+            if (loginEmpIdEl) loginEmpIdEl.value = empId;
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Managing weekly logging verification and submits...
+         * =========================================
+         */
+        function handleEmpIdLookup(val) {
+            const lookupStatus = document.getElementById('lookup-status');
+            const nameEl = document.getElementById('submit-emp-name');
+            const deptEl = document.getElementById('submit-emp-dept');
+            const weekDisplayEl = document.getElementById('submit-week-display');
+            const submitBtn = document.getElementById('btn-submit-weekly');
+            const liveHeightPreview = document.getElementById('live-height-preview');
+
+            if (!lookupStatus || !nameEl || !deptEl || !weekDisplayEl || !submitBtn || !liveHeightPreview) return;
+
+            if (!val) {
+                lookupStatus.innerText = "ตรวจสอบรหัสพนักงาน";
+                lookupStatus.className = "text-xs font-medium text-slate-400";
+                nameEl.value = "-";
+                deptEl.value = "-";
+                liveHeightPreview.innerText = "-";
+                submitBtn.disabled = true;
+                submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2";
+                submitBtn.innerText = "กรุณากรอกรหัสพนักงานให้ถูกต้อง";
+                return;
+            }
+
+            const member = state.members.find(m => m.empId === val.trim());
+
+            if (member) {
+                const isActivated = (member.password && member.initWeight !== null && member.initWeight !== undefined);
+                
+                if (!isActivated) {
+                    lookupStatus.innerText = "✕ ไม่พบประวัติสมัคร";
+                    lookupStatus.className = "text-xs font-semibold text-amber-600";
+                    nameEl.value = member.fullName;
+                    deptEl.value = member.dept;
+                    liveHeightPreview.innerText = member.height || "ไม่มีข้อมูล";
+                    submitBtn.disabled = true;
+                    submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2";
+                    submitBtn.innerText = "โปรดลงทะเบียนสมัครที่ หน้าที่ 1 ก่อน";
+                } else {
+                    lookupStatus.innerText = "✓ ตรวจสิทธิ์ผ่าน";
+                    lookupStatus.className = "text-xs font-semibold text-emerald-600";
+                    nameEl.value = member.fullName;
+                    deptEl.value = member.dept;
+                    liveHeightPreview.innerText = member.height;
+                    submitBtn.disabled = false;
+                    submitBtn.className = "w-2/3 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/10 rounded-xl font-bold hover:shadow-emerald-500/25 transition flex items-center justify-center gap-2 cursor-pointer";
+                    submitBtn.innerText = "บันทึกข้อมูลประจำสัปดาห์";
+                    calculateLiveBmi();
+                }
+            } else {
+                lookupStatus.innerText = "✕ ไม่พบรหัส";
+                lookupStatus.className = "text-xs font-semibold text-red-500";
+                nameEl.value = "-";
+                deptEl.value = "-";
+                liveHeightPreview.innerText = "-";
+                submitBtn.disabled = true;
+                submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2";
+                submitBtn.innerText = "ไม่พบสารระบบรหัสพนักงาน";
+                const liveBmiPreview = document.getElementById('live-bmi-preview');
+                if (liveBmiPreview) liveBmiPreview.innerText = "0.00";
+            }
+        }
+
+        function calculateLiveBmi() {
+            const liveHeightPreview = document.getElementById('live-height-preview');
+            const submitWeight = document.getElementById('submit-weight');
+            const liveBmiPreview = document.getElementById('live-bmi-preview');
+
+            if (!liveHeightPreview || !submitWeight || !liveBmiPreview) return;
+
+            const height = parseFloat(liveHeightPreview.innerText);
+            const weight = parseFloat(submitWeight.value);
+            
+            if (height && weight) {
+                const bmi = calculateBmi(weight, height);
+                liveBmiPreview.innerText = bmi.toFixed(2);
+            } else {
+                liveBmiPreview.innerText = "0.00";
+            }
+        }
+
+        function handleWeeklySubmit(e) {
+            e.preventDefault();
+            const empId = document.getElementById('submit-emp-id').value.trim();
+            const weightVal = document.getElementById('submit-weight').value;
+            const waistVal = document.getElementById('submit-waist').value;
+            const hipVal = document.getElementById('submit-hip').value;
+
+            if (!weightVal || !waistVal || !hipVal) return;
+
+            const weight = parseFloat(weightVal);
+            const waist = parseFloat(waistVal);
+            const hip = parseFloat(hipVal);
+            
+            const q1_5groups = document.querySelector('input[name="survey-q1"]:checked')?.value || "no";
+            const q2_leanMeat = document.querySelector('input[name="survey-q2"]:checked')?.value || "no";
+            const q3_dietPills = document.querySelector('input[name="survey-q3"]:checked')?.value || "no";
+            const q4_dinnerGap = document.querySelector('input[name="survey-q4"]:checked')?.value || "no";
+            const q5_enoughProtein = document.querySelector('input[name="survey-q5"]:checked')?.value || "no";
+
+            const week = getCurrentWeekNumber();
+            const dateStr = new Date().toISOString().split('T')[0];
+
+            const member = state.members.find(m => m.empId === empId);
+            if (!member) return;
+
+            const bmi = calculateBmi(weight, member.height);
+
+            const newLog = {
+                empId,
+                week,
+                date: dateStr,
+                weight,
+                waist,
+                hip,
+                bmi,
+                q1_5groups,
+                q2_leanMeat,
+                q3_dietPills,
+                q4_dinnerGap,
+                q5_enoughProtein
+            };
+
+            const existingLogIdx = state.logs.findIndex(l => l.empId === empId && l.week === week);
+            if (existingLogIdx !== -1) {
+                state.logs[existingLogIdx] = newLog;
+                showToast("อัปเดตสถิติสำเร็จ", `ปรับปรุงสถิติของสัปดาห์ที่ ${week} เรียบร้อยแล้ว`, "success");
+            } else {
+                state.logs.push(newLog);
+                showToast("ส่งสถิติสำเร็จ", `บันทึกข้อมูลสัปดาห์ที่ ${week} ของคุณเรียบร้อย`, "success");
+            }
+
+            saveToLocalStorage();
+            syncStateToCloud();
+            
+            clearWeeklyForm();
+            switchTab('home');
+        }
+
+        function clearWeeklyForm() {
+            const form = document.getElementById('form-weekly-log');
+            if (form) form.reset();
+            handleEmpIdLookup("");
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Managing employee dashboard portals and metrics cards...
+         * =========================================
+         */
+        function handleEmployeeLogin(e) {
+            e.preventDefault();
+            const empId = document.getElementById('login-emp-id').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            const member = state.members.find(m => m.empId === empId);
+            
+            if (!member) {
+                showToast("ไม่พบข้อมูล", "ไม่พบรหัสพนักงานนี้ในระบบ", "error");
+                return;
+            }
+
+            if (!member.password) {
+                showToast("ยังไม่ได้ยืนยันตัวตน", "กรุณายืนยันตัวตนเพื่อตั้งรหัสผ่านสมัครที่หน้าที่ 1 ก่อน", "warning");
+                return;
+            }
+
+            if (member.password !== password) {
+                showToast("รหัสผ่านไม่ถูกต้อง", "รหัสผ่านที่กรอกไม่ถูกต้อง", "error");
+                return;
+            }
+
+            session.currentMember = member;
+            showToast("เข้าสู่ระบบสำเร็จ", `ยินดีต้อนรับคุณ ${member.fullName}`, "success");
+            
+            document.getElementById('employee-login-screen').classList.add('hidden');
+            document.getElementById('employee-dashboard-screen').classList.remove('hidden');
+            
+            updateEmployeeDashboard();
+        }
+
+        function handleLogout() {
+            session.currentMember = null;
+            document.getElementById('employee-dashboard-screen').classList.add('hidden');
+            document.getElementById('employee-login-screen').classList.remove('hidden');
+            document.getElementById('login-password').value = "";
+            showToast("ออกจากระบบแล้ว", "ออกจากระบบพอร์ทัลส่วนบุคคลเรียบร้อย", "success");
+        }
+
+        function updateEmployeeDashboard() {
+            if (!session.currentMember) return;
+            const empId = session.currentMember.empId;
+            const stats = getEmployeeEffectiveLogs(empId);
+
+            if (!stats) return;
+
+            // Goal Progression tracking values
+            const targetLoss = stats.member.targetWeightLossGoal || 0;
+            const realLoss = (stats.member.initWeight || 0) - stats.currentWeight;
+            
+            const goalStatusText = document.getElementById('goal-status-text');
+            if (goalStatusText) goalStatusText.innerText = `เป้าหมายลดลง: ${targetLoss.toFixed(1)} กก. 🏆`;
+            
+            let progressPct = 0;
+            if (targetLoss > 0) {
+                progressPct = Math.min(Math.max((realLoss / targetLoss) * 100, 0), 100);
+            }
+            const goalPercentText = document.getElementById('goal-percent-text');
+            if (goalPercentText) goalPercentText.innerText = `${progressPct.toFixed(0)}%`;
+            
+            const goalProgressBar = document.getElementById('goal-progress-bar');
+            if (goalProgressBar) goalProgressBar.style.width = `${progressPct}%`;
+            
+            const goalLossAchieved = document.getElementById('goal-loss-achieved');
+            if (goalLossAchieved) goalLossAchieved.innerText = `ลดได้แล้ว: ${realLoss > 0 ? realLoss.toFixed(1) : "0.0"} กก.`;
+            
+            const remaining = targetLoss - realLoss;
+            const goalLossRemaining = document.getElementById('goal-loss-remaining');
+            if (goalLossRemaining) goalLossRemaining.innerText = `เหลืออีก: ${remaining > 0 ? remaining.toFixed(1) : "0.0"} กก.`;
+
+            // Header metadata
+            const memberInitial = document.getElementById('member-initial');
+            if (memberInitial) memberInitial.innerText = stats.member.fullName.charAt(0);
+            const memberFullname = document.getElementById('member-fullname');
+            if (memberFullname) memberFullname.innerText = stats.member.fullName;
+            const memberDept = document.getElementById('member-dept');
+            if (memberDept) memberDept.innerText = stats.member.dept;
+            const memberEmpid = document.getElementById('member-empid');
+            if (memberEmpid) memberEmpid.innerText = stats.member.empId;
+            const memberHeight = document.getElementById('member-height');
+            if (memberHeight) memberHeight.innerText = stats.member.height;
+
+            // Load Values
+            const currentWeightVal = document.getElementById('current-weight-val');
+            if (currentWeightVal) currentWeightVal.innerText = stats.currentWeight.toFixed(1);
+            const initialWeightVal = document.getElementById('initial-weight-val');
+            if (initialWeightVal) initialWeightVal.innerText = (stats.member.initWeight || 0).toFixed(1);
+            
+            const currentBmiVal = document.getElementById('current-bmi-val');
+            if (currentBmiVal) currentBmiVal.innerText = stats.currentBmi.toFixed(2);
+            const initialBmiVal = document.getElementById('initial-bmi-val');
+            if (initialBmiVal) initialBmiVal.innerText = (stats.member.initBmi || 0).toFixed(2);
+            
+            const currentWaistVal = document.getElementById('current-waist-val');
+            if (currentWaistVal) currentWaistVal.innerText = stats.currentWaist.toFixed(1);
+            const initialWaistVal = document.getElementById('initial-waist-val');
+            if (initialWaistVal) initialWaistVal.innerText = stats.member.initWaist ? stats.member.initWaist.toFixed(1) : "0.0";
+            
+            const currentHipVal = document.getElementById('current-hip-val');
+            if (currentHipVal) currentHipVal.innerText = stats.currentHip.toFixed(1);
+            const initialHipVal = document.getElementById('initial-hip-val');
+            if (initialHipVal) initialHipVal.innerText = stats.member.initHip ? stats.member.initHip.toFixed(1) : "0.0";
+
+            // Set Pct card badges
+            setMetricCardChange('badge-weight-change', 'weight-change-abs', stats.weightPct, stats.weightDiff, 'กก.');
+            setMetricCardChange('badge-bmi-change', 'bmi-change-abs', stats.bmiPct, stats.bmiDiff, '');
+            setMetricCardChange('badge-waist-change', 'waist-change-abs', stats.waistPct, stats.waistDiff, 'นิ้ว');
+            setMetricCardChange('badge-hip-change', 'hip-change-abs', stats.hipPct, stats.hipDiff, 'นิ้ว');
+
+            // BMI class status label
+            const statusLabel = document.getElementById('bmi-status-label');
+            if (statusLabel) {
+                const bmi = stats.currentBmi;
+                if (bmi >= 30.0) {
+                    statusLabel.innerText = "อ้วนระดับ 2";
+                    statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-red-100 text-red-800";
+                } else if (bmi >= 25.0) {
+                    statusLabel.innerText = "อ้วนระดับ 1";
+                    statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-orange-100 text-orange-800";
+                } else if (bmi >= 23.0) {
+                    statusLabel.innerText = "น้ำหนักเกิน";
+                    statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-amber-100 text-amber-800";
+                } else if (bmi >= 18.5) {
+                    statusLabel.innerText = "สมส่วน / ปกติ";
+                    statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-emerald-100 text-emerald-800";
+                } else {
+                    statusLabel.innerText = "น้ำหนักน้อยกว่าเกณฑ์";
+                    statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-sky-100 text-sky-800";
+                }
+            }
+
+            // Fill records history table
+            const tableBody = document.getElementById('member-records-body');
+            if (tableBody) {
+                tableBody.innerHTML = "";
+                const recordsCount = document.getElementById('records-count');
+                if (recordsCount) recordsCount.innerText = `พบ ${stats.logs.length + 1} รายการสรุปรวมสัปดาห์ที่ 1`;
+
+                // Start base row
+                tableBody.innerHTML += `
+                    <tr class="bg-emerald-50/40 font-semibold border-b border-slate-100">
+                        <td class="py-3 px-6 text-slate-800">สัปดาห์ที่ 1 (Start)</td>
+                        <td class="py-3 px-6 text-slate-400">ข้อมูลตั้งต้นสมัคร (แอดมิน)</td>
+                        <td class="py-3 px-6 text-center font-mono">${(stats.member.initWeight || 0).toFixed(1)}</td>
+                        <td class="py-3 px-6 text-center font-mono text-emerald-700">${(stats.member.initBmi || 0).toFixed(2)}</td>
+                        <td class="py-3 px-6 text-center font-mono">${stats.member.initWaist ? stats.member.initWaist.toFixed(1) : "-"}</td>
+                        <td class="py-3 px-6 text-center font-mono">${stats.member.initHip ? stats.member.initHip.toFixed(1) : "-"}</td>
+                        <td class="py-3 px-6 text-right"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px]">ชี้วัดหลัก</span></td>
+                    </tr>
+                `;
+
+                // Sequential Logs (Real + Synthetic)
+                stats.logs.forEach(log => {
+                    const statusPill = log.isVirtual 
+                        ? `<span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded text-[10px]" title="ไม่ได้ลงข้อมูลรายสัปดาห์ในวันดังกล่าว ระบบดึงค่าล่าสุดมาทดแทนให้อัตโนมัติ">ทดแทนอัตโนมัติ</span>`
+                        : `<span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-150 rounded text-[10px]">พนักงานส่งผลปกติ</span>`;
+
+                    tableBody.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                            <td class="py-3 px-6 font-bold text-slate-700">สัปดาห์ที่ ${log.week}</td>
+                            <td class="py-3 px-6 text-slate-400 font-mono">${log.date}</td>
+                            <td class="py-3 px-6 text-center font-mono">${log.weight.toFixed(1)}</td>
+                            <td class="py-3 px-6 text-center font-mono text-emerald-700">${log.bmi.toFixed(2)}</td>
+                            <td class="py-3 px-6 text-center font-mono">${log.waist.toFixed(1)}</td>
+                            <td class="py-3 px-6 text-center font-mono">${log.hip.toFixed(1)}</td>
+                            <td class="py-3 px-6 text-right">${statusPill}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            renderCharts(stats);
+        }
+
+        function setMetricCardChange(badgeId, textId, pctValue, rawDiff, unit) {
+            const badge = document.getElementById(badgeId);
+            const text = document.getElementById(textId);
+            if (!badge || !text) return;
+
+            const sign = rawDiff > 0 ? "+" : "";
+            text.innerText = `${sign}${rawDiff.toFixed(1)} ${unit}`.trim();
+
+            if (pctValue > 0) {
+                badge.innerText = `ลดลง ${pctValue.toFixed(1)}%`;
+                badge.className = "text-xs px-2.5 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800";
+            } else if (pctValue < 0) {
+                badge.innerText = `เพิ่มขึ้น ${Math.abs(pctValue).toFixed(1)}%`;
+                badge.className = "text-xs px-2.5 py-0.5 rounded-full font-bold bg-red-100 text-red-800";
+            } else {
+                badge.innerText = "คงที่";
+                badge.className = "text-xs px-2.5 py-0.5 rounded-full font-bold bg-slate-100 text-slate-600";
+            }
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Drawing individual trend chart lines...
+         * =========================================
+         */
+        function renderCharts(stats) {
+            const labels = ["เริ่มต้น", ...stats.logs.map(l => `สัปดาห์ที่ ${l.week}`)];
+            
+            const dataBmi = [stats.member.initBmi || 0, ...stats.logs.map(l => l.bmi)];
+            const dataWeight = [stats.member.initWeight || 0, ...stats.logs.map(l => l.weight)];
+            const dataWaist = [stats.member.initWaist || 0, ...stats.logs.map(l => l.waist)];
+            const dataHip = [stats.member.initHip || 0, ...stats.logs.map(l => l.hip)];
+
+            createOrUpdateLineChart('chart-bmi', activeCharts, 'bmi', labels, dataBmi, 'BMI', '#0284c7', '#e0f2fe');
+            createOrUpdateLineChart('chart-weight', activeCharts, 'weight', labels, dataWeight, 'น้ำหนัก (กก.)', '#059669', '#d1fae5');
+            createOrUpdateLineChart('chart-waist', activeCharts, 'waist', labels, dataWaist, 'รอบเอว (นิ้ว)', '#d97706', '#fef3c7');
+            createOrUpdateLineChart('chart-hip', activeCharts, 'hip', labels, dataHip, 'รอบสะโพก (นิ้ว)', '#7c3aed', '#f3e8ff');
+        }
+
+        function createOrUpdateLineChart(canvasId, storageObj, key, labels, data, labelTitle, primaryColor, bgColor) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            if (storageObj[key]) {
+                storageObj[key].destroy();
+            }
+
+            storageObj[key] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: labelTitle,
+                        data: data,
+                        borderColor: primaryColor,
+                        backgroundColor: bgColor,
+                        borderWidth: 3,
+                        pointBackgroundColor: primaryColor,
+                        pointHoverRadius: 6,
+                        tension: 0.25,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: { color: '#f1f5f9' },
+                            ticks: { font: { family: 'Kanit' } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Kanit' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Computing executive summaries and team filters...
+         * =========================================
+         */
+        function getWeeklyOrganizationAverages(weekNum, deptFilter = "ALL") {
+            let registeredMembers = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined);
+            if (deptFilter !== "ALL") {
+                registeredMembers = registeredMembers.filter(m => m.dept === deptFilter);
+            }
+
+            if (registeredMembers.length === 0) return { weight: 0, bmi: 0, waist: 0, hip: 0, count: 0 };
+
+            let totalWeight = 0;
+            let totalBmi = 0;
+            let totalWaist = 0;
+            let totalHip = 0;
+            let count = 0;
+
+            registeredMembers.forEach(m => {
+                if (weekNum === 1) {
+                    totalWeight += m.initWeight || 0;
+                    totalBmi += m.initBmi || 0;
+                    totalWaist += m.initWaist || 0;
+                    totalHip += m.initHip || 0;
+                    count++;
+                } else {
+                    const stats = getEmployeeEffectiveLogs(m.empId);
+                    if (stats && stats.hasRegistered) {
+                        const logAtW = stats.logs.find(l => l.week === weekNum);
+                        if (logAtW) {
+                            totalWeight += logAtW.weight || 0;
+                            totalBmi += logAtW.bmi || 0;
+                            totalWaist += logAtW.waist || 0;
+                            totalHip += logAtW.hip || 0;
+                            count++;
+                        }
+                    }
+                }
+            });
+
+            if (count === 0) return { weight: 0, bmi: 0, waist: 0, hip: 0, count: 0 };
+            return {
+                weight: totalWeight / count,
+                bmi: totalBmi / count,
+                waist: totalWaist / count,
+                hip: totalHip / count,
+                count: count
+            };
+        }
+
+        function populateAdminDeptDropdown() {
+            const selectEl = document.getElementById('admin-dept-filter');
+            if (!selectEl) return;
+
+            selectEl.innerHTML = '<option value="ALL">ทุกแผนก (รวมทั้งหมด)</option>';
+            const depts = [...new Set(state.members.map(m => m.dept))];
+            depts.forEach(dept => {
+                const opt = document.createElement('option');
+                opt.value = dept;
+                opt.innerText = dept;
+                selectEl.appendChild(opt);
+            });
+        }
+
+        function filterAdminExecutiveSummary() {
+            renderAdminExecutiveCharts();
+        }
+
+        function populateComparisonDropdowns() {
+            const baseSelect = document.getElementById('compare-base-week');
+            const targetSelect = document.getElementById('compare-target-week');
+            
+            if (!baseSelect || !targetSelect) return;
+
+            const prevBase = baseSelect.value;
+            const prevTarget = targetSelect.value;
+
+            baseSelect.innerHTML = "";
+            targetSelect.innerHTML = "";
+
+            const currentWeek = getCurrentWeekNumber();
+
+            for (let w = 1; w <= 13; w++) {
+                const optBase = document.createElement('option');
+                optBase.value = w;
+                optBase.innerText = w === 1 ? "สัปดาห์ที่ 1 (ตั้งต้น)" : `สัปดาห์ที่ ${w}`;
+                baseSelect.appendChild(optBase);
+
+                const optTarget = document.createElement('option');
+                optTarget.value = w;
+                optTarget.innerText = w === 1 ? "สัปดาห์ที่ 1 (ตั้งต้น)" : `สัปดาห์ที่ ${w}`;
+                targetSelect.appendChild(optTarget);
+            }
+
+            baseSelect.value = prevBase && parseInt(prevBase) <= 13 ? prevBase : "1";
+            targetSelect.value = prevTarget && parseInt(prevTarget) <= 13 ? prevTarget : String(currentWeek);
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Processing side-by-side comparison bars...
+         * =========================================
+         */
+        function renderAdminComparison() {
+            const baseWeek = parseInt(document.getElementById('compare-base-week').value || 1);
+            const targetWeek = parseInt(document.getElementById('compare-target-week').value || getCurrentWeekNumber());
+            const deptFilter = document.getElementById('admin-dept-filter').value || "ALL";
+
+            const baseAvg = getWeeklyOrganizationAverages(baseWeek, deptFilter);
+            const targetAvg = getWeeklyOrganizationAverages(targetWeek, deptFilter);
+
+            const metricsGrid = document.getElementById('compare-metrics-grid');
+            if (metricsGrid) {
+                metricsGrid.innerHTML = "";
+
+                const compareMetrics = [
+                    { label: "น้ำหนักรวมเฉลี่ย", baseVal: baseAvg.weight, targetVal: targetAvg.weight, unit: "กก.", key: "weight" },
+                    { label: "BMI เฉลี่ยองค์กร", baseVal: baseAvg.bmi, targetVal: targetAvg.bmi, unit: "", key: "bmi" },
+                    { label: "รอบเอวเฉลี่ยรวม", baseVal: baseAvg.waist, targetVal: targetAvg.waist, unit: "นิ้ว", key: "waist" },
+                    { label: "รอบสะโพกเฉลี่ยรวม", baseVal: baseAvg.hip, targetVal: targetAvg.hip, unit: "นิ้ว", key: "hip" }
+                ];
+
+                compareMetrics.forEach(metric => {
+                    const rawDiff = metric.targetVal - metric.baseVal;
+                    const pctChange = metric.baseVal > 0 ? ((metric.baseVal - metric.targetVal) / metric.baseVal) * 100 : 0;
+                    
+                    let badgeClass = "bg-slate-100 text-slate-600";
+                    let badgeText = "คงที่";
+                    
+                    if (pctChange > 0) {
+                        badgeClass = "bg-emerald-100 text-emerald-800 font-bold";
+                        badgeText = `ลดลง ${pctChange.toFixed(2)}%`;
+                    } else if (pctChange < 0) {
+                        badgeClass = "bg-red-100 text-red-800 font-bold";
+                        badgeText = `เพิ่มขึ้น ${Math.abs(pctChange).toFixed(2)}%`;
+                    }
+
+                    metricsGrid.innerHTML += `
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col justify-between shadow-sm">
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 block uppercase">${metric.label}</span>
+                                <div class="flex items-baseline justify-between mt-2">
+                                    <span class="text-[11px] text-slate-500">W${baseWeek}: <b class="text-slate-800 font-mono text-xs">${metric.baseVal.toFixed(1)}</b></span>
+                                    <span class="text-[11px] text-slate-500">W${targetWeek}: <b class="text-slate-950 font-mono text-xs">${metric.targetVal.toFixed(1)}</b></span>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                                <span class="text-[10px] text-slate-400 font-mono font-semibold">${rawDiff >= 0 ? "+" : ""}${rawDiff.toFixed(1)} ${metric.unit}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${badgeText}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Update Side-by-Side comparison Bar Chart
+            const canvas = document.getElementById('chart-admin-comparison-bar');
+            if (!canvas) return;
+            const ctxBar = canvas.getContext('2d');
+            
+            if (activeCharts.adminComparisonBar) {
+                activeCharts.adminComparisonBar.destroy();
+            }
+
+            activeCharts.adminComparisonBar = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['น้ำหนัก (กก.)', 'BMI', 'รอบเอว (นิ้ว)', 'รอบสะโพก (นิ้ว)'],
+                    datasets: [
+                        {
+                            label: `สัปดาห์ที่ ${baseWeek}`,
+                            data: [baseAvg.weight, baseAvg.bmi, baseAvg.waist, baseAvg.hip],
+                            backgroundColor: '#94a3b8',
+                            borderColor: '#64748b',
+                            borderWidth: 1
+                        },
+                        {
+                            label: `สัปดาห์ที่ ${targetWeek}`,
+                            data: [targetAvg.weight, targetAvg.bmi, targetAvg.waist, targetAvg.hip],
+                            backgroundColor: '#10b981',
+                            borderColor: '#047857',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { family: 'Kanit', size: 10 } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { font: { family: 'Kanit', size: 9 } }
+                        },
+                        x: { ticks: { font: { family: 'Kanit', size: 10, weight: 'bold' } } }
+                    }
+                }
+            });
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Drawing organizational aggregate summaries...
+         * =========================================
+         */
+        function renderAdminExecutiveCharts() {
+            const deptFilterSelect = document.getElementById('admin-dept-filter');
+            const deptFilter = deptFilterSelect ? deptFilterSelect.value : "ALL";
+
+            let registeredMembers = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined);
+            if (deptFilter !== "ALL") {
+                registeredMembers = registeredMembers.filter(m => m.dept === deptFilter);
+            }
+
+            const activeCount = registeredMembers.filter(m => m.password !== null && m.password !== undefined).length;
+            const pendingCount = registeredMembers.length - activeCount;
+
+            // Doughnut Chart: Participation Status
+            const canvasParticipation = document.getElementById('chart-admin-participation');
+            if (canvasParticipation) {
+                const ctxParticipation = canvasParticipation.getContext('2d');
+                if (activeCharts.adminParticipation) {
+                    activeCharts.adminParticipation.destroy();
+                }
+
+                activeCharts.adminParticipation = new Chart(ctxParticipation, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['เปิดใช้งานแล้ว (Active)', 'ยังไม่เปิดใช้ (Pending)'],
+                        datasets: [{
+                            data: [activeCount, pendingCount],
+                            backgroundColor: ['#059669', '#cbd5e1'],
+                            borderWidth: 2,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { family: 'Kanit', size: 10 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Line Chart: Overall Average % Reduction Week by Week
+            const maxWeeks = getCurrentWeekNumber();
+            let weekLabels = ["เริ่มต้น (W1)"];
+            let avgWeightDrops = [0];
+            let avgBmiDrops = [0];
+            let avgWaistDrops = [0];
+            let avgHipDrops = [0];
+
+            for (let w = 2; w <= maxWeeks; w++) {
+                weekLabels.push(`สัปดาห์ที่ ${w}`);
+                
+                let sumWeightDropPct = 0;
+                let sumBmiDropPct = 0;
+                let sumWaistDropPct = 0;
+                let sumHipDropPct = 0;
+                let validCount = 0;
+
+                registeredMembers.forEach(m => {
+                    const realLogs = state.logs.filter(l => l.empId === m.empId);
+                    let wWeight = m.initWeight;
+                    let wBmi = m.initBmi;
+                    let wWaist = m.initWaist || 0;
+                    let wHip = m.initHip || 0;
+
+                    for (let tempW = 2; tempW <= w; tempW++) {
+                        const logAtTempW = realLogs.find(l => l.week === tempW);
+                        if (logAtTempW) {
+                            wWeight = logAtTempW.weight;
+                            wBmi = logAtTempW.bmi;
+                            wWaist = logAtTempW.waist;
+                            wHip = logAtTempW.hip;
+                        }
+                    }
+
+                    const weightPct = m.initWeight > 0 ? ((m.initWeight - wWeight) / m.initWeight) * 100 : 0;
+                    const bmiPct = m.initBmi > 0 ? ((m.initBmi - wBmi) / m.initBmi) * 100 : 0;
+                    const waistPct = (m.initWaist && m.initWaist > 0) ? ((m.initWaist - wWaist) / m.initWaist) * 100 : 0;
+                    const hipPct = (m.initHip && m.initHip > 0) ? ((m.initHip - wHip) / m.initHip) * 100 : 0;
+
+                    sumWeightDropPct += weightPct;
+                    sumBmiDropPct += bmiPct;
+                    sumWaistDropPct += waistPct;
+                    sumHipDropPct += hipPct;
+                    validCount++;
+                });
+
+                if (validCount > 0) {
+                    avgWeightDrops.push(sumWeightDropPct / validCount);
+                    avgBmiDrops.push(sumBmiDropPct / validCount);
+                    avgWaistDrops.push(sumWaistDropPct / validCount);
+                    avgHipDrops.push(sumHipDropPct / validCount);
+                } else {
+                    avgWeightDrops.push(0); avgBmiDrops.push(0); avgWaistDrops.push(0); avgHipDrops.push(0);
+                }
+            }
+
+            const canvasTrend = document.getElementById('chart-admin-trend');
+            if (canvasTrend) {
+                const ctxTrend = canvasTrend.getContext('2d');
+                if (activeCharts.adminTrend) {
+                    activeCharts.adminTrend.destroy();
+                }
+
+                activeCharts.adminTrend = new Chart(ctxTrend, {
+                    type: 'line',
+                    data: {
+                        labels: weekLabels,
+                        datasets: [
+                            {
+                                label: 'น้ำหนักลดสะสมเฉลี่ย (%)',
+                                data: avgWeightDrops,
+                                borderColor: '#059669',
+                                backgroundColor: 'transparent',
+                                borderWidth: 2,
+                                tension: 0.2
+                            },
+                            {
+                                label: 'BMI พัฒนาสะสมเฉลี่ย (%)',
+                                data: avgBmiDrops,
+                                borderColor: '#0284c7',
+                                backgroundColor: 'transparent',
+                                borderWidth: 2,
+                                tension: 0.2
+                            },
+                            {
+                                label: 'เอวลดสะสมเฉลี่ย (%)',
+                                data: avgWaistDrops,
+                                borderColor: '#d97706',
+                                backgroundColor: 'transparent',
+                                borderWidth: 2,
+                                tension: 0.2
+                            },
+                            {
+                                label: 'สะโพกลดสะสมเฉลี่ย (%)',
+                                data: avgHipDrops,
+                                borderColor: '#7c3aed',
+                                backgroundColor: 'transparent',
+                                borderWidth: 2,
+                                tension: 0.2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { font: { family: 'Kanit', size: 9 } } }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    callback: function(value) { return value.toFixed(1) + '%'; },
+                                    font: { family: 'Kanit', size: 9 }
+                                }
+                            },
+                            x: { ticks: { font: { family: 'Kanit', size: 9 } } }
+                        }
+                    }
+                });
+            }
+
+            // Ultimate Absolute Reduction KPI Widgets for Executives
+            let totalInitWeight = 0, totalCurrentWeight = 0;
+            let totalInitBmi = 0, totalCurrentBmi = 0;
+            let totalInitWaist = 0, totalCurrentWaist = 0;
+            let totalInitHip = 0, totalCurrentHip = 0;
+            let totalRegistered = 0;
+
+            registeredMembers.forEach(m => {
+                const s = getEmployeeEffectiveLogs(m.empId);
+                if (s && s.hasRegistered) {
+                    totalInitWeight += m.initWeight || 0;
+                    totalCurrentWeight += s.currentWeight || 0;
+
+                    totalInitBmi += m.initBmi || 0;
+                    totalCurrentBmi += s.currentBmi || 0;
+
+                    totalInitWaist += m.initWaist || 0;
+                    totalCurrentWaist += s.currentWaist || 0;
+
+                    totalInitHip += m.initHip || 0;
+                    totalCurrentHip += s.currentHip || 0;
+
+                    totalRegistered++;
+                }
+            });
+
+            if (totalRegistered > 0) {
+                const totalWeightDropPct = totalInitWeight > 0 ? ((totalInitWeight - totalCurrentWeight) / totalInitWeight) * 100 : 0;
+                const totalBmiDropPct = totalInitBmi > 0 ? ((totalInitBmi - totalCurrentBmi) / totalInitBmi) * 100 : 0;
+                const totalWaistDropPct = totalInitWaist > 0 ? ((totalInitWaist - totalCurrentWaist) / totalInitWaist) * 100 : 0;
+                const totalHipDropPct = totalInitHip > 0 ? ((totalInitHip - totalCurrentHip) / totalInitHip) * 100 : 0;
+
+                setExecKpiText('exec-weight-drop', totalWeightDropPct);
+                setExecKpiText('exec-bmi-drop', totalBmiDropPct);
+                setExecKpiText('exec-waist-drop', totalWaistDropPct);
+                setExecKpiText('exec-hip-drop', totalHipDropPct);
+            }
+
+            populateComparisonDropdowns();
+            renderAdminComparison();
+            
+            // Auto update drilldown if already open
+            const drilldownSec = document.getElementById('admin-drilldown-section');
+            if (drilldownSec && !drilldownSec.classList.contains('hidden') && window.currentDrilldownCategory) {
+                showAdminDrilldown(window.currentDrilldownCategory);
+            }
+        }
+
+        function setExecKpiText(id, value) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (value > 0) {
+                el.innerText = `-${value.toFixed(2)}%`;
+                el.className = "text-3xl font-black text-emerald-600 block my-1";
+            } else if (value < 0) {
+                el.innerText = `+${Math.abs(value).toFixed(2)}%`;
+                el.className = "text-3xl font-black text-red-500 block my-1";
+            } else {
+                el.innerText = "0.00%";
+                el.className = "text-3xl font-black text-slate-500 block my-1";
+            }
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Filtering executive drilling queries...
+         * =========================================
+         */
+        function showAdminDrilldown(category) {
+            window.currentDrilldownCategory = category;
+            const drilldownSec = document.getElementById('admin-drilldown-section');
+            const titleEl = document.getElementById('drilldown-title');
+            const headerBase = document.getElementById('drilldown-header-base');
+            const headerCurrent = document.getElementById('drilldown-header-current');
+            const headerDiff = document.getElementById('drilldown-header-diff');
+            const tbody = document.getElementById('drilldown-table-body');
+            
+            if (!drilldownSec || !titleEl || !headerBase || !headerCurrent || !headerDiff || !tbody) return;
+
+            drilldownSec.classList.remove('hidden');
+            tbody.innerHTML = "";
+
+            const deptFilterSelect = document.getElementById('admin-dept-filter');
+            const deptFilter = deptFilterSelect ? deptFilterSelect.value : "ALL";
+
+            let registeredMembers = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined);
+            if (deptFilter !== "ALL") {
+                registeredMembers = registeredMembers.filter(m => m.dept === deptFilter);
+            }
+
+            let catTitle = "";
+            let unit = "";
+
+            if (category === 'bmi') {
+                catTitle = "ดัชนีมวลกาย BMI";
+                headerBase.innerText = "BMI แรกเริ่ม";
+                headerCurrent.innerText = "BMI ปัจจุบัน";
+                headerDiff.innerText = "% พัฒนาการลดลง";
+            } else if (category === 'weight') {
+                catTitle = "น้ำหนักตัว (กก.)";
+                headerBase.innerText = "น้ำหนักแรกเริ่ม (กก.)";
+                headerCurrent.innerText = "น้ำหนักปัจจุบัน (กก.)";
+                headerDiff.innerText = "% น้ำหนักที่ลดได้";
+                unit = " กก.";
+            } else if (category === 'waist') {
+                catTitle = "รอบเอวพนักงาน (นิ้ว)";
+                headerBase.innerText = "รอบเอวเริ่มต้น (นิ้ว)";
+                headerCurrent.innerText = "รอบเอวปัจจุบัน (นิ้ว)";
+                headerDiff.innerText = "% รอบเอวที่กระชับได้";
+                unit = " นิ้ว";
+            } else if (category === 'hip') {
+                catTitle = "รอบสะโพกพนักงาน (นิ้ว)";
+                headerBase.innerText = "รอบสะโพกเริ่มต้น (นิ้ว)";
+                headerCurrent.innerText = "รอบสะโพกปัจจุบัน (นิ้ว)";
+                headerDiff.innerText = "% รอบสะโพกที่ลดได้";
+                unit = " นิ้ว";
+            }
+
+            titleEl.innerHTML = `<span>🔎</span> รายละเอียดเจาะลึกผู้เข้าร่วมโครงการ: <b>${catTitle}</b> (${deptFilter === "ALL" ? "รวมทุกแผนก" : `แผนก ${deptFilter}`})`;
+
+            registeredMembers.forEach(m => {
+                const stats = getEmployeeEffectiveLogs(m.empId);
+                if (!stats || !stats.hasRegistered) return;
+
+                let baseVal = 0;
+                let currVal = 0;
+                let pct = 0;
+
+                if (category === 'bmi') {
+                    baseVal = m.initBmi || 0;
+                    currVal = stats.currentBmi;
+                    pct = stats.bmiPct;
+                } else if (category === 'weight') {
+                    baseVal = m.initWeight || 0;
+                    currVal = stats.currentWeight;
+                    pct = stats.weightPct;
+                } else if (category === 'waist') {
+                    baseVal = m.initWaist || 0;
+                    currVal = stats.currentWaist;
+                    pct = stats.waistPct;
+                } else if (category === 'hip') {
+                    baseVal = m.initHip || 0;
+                    currVal = stats.currentHip;
+                    pct = stats.hipPct;
+                }
+
+                let diffClass = "text-slate-400";
+                let pctStr = "คงที่";
+
+                if (pct > 0) {
+                    diffClass = "text-emerald-600 font-bold";
+                    pctStr = `ลดลง ${pct.toFixed(1)}%`;
+                } else if (pct < 0) {
+                    diffClass = "text-red-500 font-bold";
+                    pctStr = `เพิ่มขึ้น ${Math.abs(pct).toFixed(1)}%`;
+                }
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="py-2.5 px-4 font-mono font-bold">${m.empId}</td>
+                        <td class="py-2.5 px-4 font-medium text-slate-800">${m.fullName}</td>
+                        <td class="py-2.5 px-4 text-slate-500">${m.dept}</td>
+                        <td class="py-2.5 px-4 text-center font-mono text-slate-600">${baseVal > 0 ? baseVal.toFixed(1) + unit : "-"}</td>
+                        <td class="py-2.5 px-4 text-center font-mono text-slate-900 font-bold">${currVal > 0 ? currVal.toFixed(1) + unit : "-"}</td>
+                        <td class="py-2.5 px-4 text-right font-mono ${diffClass}">${pctStr}</td>
+                    </tr>
+                `;
+            });
+
+            if (tbody.children.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">ไม่พบสมาชิกที่มีข้อมูลตามเงื่อนไขเจาะลึก</td></tr>`;
+            }
+
+            drilldownSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function closeDrilldown() {
+            const drilldownSec = document.getElementById('admin-drilldown-section');
+            if (drilldownSec) drilldownSec.classList.add('hidden');
+            window.currentDrilldownCategory = null;
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Managing administrative settings and sync callbacks...
+         * =========================================
+         */
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            try {
+                const passField = document.getElementById('admin-input-pass');
+                if (!passField) return;
+                const password = passField.value.trim();
+
+                if (password === "ad2026") {
+                    session.isAdmin = true;
+                    showToast("ยืนยันสิทธิ์แอดมินสำเร็จ", "ยินดีต้อนรับสู่แผงควบคุมหลัก", "success");
+                    
+                    document.getElementById('admin-login-screen').classList.add('hidden');
+                    document.getElementById('admin-suite').classList.remove('hidden');
+                    
+                    renderAdminMembersTable();
+                    populateAdminDeptDropdown();
+                    renderAdminExecutiveCharts();
+                } else {
+                    showToast("ล้มเหลว", "รหัสผ่านแอดมินไม่ถูกต้อง", "error");
+                }
+            } catch (err) {
+                console.error("Admin Login Block Crash: ", err);
+                showToast("เกิดข้อผิดพลาดในการเปิดแผงแอดมิน", err.message, "error");
+            }
+        }
+
+        function handleAdminLogout() {
+            session.isAdmin = false;
+            const suite = document.getElementById('admin-suite');
+            if (suite) suite.classList.add('hidden');
+            const screen = document.getElementById('admin-login-screen');
+            if (screen) screen.classList.remove('hidden');
+            const passField = document.getElementById('admin-input-pass');
+            if (passField) passField.value = "";
+            showToast("สิทธิ์ผู้ดูแลหมดลง", "ทำการล็อกเอาต์ออกจากแผงควบคุมแล้ว", "success");
+        }
+
+        function toggleAdminSetting(key) {
+            state.config[key] = !state.config[key];
+            saveToLocalStorage();
+            updateTogglesDisplay();
+            syncStateToCloud();
+            showToast("อัปเดตการตั้งค่า", "ปรับเปลี่ยนสิทธิ์ตั้งค่าระบบและซิงก์ประวัติเรียบร้อย", "success");
+        }
+
+        function handleStartDateChange(val) {
+            if (!val) return;
+            state.config.projectStartDate = val;
+            saveToLocalStorage();
+            updateDashboardCounters();
+            syncStateToCloud();
+            showToast("เปลี่ยนวันเริ่มโครงการ", `วันเริ่มต้นโครงการปรับเป็น: ${val}`, "success");
+        }
+
+        function handleEmployeePreRegistration(e) {
+            e.preventDefault();
+            const empId = document.getElementById('reg-emp-id').value.trim();
+            const fullName = document.getElementById('reg-firstname').value.trim();
+            const dept = document.getElementById('reg-dept').value.trim();
+            
+            const heightInput = document.getElementById('reg-height');
+            const height = heightInput && heightInput.value ? parseFloat(heightInput.value) : null;
+
+            const exists = state.members.some(m => m.empId === empId);
+            if (exists) {
+                showToast("ผิดพลาด", `รหัสพนักงาน ${empId} มีในฐานระบบอยู่แล้ว`, "error");
+                return;
+            }
+
+            const newMember = {
+                empId, fullName, dept, height,
+                initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null
+            };
+
+            state.members.push(newMember);
+            saveToLocalStorage();
+            syncStateToCloud();
+
+            showToast("เพิ่มพนักงานสำเร็จ", `กรอกประวัติคุณ ${fullName} ในระบบ รอผลวัดวันแรกรับสมัคร`, "success");
+            
+            const form = document.getElementById('form-register-employee');
+            if (form) form.reset();
+            renderAdminMembersTable();
+            populateAdminDeptDropdown();
+            renderAdminExecutiveCharts();
+            updateDashboardCounters();
+        }
+
+        function renderAdminMembersTable() {
+            const tbody = document.getElementById('admin-members-list');
+            const empty = document.getElementById('admin-empty-state');
+            if (!tbody) return;
+            tbody.innerHTML = "";
+
+            if (state.members.length === 0) {
+                if (empty) empty.classList.remove('hidden');
+                return;
+            } else {
+                if (empty) empty.classList.add('hidden');
+            }
+
+            state.members.forEach(member => {
+                const stats = getEmployeeEffectiveLogs(member.empId);
+                if (!stats) return;
+
+                let startStr = "-";
+                let currentStr = "-";
+                let bmiStr = "-";
+                let statusPill = "";
+
+                if (member.password && member.initWeight) {
+                    statusPill = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">สมัครเรียบร้อย</span>`;
+                } else {
+                    statusPill = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">รอชั่งวัดตัวสมัคร</span>`;
+                }
+
+                if (stats.hasRegistered) {
+                    startStr = `${(member.initWeight || 0).toFixed(1)} กก.`;
+                    currentStr = `${stats.currentWeight.toFixed(1)} กก. | เอว ${stats.currentWaist.toFixed(1)}" | สะโพก ${stats.currentHip.toFixed(1)}"`;
+                    bmiStr = stats.currentBmi.toFixed(2);
+                } else {
+                    startStr = member.height ? `ส่วนสูง: ${member.height} ซม.` : "ไม่มีข้อมูลส่วนสูง";
+                }
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 border-b border-slate-100 transition text-[11px]">
+                        <td class="py-3.5 px-6 font-mono font-bold text-slate-900">${member.empId}</td>
+                        <td class="py-3.5 px-6">
+                            <div class="font-semibold text-slate-900 text-xs">${member.fullName}</div>
+                            <div class="text-[9px] text-slate-400">สิทธิ์ล็อกอิน: ${member.password ? "เปิดใช้งานแล้ว" : "✕ ยังไม่เปิดใช้"}</div>
+                        </td>
+                        <td class="py-3.5 px-6 text-slate-500 font-medium">${member.dept}</td>
+                        <td class="py-3.5 px-6 text-center font-mono">${member.height ? member.height + ' ซม.' : 'กรอกตอนสมัคร'}</td>
+                        <td class="py-3.5 px-6 text-center font-mono font-bold text-teal-700">${member.targetWeightLossGoal ? member.targetWeightLossGoal.toFixed(1) : "-"}</td>
+                        <td class="py-3.5 px-6 text-center font-mono text-slate-500">${startStr}</td>
+                        <td class="py-3.5 px-6 text-center font-mono text-slate-950 font-bold">${currentStr}</td>
+                        <td class="py-3.5 px-6 text-center font-mono text-emerald-800 font-bold">${bmiStr}</td>
+                        <td class="py-3.5 px-6 text-center">${statusPill}</td>
+                        <td class="py-3.5 px-6 text-right">
+                            <button onclick="deleteMemberWithConfirmation('${member.empId}')" class="text-red-500 hover:text-red-700 font-bold bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg transition text-[10px] cursor-pointer">
+                                ลบออก
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deleteMemberWithConfirmation(empId) {
+            const member = state.members.find(m => m.empId === empId);
+            if (!member) return;
+
+            if (confirm(`คุณต้องการลบพนักงาน คุณ ${member.fullName} (รหัส: ${empId}) และสถิติทั้งหมดใช่หรือไม่?`)) {
+                state.members = state.members.filter(m => m.empId !== empId);
+                state.logs = state.logs.filter(l => l.empId !== empId);
+
+                saveToLocalStorage();
+                syncStateToCloud();
+
+                showToast("ลบพนักงานสำเร็จ", "ทำการล้างบัญชีและสถิติเรียบร้อย", "success");
+                renderAdminMembersTable();
+                populateAdminDeptDropdown();
+                renderAdminExecutiveCharts();
+                updateDashboardCounters();
+            }
+        }
+
+        function resetWholeProjectWithConfirmation() {
+            if (confirm("แจ้งเตือนแอดมิน: คุณต้องการล้างฐานข้อมูลพนักงานและประวัติสัปดาห์ทั้งหมดในระบบเริ่มใหม่ใช่หรือไม่?")) {
+                state.members = [];
+                state.logs = [];
+                saveToLocalStorage();
+                syncStateToCloud();
+
+                showToast("ล้างระบบเรียบร้อย", "ระบบกลับมาว่างเปล่า", "success");
+                renderAdminMembersTable();
+                populateAdminDeptDropdown();
+                renderAdminExecutiveCharts();
+                updateDashboardCounters();
+            }
+        }
+
+        function exportToCsv() {
+            if (state.members.length === 0) {
+                showToast("ล้มเหลว", "ไม่มีฐานข้อมูลเพื่อจัดเก็บและดาวน์โหลด", "warning");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "=== MEMBERS DATABASE ===\n";
+            csvContent += "รหัสพนักงาน,ชื่อจริง-นามสกุล,แผนก,ส่วนสูง(ซม.),น้ำหนักตั้งต้นสมัคร(กก.),เป้าหมายลดน้ำหนัก(กก.),BMIตั้งต้นสมัคร\n";
+            state.members.forEach(m => {
+                csvContent += `"${m.empId}","${m.fullName}","${m.dept}",${m.height || ""},${m.initWeight || ""},${m.targetWeightLossGoal || ""},${m.initBmi || ""}\n`;
+            });
+
+            csvContent += "\n=== WEEKLY RECORD LOGS ===\n";
+            csvContent += "รหัสพนักงาน,สัปดาห์ที่,วันที่รายงาน,น้ำหนัก(กก.),รอบเอว(นิ้ว),รอบสะโพก(นิ้ว),BMIคำนวณได้,Q1,Q2,Q3,Q4,Q5\n";
+            state.logs.forEach(l => {
+                csvContent += `"${l.empId}",${l.week},"${l.date}",${l.weight},${l.waist},${l.hip},${l.bmi},"${l.q1_5groups || "-"}","${l.q2_leanMeat || "-"}","${l.q3_dietPills || "-"}","${l.q4_dinnerGap || "-"}","${l.q5_enoughProtein || "-"}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `BMI_90Days_Project_Export_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("ดาวน์โหลดสำเร็จ", "ระบบดึงข้อมูลส่งออกเรียบร้อย", "success");
+        }
+
+        function saveApiUrl(val) {
+            state.config.apiUrl = val.trim();
+            saveToLocalStorage();
+            updateBannerStatus();
+            
+            if (val.trim()) {
+                showToast("บันทึกการซิงก์สำเร็จ", "พิกัด URL คลาวด์ของแอปได้รับการอัปเดต", "success");
+            }
+        }
+
+        /* * =========================================
+         * STREAMING_CHUNK: Processing cloud spreadsheet integrations...
+         * =========================================
+         */
+        function syncStateToCloud() {
+            if (!state.config.apiUrl) return;
+
+            const payload = {
+                action: "syncWholeState",
+                members: state.members,
+                logs: state.logs,
+                config: {
+                    isRegOpen: state.config.isRegOpen,
+                    isLeaderboardOpen: state.config.isLeaderboardOpen,
+                    projectStartDate: state.config.projectStartDate
+                }
+            };
+
+            fetch(state.config.apiUrl, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                showToast("ซิงก์ข้อมูลอัตโนมัติสำเร็จ", "สถิติล่าสุดสำรองขึ้นคลาวด์เรียบร้อยแล้ว", "success");
+            })
+            .catch(err => {
+                console.error("Cloud syncing error: ", err);
+                showToast("ระบบซิงก์คลาวด์ขัดข้อง", "ไม่สามารถติดต่อ Google API ได้ในขณะนี้ ข้อมูลเก็บแบบ Local ในเครื่อง", "warning");
+            });
+        }
+
+        function handleTestDataSync() {
+            if (!state.config.apiUrl) {
+                showToast("ไม่มีพิกัดเชื่อมต่อ", "โปรดกรอกพิกัด URL Google Web App เพื่อดำเนินการซิงก์", "warning");
+                return;
+            }
+
+            showToast("กำลังติดต่อ API...", "กำลังเรียกข้อมูลจากฐานสเปรดชีตมาแทนที่ข้อมูลเดิมในเบราว์เซอร์", "warning");
+
+            fetch(state.config.apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                if (data.members && data.logs) {
+                    state.members = data.members;
+                    state.logs = data.logs;
+                    if (data.config) {
+                        state.config.isRegOpen = data.config.isRegOpen !== undefined ? (data.config.isRegOpen === true || data.config.isRegOpen === "true") : state.config.isRegOpen;
+                        state.config.isLeaderboardOpen = data.config.isLeaderboardOpen !== undefined ? (data.config.isLeaderboardOpen === true || data.config.isLeaderboardOpen === "true") : state.config.isLeaderboardOpen;
+                        state.config.projectStartDate = data.config.projectStartDate || state.config.projectStartDate;
+                    }
+                    saveToLocalStorage();
+                    
+                    initAppUI();
+                    showToast("ดึงฐานข้อมูลคลาวด์สำเร็จ ☁️", "สถิติล่าสุดประสานเข้ากับหน้าจอแอดมินเรียบร้อย!", "success");
+                } else {
+                    showToast("โครงสร้างขัดข้อง", "โครงสร้าง Sheets ไม่ตรงตามคอลัมน์มาตรฐาน", "warning");
+                }
+            })
+            .catch(err => {
+                console.error("Test API Connection issue: ", err);
+                showToast("เชื่อมต่อฐานคลาวด์ไม่สำเร็จ", "โปรดตรวจสอบการอนุญาตสิทธิ์เข้าถึง (Access) บนเว็บแอปเป็น Everyone", "error");
+            });
+        }
+
+        function openAppsScriptModal() {
+            const modal = document.getElementById('script-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeAppsScriptModal() {
+            const modal = document.getElementById('script-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function copyAppsScriptCode() {
+            const textarea = document.getElementById('apps-script-code-area');
+            if (!textarea) return;
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            showToast("คัดลอกสำเร็จ", "โค้ด Apps Script พร้อมสำหรับจัดวางในชีตแล้ว", "success");
+        }
+    </script>
+</body>
+</html>

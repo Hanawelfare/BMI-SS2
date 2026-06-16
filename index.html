@@ -46,7 +46,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-lg font-bold leading-tight tracking-wider">FIT & FIRM 90 DAYS</h1>
+                        <h1 class="text-lg font-bold leading-tight tracking-wider font-mono">FIT & FIRM 90 DAYS</h1>
                         <p class="text-xs text-emerald-100 font-light">ระบบติดตามและประเมินผลค่า BMI พนักงาน</p>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
         </div>
 
         <!-- Notification Toast Manager -->
-        <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2 pointer-events-none"></div>
+        <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2 pointer-events-none text-slate-800"></div>
 
         <!-- TAB 1: Apply Project (หน้าสมัครเข้าโครงการ) -->
         <section id="tab-apply-project" class="tab-content block animate-fade-in max-w-3xl mx-auto">
@@ -121,7 +121,7 @@
                 <div class="p-6 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex justify-between items-center">
                     <div>
                         <h3 class="text-xl font-bold">กรอกใบสมัครเข้าร่วมโครงการ FIT & FIRM</h3>
-                        <p class="text-xs text-emerald-100">กรอกรหัสพนักงานของท่านเพื่อค้นหารายชื่อส่วนสูง ตรวจทานข้อมูล วัดน้ำหนักครั้งแรก และตั้งเป้าหมาย</p>
+                        <p class="text-xs text-emerald-100">กรอกรหัสพนักงานเพื่อค้นหารายชื่อส่วนสูง ตรวจทานข้อมูล วัดน้ำหนักครั้งแรก และตั้งเป้าหมาย</p>
                     </div>
                     <svg class="w-12 h-12 text-white/10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
@@ -138,7 +138,7 @@
                         <div>
                             <label for="apply-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">ระบุรหัสพนักงานของคุณ</label>
                             <div class="relative">
-                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 00123" oninput="handleApplyLookup(this.value)" required
+                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 012345" oninput="handleApplyLookup(this.value)" required
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                     <span id="apply-lookup-status" class="text-xs font-medium text-slate-400">ระบุรหัสพนักงาน</span>
@@ -150,14 +150,14 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">ชื่อพนักงาน</label>
-                                <input type="text" id="apply-firstname" disabled placeholder="-" class="w-full bg-slate-100/85 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
+                                <input type="text" id="apply-fullname" disabled placeholder="-" class="w-full bg-slate-100/85 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">แผนก</label>
                                 <input type="text" id="apply-dept" disabled placeholder="-" class="w-full bg-slate-100/85 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">ส่วนสูงคงที่ (ซม.)</label>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">ส่วนสูงคงที่เดิมในระบบ (ซม.)</label>
                                 <input type="text" id="apply-preloaded-height" disabled placeholder="-" class="w-full bg-slate-100/85 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-500 font-bold text-sm">
                             </div>
                         </div>
@@ -172,8 +172,8 @@
                         
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <label for="apply-input-height" class="block text-xs font-semibold text-slate-500 mb-1">ส่วนสูงของคุณ (เพื่อรีเช็ค)</label>
-                                <input type="number" id="apply-input-height" step="0.1" required placeholder="00.0" oninput="validateApplyHeight()"
+                                <label for="apply-input-height" class="block text-xs font-semibold text-slate-500 mb-1">ส่วนสูงที่ใช้วัดผล (ซม.)</label>
+                                <input type="number" id="apply-input-height" step="0.1" required placeholder="00.0" oninput="calculateApplyBmi()"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition">
                                 <span id="height-check-match" class="text-[10px] mt-1 block"></span>
                             </div>
@@ -244,7 +244,7 @@
                         <div>
                             <label for="submit-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">รหัสพนักงานของคุณ</label>
                             <div class="relative">
-                                <input type="text" id="submit-emp-id" placeholder="ตัวอย่าง: 00123" oninput="handleEmpIdLookup(this.value)" required
+                                <input type="text" id="submit-emp-id" placeholder="ตัวอย่าง: 004148" oninput="handleEmpIdLookup(this.value)" required
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                     <span id="lookup-status" class="text-xs font-medium text-slate-400">ตรวจสอบรหัสพนักงาน</span>
@@ -256,15 +256,15 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">ชื่อพนักงาน</label>
-                                <input type="text" id="submit-emp-name" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-slate-500 font-medium">
+                                <input type="text" id="submit-emp-name" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">แผนก</label>
-                                <input type="text" id="submit-emp-dept" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-slate-500 font-medium">
+                                <input type="text" id="submit-emp-dept" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">รอบส่งผลสัปดาห์นี้</label>
-                                <input type="text" id="submit-week-display" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-emerald-700 font-bold">
+                                <input type="text" id="submit-week-display" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-emerald-700 font-bold text-sm">
                             </div>
                         </div>
                     </div>
@@ -402,7 +402,7 @@
 
                         <!-- Survey Q5 -->
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-white rounded-xl border border-slate-200/60">
-                            <div class="space-y-1 pr-2">
+                            <div class="space-y-1 pr-2 text-left">
                                 <p class="text-xs font-semibold text-slate-700">5. มั่นใจว่ากินโปรตีนได้ปริมาณเพียงพอตามความต้องการจริงของร่างกาย</p>
                                 <div class="flex items-center gap-1.5 flex-wrap">
                                     <span class="text-[10px] text-slate-500">เช่น น้ำหนัก 70 กก. ควรได้รับโปรตีน 70-84 กรัม/วัน</span>
@@ -442,9 +442,48 @@
 
         <!-- TAB 3: Home (หน้าแสดงอันดับ %BMI) -->
         <section id="tab-home" class="tab-content hidden space-y-8 animate-fade-in">
+            <!-- Hero Dashboard Summary Header -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl mb-6">
+                <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-emerald-500/10 blur-xl"></div>
+                <div class="absolute right-1/4 -top-10 w-36 h-36 rounded-full bg-teal-500/10 blur-xl"></div>
+                
+                <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <div class="md:col-span-2 space-y-2 text-left">
+                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full border border-emerald-500/30">
+                            โครงการ FIT & FIRM 90 DAYS
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">ร่วมก้าวสู่วิถีชีวิตใหม่ ร่างกายแข็งแรง</h2>
+                        <p class="text-slate-300 text-xs">
+                            ร่วมแข่งขันลดเปอร์เซ็นต์ BMI สะสมภายใน 90 วัน เพื่อสร้างผลงานสุขภาพพนักงานที่ดีที่สุดในองค์กร
+                        </p>
+                    </div>
+                    
+                    <!-- Stats widget -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 backdrop-blur-md">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-medium text-slate-300">วันคืบหน้าโครงการ</span>
+                            <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-md font-medium" id="project-days">วันที่ 1/90</span>
+                        </div>
+                        <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                            <div id="project-progress-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 1%"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-center">
+                            <div class="p-2 bg-white/5 rounded-xl">
+                                <span class="block text-lg font-bold text-white" id="count-active-members">0</span>
+                                <span class="text-[9px] text-slate-400">สมัครแล้ว (คน)</span>
+                            </div>
+                            <div class="p-2 bg-white/5 rounded-xl">
+                                <span class="block text-lg font-bold text-emerald-400" id="count-weight-loss">0.0</span>
+                                <span class="text-[9px] text-slate-400">ลดรวม (กก.)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col min-h-[450px]">
                 <div class="p-6 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <div>
+                    <div class="text-left">
                         <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                             <span class="p-1.5 bg-emerald-500/10 text-emerald-600 rounded-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -453,7 +492,7 @@
                             </span>
                             ตารางอันดับผู้พัฒนา %BMI ลดลงสูงสุด (Leaderboard)
                         </h3>
-                        <p class="text-xs text-slate-500">เปรียบเทียบจาก BMI แรกเริ่มในใบสมัคร คัดกรองพนักงานที่ฟิตที่สุดเรียงลงไปท้ายสุด</p>
+                        <p class="text-xs text-slate-500">เปรียบเทียบจาก BMI แรกเริ่มในใบสมัคร คัดกรองพนักงานที่ลดเปอร์เซ็นต์ BMI ได้ดีที่สุด</p>
                     </div>
                     <span class="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-semibold">เรียงลำดับสุทธิเรียลไทม์</span>
                 </div>
@@ -462,8 +501,8 @@
                     <!-- Lock Screen Overlay -->
                     <div id="leaderboard-lock-overlay" class="hidden absolute inset-0 bg-slate-150/90 backdrop-blur-md z-10 flex flex-col items-center justify-center p-8 text-center">
                         <span class="p-4 bg-slate-200 text-slate-600 rounded-full text-3xl mb-4">🔒</span>
-                        <h4 class="text-lg font-bold text-slate-800">แอดมินปิดการแสดงตารางอันดับชั่วคราว</h4>
-                        <p class="text-sm text-slate-500 max-w-md mt-1">ผู้ดูแลระบบกำลังปรับยอดสถิติหรือปรับปรุงข้อมูล Google Sheets</p>
+                        <h4 class="text-lg font-bold text-slate-800">ผู้ดูแลระบบปิดการแสดงตารางอันดับชั่วคราว</h4>
+                        <p class="text-xs text-slate-500 max-w-md mt-1.5">ผู้ดูแลระบบกำลังปรับยอดสถิติหรือปรับปรุงข้อมูลตารางจัดอันดับ</p>
                     </div>
 
                     <!-- Top 3 Podium -->
@@ -490,7 +529,7 @@
                             </tbody>
                         </table>
                         <div id="leaderboard-empty-state" class="hidden p-8 text-center text-slate-400">
-                            ยังไม่มีผู้สมัครเปิดใช้งานข้อมูลความความฟิตสมบูรณ์
+                            ยังไม่มีผู้สมัครเข้าร่วมที่มีประวัติความสมบูรณ์ในตารางจัดอันดับ
                         </div>
                     </div>
                 </div>
@@ -513,7 +552,7 @@
                     <form onsubmit="handleEmployeeLogin(event)" class="space-y-4">
                         <div>
                             <label for="login-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">รหัสพนักงาน</label>
-                            <input type="text" id="login-emp-id" placeholder="ตัวอย่าง: 00123" required
+                            <input type="text" id="login-emp-id" placeholder="ตัวอย่าง: 004148" required
                                 class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                         </div>
                         <div>
@@ -533,7 +572,7 @@
             </div>
 
             <!-- Logged In State: Employee Dashboard -->
-            <div id="employee-dashboard-screen" class="hidden space-y-8 animate-fade-in">
+            <div id="employee-dashboard-screen" class="hidden space-y-8 animate-fade-in text-left">
                 <!-- User Meta Header -->
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div class="flex items-center space-x-4">
@@ -559,7 +598,7 @@
                 </div>
 
                 <!-- Goal Progression Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gradient-to-br from-emerald-650 to-teal-750 text-white rounded-3xl p-6 shadow-md">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gradient-to-br from-emerald-650 to-teal-750 text-white rounded-3xl p-6 shadow-md text-left">
                     <div class="md:col-span-2 space-y-2">
                         <span class="text-xs font-bold text-emerald-300 uppercase tracking-wide">เป้าหมายทองคำของคุณ (Your Weight Goal)</span>
                         <h4 class="text-xl font-extrabold" id="goal-status-text">เป้าหมายลดลง: XX กก. 🏆</h4>
@@ -573,9 +612,9 @@
                             <span class="font-bold text-white" id="goal-percent-text">0%</span>
                         </div>
                         <div class="w-full bg-emerald-950/40 h-2.5 rounded-full overflow-hidden my-2">
-                            <div id="goal-progress-bar" class="bg-white h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            <div id="goal-progress-bar font-bold" class="bg-white h-full rounded-full transition-all duration-500" style="width: 0%"></div>
                         </div>
-                        <div class="flex justify-between items-center text-xxs text-emerald-200">
+                        <div class="flex justify-between items-center text-[10px] text-emerald-200">
                             <span id="goal-loss-achieved">ลดได้แล้ว: 0 กก.</span>
                             <span id="goal-loss-remaining">เหลืออีก: 0 กก.</span>
                         </div>
@@ -583,7 +622,7 @@
                 </div>
 
                 <!-- KPI Status Grid comparing current metrics to initial metrics -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left">
                     <!-- Weight Box -->
                     <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
                         <div class="flex justify-between items-start">
@@ -651,7 +690,7 @@
 
                 <!-- Permanent Health Calculator Widget Resource -->
                 <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div class="space-y-1">
+                    <div class="space-y-1 text-left">
                         <h4 class="text-sm font-bold text-slate-950 flex items-center gap-1.5">
                             <span>🥛</span> เครื่องมือความรู้สุขภาพ: คำนวณโปรตีนตามน้ำหนักตัว (Protein Calculator)
                         </h4>
@@ -678,7 +717,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Chart 1: BMI -->
                         <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
-                            <span class="font-bold text-slate-800 text-sm block mb-4">ดัชนีมวลกายย้อนหลัง (BMI Trend)</span>
+                            <span class="font-bold text-slate-800 text-sm block mb-4 text-left">ดัชนีมวลกายย้อนหลัง (BMI Trend)</span>
                             <div class="h-64 relative">
                                 <canvas id="chart-bmi"></canvas>
                             </div>
@@ -686,7 +725,7 @@
 
                         <!-- Chart 2: Weight -->
                         <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
-                            <span class="font-bold text-slate-800 text-sm block mb-4">การลดน้ำหนักสะสม (Weight Chart - กก.)</span>
+                            <span class="font-bold text-slate-800 text-sm block mb-4 text-left">การลดน้ำหนักสะสม (Weight Chart - กก.)</span>
                             <div class="h-64 relative">
                                 <canvas id="chart-weight"></canvas>
                             </div>
@@ -694,7 +733,7 @@
 
                         <!-- Chart 3: Waist -->
                         <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
-                            <span class="font-bold text-slate-800 text-sm block mb-4">ความกระชับขนาดเอว (Waist Chart - นิ้ว)</span>
+                            <span class="font-bold text-slate-800 text-sm block mb-4 text-left">ความกระชับขนาดเอว (Waist Chart - นิ้ว)</span>
                             <div class="h-64 relative">
                                 <canvas id="chart-waist"></canvas>
                             </div>
@@ -702,7 +741,7 @@
 
                         <!-- Chart 4: Hip -->
                         <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
-                            <span class="font-bold text-slate-800 text-sm block mb-4">ความฟิตขนาดสะโพก (Hip Chart - นิ้ว)</span>
+                            <span class="font-bold text-slate-800 text-sm block mb-4 text-left">ความฟิตขนาดสะโพก (Hip Chart - นิ้ว)</span>
                             <div class="h-64 relative">
                                 <canvas id="chart-hip"></canvas>
                             </div>
@@ -748,8 +787,8 @@
                 </div>
                 <form onsubmit="handleAdminLogin(event)" class="p-6 space-y-4">
                     <div>
-                        <label for="admin-password" class="block text-xs font-semibold text-slate-500 mb-1">รหัสผ่านผู้ดูแล</label>
-                        <input type="password" id="admin-password" placeholder="เริ่มต้น: ad2026" required
+                        <label for="admin-input-pass" class="block text-xs font-semibold text-slate-500 mb-1 text-left">รหัสผ่านผู้ดูแล</label>
+                        <input type="password" id="admin-input-pass" placeholder="กรอกรหัสผ่าน admin" required
                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition">
                     </div>
                     <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition">
@@ -759,7 +798,7 @@
             </div>
 
             <!-- Logged In State: Admin Suite Container -->
-            <div id="admin-suite" class="hidden space-y-8 animate-fade-in">
+            <div id="admin-suite" class="hidden space-y-8 animate-fade-in text-left">
                 <!-- Suite Header -->
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
@@ -795,26 +834,26 @@
                         <div onclick="showAdminDrilldown('bmi')" class="bg-sky-50 border border-sky-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
                             <span class="text-xxs uppercase font-bold text-sky-600 block">BMI ลดลงเฉลี่ยรวม 🖱️</span>
                             <span id="exec-bmi-drop" class="text-3xl font-black text-sky-950 block my-1">-%</span>
-                            <span class="text-xxs text-sky-700">คลิกดูรายบุคคลเจาะลึก</span>
+                            <span class="text-xxs text-sky-700">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
                         </div>
                         <div onclick="showAdminDrilldown('weight')" class="bg-emerald-50 border border-emerald-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
                             <span class="text-xxs uppercase font-bold text-emerald-600 block">น้ำหนักลดลงเฉลี่ยรวม 🖱️</span>
                             <span id="exec-weight-drop" class="text-3xl font-black text-emerald-950 block my-1">-%</span>
-                            <span class="text-xxs text-emerald-700">คลิกดูรายบุคคลเจาะลึก</span>
+                            <span class="text-xxs text-emerald-700">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
                         </div>
                         <div onclick="showAdminDrilldown('waist')" class="bg-amber-50 border border-amber-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
                             <span class="text-xxs uppercase font-bold text-amber-600 block">รอบเอวหดลงเฉลี่ยรวม 🖱️</span>
                             <span id="exec-waist-drop" class="text-3xl font-black text-amber-950 block my-1">-%</span>
-                            <span class="text-xxs text-amber-700">คลิกดูรายบุคคลเจาะลึก</span>
+                            <span class="text-xxs text-amber-700">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
                         </div>
                         <div onclick="showAdminDrilldown('hip')" class="bg-violet-50 border border-violet-100 p-5 rounded-2xl cursor-pointer hover:shadow-md transition">
                             <span class="text-xxs uppercase font-bold text-violet-600 block">สะโพกลดลงเฉลี่ยรวม 🖱️</span>
                             <span id="exec-hip-drop" class="text-3xl font-black text-violet-950 block my-1">-%</span>
-                            <span class="text-xxs text-violet-700">คลิกดูรายบุคคลเจาะลึก</span>
+                            <span class="text-xxs text-violet-700">คลิกเพื่อส่องรายพนักงานเจาะลึก</span>
                         </div>
                     </div>
 
-                    <!-- DRILL DOWN LIST (คลิกที่การ์ดเพื่อส่องรายละเอียดพนักงานทุกคนทันที) -->
+                    <!-- DRILL DOWN LIST -->
                     <div id="admin-drilldown-section" class="bg-white rounded-2xl p-5 border-2 border-emerald-500/20 shadow-inner hidden animate-fade-in space-y-4">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2.5">
                             <div>
@@ -976,18 +1015,13 @@
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
-                                    <label for="reg-firstname" class="block text-xs font-semibold text-slate-500 mb-1">ชื่อจริง</label>
-                                    <input type="text" id="reg-firstname" placeholder="ภาษาไทย" required
+                                    <label for="reg-firstname" class="block text-xs font-semibold text-slate-500 mb-1">ชื่อ-นามสกุลจริง</label>
+                                    <input type="text" id="reg-firstname" placeholder="เช่น วิชัย สุขประเสริฐกุล" required
                                         class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                                 </div>
                                 <div>
-                                    <label for="reg-lastname" class="block text-xs font-semibold text-slate-500 mb-1">นามสกุล</label>
-                                    <input type="text" id="reg-lastname" placeholder="ภาษาไทย" required
-                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
-                                </div>
-                                <div>
-                                    <label for="reg-height" class="block text-xs font-semibold text-slate-500 mb-1">ส่วนสูงคงที่ (ซม.)</label>
-                                    <input type="number" id="reg-height" step="0.1" min="100" max="250" placeholder="00.0" required
+                                    <label for="reg-height" class="block text-xs font-semibold text-slate-500 mb-1">ส่วนสูงคงที่ (ซม.) (*เว้นได้ถ้าต้องการป้อนตอนสมัคร)</label>
+                                    <input type="number" id="reg-height" step="0.1" min="100" max="250" placeholder="ว่างไว้หากยังไม่มีข้อมูล"
                                         class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                                 </div>
                             </div>
@@ -1038,7 +1072,7 @@
                     <div class="p-6 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
                             <h4 class="text-base font-bold text-slate-900">ฐานข้อมูลรายละเอียดการสมัครและสัดส่วนพนักงาน</h4>
-                            <p class="text-xs text-slate-500 mt-1">ตารางพนักงานทั้งหมดที่ถูกเพิ่มในสารบบล่วงหน้าและสถานะการยืนยันตัวตนสมัคร</p>
+                            <p class="text-xs text-slate-500 mt-1">ตารางพนักงานทั้งหมดที่ถูกเพิ่มในสารบระบบ และสถิติความสูงตั้งต้น</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <button onclick="exportToCsv()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 text-xs rounded-xl font-bold transition flex items-center gap-2">
@@ -1060,10 +1094,10 @@
                                     <th class="py-3.5 px-6 font-semibold">รหัสพนักงาน</th>
                                     <th class="py-3.5 px-6 font-semibold">ชื่อ-นามสกุล</th>
                                     <th class="py-3.5 px-6 font-semibold">แผนก</th>
-                                    <th class="py-3.5 px-6 text-center">ความสูง</th>
+                                    <th class="py-3.5 px-6 text-center">ความสูง (ซม.)</th>
                                     <th class="py-3.5 px-6 text-center">เป้าหมายลด (กก.)</th>
-                                    <th class="py-3.5 px-6 text-center">สัดส่วนสมัครแรกเริ่ม</th>
-                                    <th class="py-3.5 px-6 text-center">สัดส่วนล่าสุด (รวมทดแทน)</th>
+                                    <th class="py-3.5 px-6 text-center">สัดส่วนสมัครแรกเริ่ม (W1)</th>
+                                    <th class="py-3.5 px-6 text-center">สัดส่วนล่าสุด (W2+)</th>
                                     <th class="py-3.5 px-6 text-center">ดัชนี BMI ล่าสุด</th>
                                     <th class="py-3.5 px-6 text-center">สถานะใช้งานบัญชี</th>
                                     <th class="py-3.5 px-6 text-right">ดำเนินการ</th>
@@ -1082,174 +1116,53 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400">
-        <p>© 2026 โครงการกระชับหุ่นฟิตพนักงานในองค์กร FIT & FIRM 90 Days</p>
-        <p class="mt-1 font-light">ข้อมูลเชื่อมต่อตรงกับ <span class="font-semibold text-slate-600">Google Sheets (HTTPS Spreadsheet API)</span> แบบเรียลไทม์</p>
-    </footer>
-
-    <!-- MODAL: Google Apps Script Code Setup & Spreadsheet Integration -->
-    <div id="script-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl border border-slate-150 flex flex-col max-h-[85vh]">
-            <div class="p-6 bg-slate-900 text-white flex justify-between items-center">
-                <div>
-                    <h3 class="text-lg font-bold">ขั้นตอนการเชื่อมต่อแบบเรียลไทม์ (Google Spreadsheet Sync)</h3>
-                    <p class="text-xs text-slate-400">ใช้สำหรับลิงก์ข้อมูลตรงไปยังแผ่นงาน Google Sheet ของคุณ</p>
-                </div>
-                <button onclick="closeAppsScriptModal()" class="text-slate-400 hover:text-white font-bold text-xl">✕</button>
-            </div>
-            
-            <div class="p-6 overflow-y-auto space-y-6 text-sm custom-scrollbar text-slate-600 leading-relaxed">
-                <div class="space-y-2">
-                    <h4 class="font-bold text-slate-800">วิธีการติดตั้งบน Google Sheets:</h4>
-                    <ol class="list-decimal list-inside space-y-1.5 text-xs">
-                        <li>เปิดลิงก์ Google Sheet ของคุณ (<a href="https://docs.google.com/spreadsheets/d/1ARI5modgryZUL5xCdQcfupE-5YCh2F4lkY3z_QxqUys/edit#gid=0" target="_blank" class="text-sky-600 underline font-medium">ไปที่ชีตของคุณ</a>)</li>
-                        <li>กดที่แถบเมนูด้านบน <strong>"ส่วนขยาย" (Extensions)</strong> &gt; <strong>"Apps Script"</strong></li>
-                        <li>ลบโค้ดเริ่มต้นในไฟล์ `Code.gs` ทั้งหมด แล้วทำการวางโค้ดด้านล่างนี้ลงไป</li>
-                        <li>กดปุ่มเซฟรูปแผ่นดิสก์ และคลิกปุ่ม <strong>"การทำให้ใช้งานได้" (Deploy)</strong> &gt; <strong>"การทำให้ใช้งานได้ใหม่" (New Deployment)</strong></li>
-                        <li>เลือกประเภทการใช้งานเป็น <strong>"เว็บแอป" (Web App)</strong></li>
-                        <li>ตั้งค่า <i>"ผู้ที่มีสิทธิ์เข้าถึง" (Who has access)</i> ให้เป็น <strong>"ทุกคน" (Anyone)</strong> และกดปุ่ม <strong>"ทำให้ใช้งานได้" (Deploy)</strong></li>
-                        <li>คัดลอก URL ของเว็บแอปที่ได้ มากรอกลงในช่องตั้งค่าด้านล่างแผงควบคุมของแอดมิน เพื่อเริ่มซิงก์ข้อมูล!</li>
-                    </ol>
-                </div>
-
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
-                        <label class="font-bold text-slate-800 text-xs">โค้ด Google Apps Script (Copy & Paste):</label>
-                        <button onclick="copyAppsScriptCode()" class="text-xxs bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1.5 rounded font-semibold transition">คัดลอกรหัสโค้ด</button>
-                    </div>
-                    <textarea id="apps-script-code-area" readonly class="w-full h-64 font-mono text-[11px] bg-slate-900 text-emerald-400 p-4 rounded-2xl focus:outline-none custom-scrollbar">
-/* * โค้ดหลังบ้านสำหรับเชื่อมต่อเว็บแอปและ Google Spreadsheet โดยรักษาเลข 0 นำหน้ารหัสพนักงาน
- * วางโค้ดนี้ใน Apps Script ของ Google Sheet ลิงก์ด้านล่าง:
- * https://docs.google.com/spreadsheets/d/1ARI5modgryZUL5xCdQcfupE-5YCh2F4lkY3z_QxqUys/edit
- */
-
-function doGet(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheetMembers = getOrCreateSheet(ss, "Members");
-  var sheetLogs = getOrCreateSheet(ss, "WeeklyLogs");
-  var sheetConfig = getOrCreateSheet(ss, "Config");
-  
-  var membersData = readSheetData(sheetMembers);
-  var logsData = readSheetData(sheetLogs);
-  var configData = readSheetData(sheetConfig);
-  
-  var result = {
-    members: membersData,
-    logs: logsData,
-    config: configData[0] || {}
-  };
-  
-  return ContentService.createTextOutput(JSON.stringify(result))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-function doPost(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheetMembers = getOrCreateSheet(ss, "Members");
-  var sheetLogs = getOrCreateSheet(ss, "WeeklyLogs");
-  var sheetConfig = getOrCreateSheet(ss, "Config");
-  
-  var postData = JSON.parse(e.postData.contents);
-  var action = postData.action;
-  
-  if (action === "syncWholeState") {
-    rewriteSheet(sheetMembers, postData.members, ["empId", "firstName", "lastName", "dept", "height", "initWeight", "initWaist", "initHip", "initBmi", "password", "targetWeightLossGoal"]);
-    rewriteSheet(sheetLogs, postData.logs, ["empId", "week", "date", "weight", "waist", "hip", "bmi", "q1_5groups", "q2_leanMeat", "q3_dietPills", "q4_dinnerGap", "q5_enoughProtein"]);
-    rewriteSheet(sheetConfig, [postData.config], ["isRegOpen", "isLeaderboardOpen", "projectStartDate"]);
-    
-    return ContentService.createTextOutput(JSON.stringify({status: "success", message: "ซิงก์ข้อมูลภาพรวมสำเร็จ"}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-  
-  return ContentService.createTextOutput(JSON.stringify({status: "error", message: "ระบุกิจกรรมไม่ถูกต้อง"}))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-function getOrCreateSheet(ss, name) {
-  var sheet = ss.getSheetByName(name);
-  if (!sheet) {
-    sheet = ss.insertSheet(name);
-  }
-  return sheet;
-}
-
-function readSheetData(sheet) {
-  var lastRow = sheet.getLastRow();
-  var lastCol = sheet.getLastColumn();
-  if (lastRow <= 1) return [];
-  
-  var headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
-  var values = sheet.getRange(2, 1, lastRow - 1, lastCol).getValues();
-  
-  var list = [];
-  for (var r = 0; r < values.length; r++) {
-    var obj = {};
-    for (var c = 0; c < headers.length; c++) {
-      var val = values[r][c];
-      if (headers[c] === "empId") {
-        obj[headers[c]] = String(val);
-      } else {
-        obj[headers[c]] = val;
-      }
-    }
-    list.push(obj);
-  }
-  return list;
-}
-
-function rewriteSheet(sheet, dataList, headers) {
-  sheet.clear();
-  sheet.appendRow(headers);
-  if (!dataList || dataList.length === 0 || (dataList.length === 1 && Object.keys(dataList[0]).length === 0)) return;
-  
-  var rows = [];
-  for (var i = 0; i < dataList.length; i++) {
-    var item = dataList[i];
-    var row = [];
-    for (var j = 0; j < headers.length; j++) {
-      var val = item[headers[j]];
-      row.push(val !== undefined ? val : "");
-    }
-    rows.push(row);
-  }
-  
-  var range = sheet.getRange(2, 1, rows.length, headers.length);
-  range.setValues(rows);
-  
-  var empIdIndex = headers.indexOf("empId");
-  if (empIdIndex !== -1) {
-    var empColRange = sheet.getRange(2, empIdIndex + 1, rows.length, 1);
-    empColRange.setNumberFormat("@");
-  }
-}</textarea>
-                </div>
-            </div>
-            
-            <div class="p-4 bg-slate-50 border-t border-slate-150 flex justify-end">
-                <button onclick="closeAppsScriptModal()" class="px-5 py-2.5 bg-slate-900 text-white font-semibold rounded-xl text-xs hover:bg-slate-800 transition">รับทราบและปิดหน้านี้</button>
-            </div>
-        </div>
-    </div>
-
     <!-- MAIN STATE CONTROLLER & CORE CODE -->
     <script>
-        // State variables
+        // Global showToast definition near top for absolute safety
+        function showToast(title, desc, type = "success") {
+            const toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) return;
+            
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-2xl shadow-xl flex items-start gap-3 border transition duration-300 pointer-events-auto max-w-sm ${
+                type === "success" ? "bg-emerald-50 border-emerald-200 text-emerald-900" :
+                type === "warning" ? "bg-amber-50 border-amber-200 text-amber-900" :
+                "bg-red-50 border-red-200 text-red-900"
+            }`;
+            
+            toast.innerHTML = `
+                <div class="flex-shrink-0 font-bold">${type === "success" ? "✓" : "⚠"}</div>
+                <div>
+                    <h5 class="text-xs font-bold">${title}</h5>
+                    <p class="text-xxs mt-0.5 opacity-80">${desc}</p>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-10');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // State variables pre-filled with real names from screenshot (image_5984e4.png)
         let state = {
             members: [
-                { empId: "01", firstName: "ณัฐพล", lastName: "สิทธิโรจน์", dept: "ฝ่ายเทคโนโลยี", height: 172.0, initWeight: 84.5, initWaist: 36.5, initHip: 40.0, initBmi: 28.56, password: "1234", targetWeightLossGoal: 5.0 },
-                { empId: "02", firstName: "วรรณธิดา", lastName: "สมสุขดี", dept: "ฝ่ายบริการลูกค้า", height: 160.0, initWeight: 68.2, initWaist: 33.0, initHip: 38.5, initBmi: 26.64, password: "1111", targetWeightLossGoal: 6.0 },
-                // Unregistered (Pending) employees
-                { empId: "003", firstName: "อนันดา", lastName: "วชิรวงศ์", dept: "ฝ่ายบุคคล", height: 180.0, initWeight: null, initWaist: 38.0, initHip: 42.0, initBmi: null, password: null, targetWeightLossGoal: null },
-                { empId: "010", firstName: "เบญจวรรณ", lastName: "เลิศฤทธิ์", dept: "ฝ่ายการตลาด", height: 155.0, initWeight: null, initWaist: 30.0, initHip: 36.0, initBmi: null, password: null, targetWeightLossGoal: null }
+                { empId: "003049", fullName: "วิชัย สุขประเสริฐกุล", dept: "OPT", height: null, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "004148", fullName: "ประภาพร ศรีประดู่", dept: "HRDS", height: 153.0, initWeight: 68.2, initWaist: 33.0, initHip: 38.5, initBmi: 29.13, password: "1111", targetWeightLossGoal: 5.0 },
+                { empId: "004379", fullName: "ประคอง อ้อยงาม", dept: "QM", height: 145.0, initWeight: 84.5, initWaist: 36.5, initHip: 40.0, initBmi: 40.19, password: "1234", targetWeightLossGoal: 6.0 },
+                { empId: "004766", fullName: "พวงเพชร มณียาย", dept: "CADT", height: 152.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "005933", fullName: "ระเบียบ ปาละรัตน์", dept: "QM", height: 142.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "006078", fullName: "อดิเรก อ่อนพรม", dept: "OP2S", height: 165.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "006125", fullName: "ยุทธนา สุยะนันทน์", dept: "OP2S", height: 172.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "006585", fullName: "มะลิ ยอดสิงห์", dept: "OP4", height: 156.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "006665", fullName: "กุหลาบ ศรไชย", dept: "OP4", height: 157.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
+                { empId: "006704", fullName: "เยี่ยมน้อง โดยอาษา", dept: "QM", height: 154.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null }
             ],
             logs: [
-                // Week 2 logs (submitted by registered users with dummy behavior tracker answers)
-                { empId: "01", week: 2, date: "2026-06-15", weight: 83.2, waist: 35.8, hip: 39.5, bmi: 28.12, q1_5groups: "yes", q2_leanMeat: "yes", q3_dietPills: "no", q4_dinnerGap: "yes", q5_enoughProtein: "yes" },
-                { empId: "02", week: 2, date: "2026-06-15", weight: 67.5, waist: 32.5, hip: 38.0, bmi: 26.37, q1_5groups: "yes", q2_leanMeat: "no", q3_dietPills: "no", q4_dinnerGap: "yes", q5_enoughProtein: "no" },
-                // Week 3 logs
-                { empId: "01", week: 3, date: "2026-06-22", weight: 82.0, waist: 35.3, hip: 39.1, bmi: 27.72, q1_5groups: "yes", q2_leanMeat: "yes", q3_dietPills: "no", q4_dinnerGap: "yes", q5_enoughProtein: "yes" },
-                { empId: "02", week: 3, date: "2026-06-22", weight: 66.8, waist: 32.0, hip: 37.7, bmi: 26.09, q1_5groups: "yes", q2_leanMeat: "yes", q3_dietPills: "no", q4_dinnerGap: "no", q5_enoughProtein: "yes" }
+                // Week 2 real logs
+                { empId: "004148", week: 2, date: "2026-06-15", weight: 67.1, waist: 32.5, hip: 38.0, bmi: 28.66 },
+                { empId: "004379", week: 2, date: "2026-06-15", weight: 83.2, waist: 35.8, hip: 39.5, bmi: 39.57 }
             ],
             config: {
                 isRegOpen: true,
@@ -1294,13 +1207,15 @@ function rewriteSheet(sheet, dataList, headers) {
                     state.logs = JSON.parse(savedLogs);
                 }
                 if (savedConfig) {
-                    // Safe merging to prevent undefined startDate or keys
                     state.config = { ...state.config, ...JSON.parse(savedConfig) };
                 }
 
-                // Sync with elements
-                document.getElementById('config-start-date').value = state.config.projectStartDate || "2026-06-08";
-                document.getElementById('cloud-api-url').value = state.config.apiUrl || "";
+                const configStartDateEl = document.getElementById('config-start-date');
+                if (configStartDateEl) configStartDateEl.value = state.config.projectStartDate;
+
+                const cloudApiUrlEl = document.getElementById('cloud-api-url');
+                if (cloudApiUrlEl) cloudApiUrlEl.value = state.config.apiUrl || "";
+                
                 updateBannerStatus();
             } catch (err) {
                 console.error("Local Storage Loading Error: ", err);
@@ -1317,6 +1232,7 @@ function rewriteSheet(sheet, dataList, headers) {
             const banner = document.getElementById('sync-banner');
             const bannerTitle = document.querySelector('#sync-banner h4');
             const bannerDesc = document.querySelector('#sync-banner p');
+            if (!banner || !bannerTitle || !bannerDesc) return;
 
             if (state.config.apiUrl) {
                 banner.classList.add('bg-emerald-50', 'border-emerald-500');
@@ -1327,11 +1243,16 @@ function rewriteSheet(sheet, dataList, headers) {
                 banner.classList.add('bg-amber-50', 'border-amber-500');
                 banner.classList.remove('bg-emerald-50', 'border-emerald-500');
                 bannerTitle.innerText = "แอปกำลังทำงานแบบ Local Storage";
-                bannerDesc.innerText = "ข้อมูลของคุณจะถูกจัดเก็บในเครื่องนี้ คุณสามารถกด 'เชื่อมต่อ Google Sheet' ที่แผงควบคุมแอดมิน เพื่อผูกข้อมูลเข้ากับชีตจริงได้";
+                bannerDesc.innerText = "ข้อมูลของคุณจะถูกจัดเก็บในเครื่องนี้ คุณสามารถกด 'เชื่อมต่อ Google Sheet' ในแผงควบคุมแอดมิน เพื่อส่งค่าขึ้นชีตจริงได้";
             }
         }
 
+        /* * =========================================
+         * STREAMING_CHUNK: Creating robust initialization UI flows...
+         * =========================================
+         */
         function initAppUI() {
+            // Run on load with complete defensive element-checking
             updateDashboardCounters();
             renderLeaderboard();
             renderAdminMembersTable();
@@ -1340,41 +1261,44 @@ function rewriteSheet(sheet, dataList, headers) {
 
         // Toggles display on admin UI
         function updateTogglesDisplay() {
-            // Reg Toggle
             const btnReg = document.getElementById('btn-toggle-reg');
             const txtReg = document.getElementById('text-toggle-reg');
-            if (state.config.isRegOpen) {
-                btnReg.className = "px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition";
-                btnReg.innerText = "เปิดอยู่ (คลิกปิด)";
-                txtReg.innerText = "สถานะ: เปิดรับสมัคร";
-                document.getElementById('apply-closed-overlay').classList.add('hidden');
-            } else {
-                btnReg.className = "px-4 py-1.5 bg-slate-500 text-white rounded-lg text-xs font-bold hover:bg-slate-600 transition";
-                btnReg.innerText = "ปิดอยู่ (คลิกเปิด)";
-                txtReg.innerText = "สถานะ: ปิดรับสมัคร";
-                document.getElementById('apply-closed-overlay').classList.remove('hidden');
+            const applyClosedOverlay = document.getElementById('apply-closed-overlay');
+
+            if (btnReg && txtReg && applyClosedOverlay) {
+                if (state.config.isRegOpen) {
+                    btnReg.className = "px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition cursor-pointer";
+                    btnReg.innerText = "เปิดอยู่ (คลิกปิด)";
+                    txtReg.innerText = "สถานะ: เปิดรับสมัคร";
+                    applyClosedOverlay.classList.add('hidden');
+                } else {
+                    btnReg.className = "px-4 py-1.5 bg-slate-500 text-white rounded-lg text-xs font-bold hover:bg-slate-600 transition cursor-pointer";
+                    btnReg.innerText = "ปิดอยู่ (คลิกเปิด)";
+                    txtReg.innerText = "สถานะ: ปิดรับสมัคร";
+                    applyClosedOverlay.classList.remove('hidden');
+                }
             }
 
-            // Leaderboard Toggle
             const btnBoard = document.getElementById('btn-toggle-board');
             const txtBoard = document.getElementById('text-toggle-board');
-            if (state.config.isLeaderboardOpen) {
-                btnBoard.className = "px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition";
-                btnBoard.innerText = "เปิดอยู่ (คลิกปิด)";
-                txtBoard.innerText = "สถานะ: เปิดแสดงผล";
-                document.getElementById('leaderboard-lock-overlay').classList.add('hidden');
-            } else {
-                btnBoard.className = "px-4 py-1.5 bg-slate-500 text-white rounded-lg text-xs font-bold hover:bg-slate-600 transition";
-                btnBoard.innerText = "ปิดอยู่ (คลิกเปิด)";
-                txtBoard.innerText = "สถานะ: ปิดแสดงผล";
-                document.getElementById('leaderboard-lock-overlay').classList.remove('hidden');
+            const leaderboardLockOverlay = document.getElementById('leaderboard-lock-overlay');
+
+            if (btnBoard && txtBoard && leaderboardLockOverlay) {
+                if (state.config.isLeaderboardOpen) {
+                    btnBoard.className = "px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition cursor-pointer";
+                    btnBoard.innerText = "เปิดอยู่ (คลิกปิด)";
+                    txtBoard.innerText = "สถานะ: เปิดแสดงผล";
+                    leaderboardLockOverlay.classList.add('hidden');
+                } else {
+                    btnBoard.className = "px-4 py-1.5 bg-slate-500 text-white rounded-lg text-xs font-bold hover:bg-slate-600 transition cursor-pointer";
+                    btnBoard.innerText = "ปิดอยู่ (คลิกเปิด)";
+                    txtBoard.innerText = "สถานะ: ปิดแสดงผล";
+                    leaderboardLockOverlay.classList.remove('hidden');
+                }
             }
         }
 
-        /* * =========================================
-         * STREAMING_CHUNK: Setup navigation tab routing...
-         * =========================================
-         */
+        // Tab routing switcher with tab button highlight bindings
         function switchTab(tabId) {
             const contentSections = document.querySelectorAll('.tab-content');
             contentSections.forEach(sec => sec.classList.add('hidden'));
@@ -1396,7 +1320,7 @@ function rewriteSheet(sheet, dataList, headers) {
                 activeBtn.classList.remove('hover:bg-white/10', 'text-emerald-50');
             }
 
-            // Refreshes view components
+            // Subcomponent refresh
             if (tabId === 'home') {
                 updateDashboardCounters();
                 renderLeaderboard();
@@ -1404,33 +1328,51 @@ function rewriteSheet(sheet, dataList, headers) {
                 updateEmployeeDashboard();
             } else if (tabId === 'admin-panel' && session.isAdmin) {
                 renderAdminMembersTable();
-                populateAdminDeptDropdown();
                 renderAdminExecutiveCharts();
             } else if (tabId === 'weekly-submit') {
                 const currentWeek = getCurrentWeekNumber();
-                document.getElementById('weekly-locked-indicator').innerText = `สัปดาห์ปัจจุบันเปิดกรอก: สัปดาห์ที่ ${currentWeek}`;
-                document.getElementById('submit-week-display').value = `สัปดาห์ที่ ${currentWeek}`;
+                const weeklyLockedIndicator = document.getElementById('weekly-locked-indicator');
+                if (weeklyLockedIndicator) weeklyLockedIndicator.innerText = `สัปดาห์ปัจจุบันเปิดกรอก: สัปดาห์ที่ ${currentWeek}`;
+                const submitWeekDisplay = document.getElementById('submit-week-display');
+                if (submitWeekDisplay) submitWeekDisplay.value = `สัปดาห์ที่ ${currentWeek}`;
+                
+                // If it is week 1, warn employee that they submit starting week 2
+                const noticeBox = document.getElementById('submit-notice-box');
+                const submitBtn = document.getElementById('btn-submit-weekly');
+                if (currentWeek <= 1) {
+                    if (noticeBox) {
+                        noticeBox.className = "bg-red-50 rounded-2xl p-4 border border-red-200 text-xs text-red-900 leading-relaxed space-y-1 text-left";
+                        noticeBox.innerHTML = `
+                            <p class="font-bold text-red-950">🚫 ระบบยังไม่เปิดให้ส่งผลสัปดาห์ที่ 1:</p>
+                            <p>สัปดาห์ที่ 1 เป็นสัปดาห์แรกรับตั้งต้นที่แอดมินบันทึกเข้าสู่ฐานข้อมูลแล้ว พนักงานจะมีสิทธิ์กรอกสถิติของตัวเองได้ตั้งแต่ **สัปดาห์ที่ 2** เป็นต้นไป</p>
+                        `;
+                    }
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2";
+                        submitBtn.innerText = "เปิดลงข้อมูลตั้งแต่สัปดาห์ที่ 2";
+                    }
+                } else {
+                    if (noticeBox) {
+                        noticeBox.className = "bg-amber-50 rounded-2xl p-4 border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-1 text-left";
+                        noticeBox.innerHTML = `
+                            <p class="font-bold text-amber-900">📅 ข้อกำหนดการกรอกผล (จันทร์ - อาทิตย์):</p>
+                            <p>1. น้ำหนักและรอบตัวเริ่มต้น ถูกลงบันทึกโดยแอดมินแล้วในสัปดาห์ที่ 1</p>
+                            <p>2. ระบบเปิดให้กรอกผลลัพธ์ย้อนหลังสวมทับได้เฉพาะ **สัปดาห์ปัจจุบัน (ขณะนี้: สัปดาห์ที่ ${currentWeek})** เพื่อป้องกันการกรอกผิดความจริง</p>
+                            <p>3. **หากลืมลงบันทึก:** ระบบจะนำตัวเลขสถิติล่าสุดมาสวมและคำนวณผลแทนอัตโนมัติเมื่อพ้นสัปดาห์</p>
+                        `;
+                    }
+                }
             }
         }
 
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-
-        function highlightSyncSection() {
-            setTimeout(() => {
-                const box = document.getElementById('section-cloud-sync');
-                if (box) {
-                    box.classList.add('ring-4', 'ring-sky-500/30', 'border-sky-500');
-                    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    setTimeout(() => box.classList.remove('ring-4', 'ring-sky-500/30'), 2500);
-                }
-            }, 200);
+            if (menu) menu.classList.toggle('hidden');
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Date and week calculations...
+         * STREAMING_CHUNK: Date, weight calculations, and carry-forward logic...
          * =========================================
          */
         function getCurrentWeekNumber() {
@@ -1446,10 +1388,10 @@ function rewriteSheet(sheet, dataList, headers) {
             const diffTime = today - start;
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
             
-            if (diffDays < 0) return 1; // Project hasn't started yet
+            if (diffDays < 0) return 1; // Not started yet, treat as Week 1
             
             let week = Math.floor(diffDays / 7) + 1;
-            return Math.min(Math.max(week, 1), 13); // Caps to Week 1-13
+            return Math.min(Math.max(week, 1), 13); // Clamp to Week 1-13
         }
 
         function getProjectDaysCount() {
@@ -1464,20 +1406,12 @@ function rewriteSheet(sheet, dataList, headers) {
             return Math.min(Math.max(diffDays, 1), 90);
         }
 
-        function calculateBmi(weightKg, heightCm) {
-            if (!weightKg || !heightCm) return 0;
-            const heightM = heightCm / 100;
-            return parseFloat((weightKg / (heightM * heightM)).toFixed(2));
-        }
-
-        /* * =========================================
-         * STREAMING_CHUNK: Processing carry-forward / virtual history...
-         * =========================================
-         */
+        // Calculates effective logs (real logs + synthetic virtual replacements for skipped weeks)
         function getEmployeeEffectiveLogs(empId) {
             const member = state.members.find(m => m.empId === empId);
             if (!member) return null;
 
+            // Check if member has completed initial registration
             const hasRegistered = (member.initWeight !== null && member.initWeight !== undefined);
             if (!hasRegistered) {
                 return {
@@ -1499,7 +1433,7 @@ function rewriteSheet(sheet, dataList, headers) {
             let lastHip = member.initHip || 0;
             let lastBmi = member.initBmi;
 
-            // Fills missing weeks starting from Week 2
+            // Generate sequence up to current active week (Week 2 onwards for logging, week 1 is starting baseline)
             for (let w = 2; w <= currentActiveWeek; w++) {
                 const realLog = realLogs.find(l => l.week === w);
                 if (realLog) {
@@ -1512,7 +1446,8 @@ function rewriteSheet(sheet, dataList, headers) {
                         isVirtual: false
                     });
                 } else {
-                    const projStart = new Date(state.config.projectStartDate || "2026-06-08");
+                    // Generate a virtual log copying last known values
+                    const projStart = new Date(state.config.projectStartDate);
                     projStart.setDate(projStart.getDate() + (w - 1) * 7);
                     const virtualDateStr = projStart.toISOString().split('T')[0];
 
@@ -1524,9 +1459,7 @@ function rewriteSheet(sheet, dataList, headers) {
                         waist: lastWaist,
                         hip: lastHip,
                         bmi: lastBmi,
-                        isVirtual: true,
-                        // Defaults for blank weeks
-                        q1_5groups: "-", q2_leanMeat: "-", q3_dietPills: "-", q4_dinnerGap: "-", q5_enoughProtein: "-"
+                        isVirtual: true // Flagged as virtual
                     });
                 }
             }
@@ -1569,52 +1502,72 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Updating landing page KPI widgets...
+         * STREAMING_CHUNK: Updating KPI metrics dashboard counters defensively...
          * =========================================
          */
         function updateDashboardCounters() {
-            const registeredCount = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined).length;
-            document.getElementById('count-active-members').innerText = registeredCount;
+            // Count actual registered members (those who set password)
+            const registeredMembers = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined);
+            const activeCount = registeredMembers.filter(m => m.password !== null && m.password !== undefined).length;
+            
+            const activeCountEl = document.getElementById('count-active-members');
+            if (activeCountEl) activeCountEl.innerText = activeCount;
 
+            // Sum up weight reductions of activated users
             let accumulatedWeightLoss = 0;
-            state.members.forEach(member => {
-                const stats = getEmployeeEffectiveLogs(member.empId);
-                if (stats && stats.hasRegistered && stats.weightDiff < 0) {
-                    accumulatedWeightLoss += Math.abs(stats.weightDiff);
+            registeredMembers.forEach(member => {
+                if (member.password) {
+                    const stats = getEmployeeEffectiveLogs(member.empId);
+                    if (stats && stats.hasRegistered && stats.weightDiff < 0) {
+                        accumulatedWeightLoss += Math.abs(stats.weightDiff);
+                    }
                 }
             });
-            document.getElementById('count-weight-loss').innerText = accumulatedWeightLoss.toFixed(1);
+            const countWeightLossEl = document.getElementById('count-weight-loss');
+            if (countWeightLossEl) countWeightLossEl.innerText = accumulatedWeightLoss.toFixed(1);
 
+            // Display active date boundaries
             const currentWeek = getCurrentWeekNumber();
-            const daysPassed = getProjectDaysCount();
-            document.getElementById('project-days').innerText = `วันที่ ${daysPassed}/90`;
+            const currentWeekEl = document.getElementById('project-current-week-display');
+            if (currentWeekEl) currentWeekEl.innerText = `สัปดาห์ที่ ${currentWeek}`;
             
+            const startDateDisplay = document.getElementById('project-start-date-display');
+            if (startDateDisplay) startDateDisplay.innerText = state.config.projectStartDate;
+
+            const daysPassed = getProjectDaysCount();
+            const projectDaysEl = document.getElementById('project-days');
+            if (projectDaysEl) projectDaysEl.innerText = `วันที่ ${daysPassed}/90`;
+            
+            // Progress bar mapping
             const progressPercentage = Math.min((daysPassed / 90) * 100, 100);
-            document.getElementById('project-progress-bar').style.width = `${progressPercentage}%`;
+            const progressBarEl = document.getElementById('project-progress-bar');
+            if (progressBarEl) progressBarEl.style.width = `${progressPercentage}%`;
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Rendering the leaderboard tables...
+         * STREAMING_CHUNK: Rendering leaderboard ranking podium...
          * =========================================
          */
         function renderLeaderboard() {
-            const registeredMembers = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined);
-            const rankedList = registeredMembers.map(member => {
+            // Only query members who have completed activation (set passwords)
+            const activeMembers = state.members.filter(m => m.password !== null && m.password !== undefined);
+            
+            const rankedList = activeMembers.map(member => {
                 return getEmployeeEffectiveLogs(member.empId);
-            }).sort((a, b) => b.bmiPct - a.bmiPct);
+            }).sort((a, b) => b.bmiPct - a.bmiPct); // Descending sorting of BMI Reduction %
 
             const podiumEl = document.getElementById('leaderboard-podium');
             const tbodyEl = document.getElementById('leaderboard-list-body');
             const emptyEl = document.getElementById('leaderboard-empty-state');
 
-            podiumEl.innerHTML = "";
-            tbodyEl.innerHTML = "";
+            if (podiumEl) podiumEl.innerHTML = "";
+            if (tbodyEl) tbodyEl.innerHTML = "";
 
             if (rankedList.length === 0) {
-                emptyEl.classList.remove('hidden');
+                if (emptyEl) emptyEl.classList.remove('hidden');
                 return;
             } else {
-                emptyEl.classList.add('hidden');
+                if (emptyEl) emptyEl.classList.add('hidden');
             }
 
             // Top 3 Podium
@@ -1628,35 +1581,39 @@ function rewriteSheet(sheet, dataList, headers) {
 
                 const pctStr = item.bmiPct > 0 ? `ลดได้ ${item.bmiPct.toFixed(1)}%` : (item.bmiPct < 0 ? `เพิ่ม ${Math.abs(item.bmiPct).toFixed(1)}%` : 'คงที่');
 
-                podiumEl.innerHTML += `
-                    <div class="bg-gradient-to-br ${colors.bg} rounded-2xl p-4 shadow-sm border ${colors.border} flex flex-col justify-between items-center relative overflow-hidden">
-                        <div class="absolute -top-3 -right-3 text-4xl opacity-15">${colors.medal}</div>
-                        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-black ${colors.text} text-xs mb-1">
-                            #${idx + 1}
+                if (podiumEl) {
+                    podiumEl.innerHTML += `
+                        <div class="bg-gradient-to-br ${colors.bg} rounded-2xl p-4 shadow-sm border ${colors.border} flex flex-col justify-between items-center relative overflow-hidden text-center">
+                            <div class="absolute -top-3 -right-3 text-4xl opacity-15">${colors.medal}</div>
+                            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-black ${colors.text} text-xs mb-1 mx-auto">
+                                #${idx + 1}
+                            </div>
+                            <h4 class="font-extrabold text-sm truncate w-full ${colors.text}">${item.member.fullName}</h4>
+                            <p class="text-[10px] opacity-80 ${colors.text} truncate w-full">${item.member.dept}</p>
+                            <div class="mt-2.5 bg-white/35 backdrop-blur-sm px-2.5 py-1 rounded-full text-xxs font-black ${colors.text} inline-block">
+                                ${pctStr}
+                            </div>
                         </div>
-                        <h4 class="font-extrabold text-sm truncate w-full ${colors.text}">${item.member.firstName}</h4>
-                        <p class="text-[10px] opacity-80 ${colors.text} truncate w-full">${item.member.dept}</p>
-                        <div class="mt-2.5 bg-white/35 backdrop-blur-sm px-2.5 py-1 rounded-full text-xxs font-black ${colors.text}">
-                            ${pctStr}
-                        </div>
-                    </div>
-                `;
+                    `;
+                }
             });
 
-            // Fills remaining places
+            // Fill empty spaces if needed
             for (let i = podiumItems.length; i < 3; i++) {
-                podiumEl.innerHTML += `
-                    <div class="bg-slate-50 rounded-2xl p-4 shadow-inner border border-slate-100 flex flex-col justify-center items-center text-slate-300 min-h-[120px]">
-                        <span class="text-xs">รอผู้สมัคร</span>
-                    </div>
-                `;
+                if (podiumEl) {
+                    podiumEl.innerHTML += `
+                        <div class="bg-slate-50 rounded-2xl p-4 shadow-inner border border-slate-100 flex flex-col justify-center items-center text-slate-300 min-h-[120px] text-center">
+                            <span class="text-xs">รอผู้สมัคร</span>
+                        </div>
+                    `;
+                }
             }
 
-            // Detailed Table Body
+            // Leaderboard Table Body
             rankedList.forEach((item, idx) => {
                 const rankNum = idx + 1;
                 const empId = item.member.empId;
-                const fullName = `${item.member.firstName} ${item.member.lastName}`;
+                const fullName = item.member.fullName;
                 const dept = item.member.dept;
                 const initBmi = item.member.initBmi ? item.member.initBmi.toFixed(2) : "0.00";
                 const currBmi = item.currentBmi ? item.currentBmi.toFixed(2) : "0.00";
@@ -1675,37 +1632,46 @@ function rewriteSheet(sheet, dataList, headers) {
                     changeClass = "text-slate-400";
                 }
 
-                tbodyEl.innerHTML += `
-                    <tr class="hover:bg-slate-50/80 transition border-b border-slate-100">
-                        <td class="py-3.5 px-6 font-bold text-slate-900">${rankNum}</td>
-                        <td class="py-3.5 px-6 font-mono">${empId}</td>
-                        <td class="py-3.5 px-6 font-medium text-slate-900">${fullName}</td>
-                        <td class="py-3.5 px-6 text-slate-500">${dept}</td>
-                        <td class="py-3.5 px-6 text-center font-mono">${initBmi}</td>
-                        <td class="py-3.5 px-6 text-center font-mono">${currBmi}</td>
-                        <td class="py-3.5 px-6 text-right font-mono ${changeClass}">${changeStr}</td>
-                    </tr>
-                `;
+                if (tbodyEl) {
+                    tbodyEl.innerHTML += `
+                        <tr class="hover:bg-slate-50/80 transition border-b border-slate-100 text-left">
+                            <td class="py-3.5 px-6 font-bold text-slate-900">${rankNum}</td>
+                            <td class="py-3.5 px-6 font-mono">${empId}</td>
+                            <td class="py-3.5 px-6 font-medium text-slate-900">${fullName}</td>
+                            <td class="py-3.5 px-6 text-slate-500">${dept}</td>
+                            <td class="py-3.5 px-6 text-center font-mono">${initBmi}</td>
+                            <td class="py-3.5 px-6 text-center font-mono">${currBmi}</td>
+                            <td class="py-3.5 px-6 text-right font-mono ${changeClass}">${changeStr}</td>
+                        </tr>
+                    `;
+                }
             });
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Processing registration lookups...
+         * STREAMING_CHUNK: Controlling lookups for registration sheets...
          * =========================================
          */
         function handleApplyLookup(val) {
             const statusEl = document.getElementById('apply-lookup-status');
-            const firstNameInput = document.getElementById('apply-firstname');
+            const fullnameInput = document.getElementById('apply-fullname');
             const deptInput = document.getElementById('apply-dept');
             const preloadedHeightInput = document.getElementById('apply-preloaded-height');
+            const inputHeightField = document.getElementById('apply-input-height');
             const submitBtn = document.getElementById('btn-apply-submit');
+            const checkLabel = document.getElementById('height-check-match');
+
+            if (!statusEl || !fullnameInput || !deptInput || !preloadedHeightInput || !inputHeightField || !submitBtn || !checkLabel) return;
 
             if (!val) {
                 statusEl.innerText = "ระบุรหัสพนักงาน";
                 statusEl.className = "text-xs font-medium text-slate-400";
-                firstNameInput.value = "-";
+                fullnameInput.value = "-";
                 deptInput.value = "-";
                 preloadedHeightInput.value = "-";
+                inputHeightField.value = "";
+                inputHeightField.disabled = false;
+                checkLabel.innerText = "";
                 submitBtn.disabled = true;
                 submitBtn.className = "w-full py-3.5 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex justify-center items-center gap-2 text-sm";
                 submitBtn.innerText = "กรุณาระบุรหัสพนักงานให้ถูกต้องก่อนลงทะเบียนสมัคร";
@@ -1715,77 +1681,91 @@ function rewriteSheet(sheet, dataList, headers) {
             const member = state.members.find(m => m.empId === val.trim());
 
             if (member) {
-                if (member.password && member.initWeight) {
+                const isActivated = (member.password && member.initWeight !== null && member.initWeight !== undefined);
+                if (isActivated) {
                     statusEl.innerText = "✓ สมัครเข้าร่วมแล้ว";
                     statusEl.className = "text-xs font-semibold text-amber-600";
-                    firstNameInput.value = `${member.firstName} ${member.lastName}`;
+                    fullnameInput.value = member.fullName;
                     deptInput.value = member.dept;
-                    preloadedHeightInput.value = member.height;
+                    preloadedHeightInput.value = member.height || "ไม่มีข้อมูล";
+                    inputHeightField.value = member.height || "";
+                    inputHeightField.disabled = true;
+                    checkLabel.innerText = "✓ ลงทะเบียนเรียบร้อยแล้ว";
+                    checkLabel.className = "text-[10px] mt-1 block text-emerald-600 font-semibold";
                     submitBtn.disabled = true;
                     submitBtn.className = "w-full py-3.5 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex justify-center items-center gap-2 text-sm";
-                    submitBtn.innerText = "พนักงานรหัสนี้สมัครเข้าร่วมโครงการไปแล้ว สามารถเข้าล็อกอินได้เลย";
+                    submitBtn.innerText = "พนักงานรหัสนี้สมัครเข้าร่วมโครงการไปแล้ว";
                 } else {
                     statusEl.innerText = "✓ ตรวจพบรหัสพนักงาน";
                     statusEl.className = "text-xs font-semibold text-emerald-600";
-                    firstNameInput.value = `${member.firstName} ${member.lastName}`;
+                    fullnameInput.value = member.fullName;
                     deptInput.value = member.dept;
-                    preloadedHeightInput.value = member.height;
+                    
+                    if (member.height && member.height > 0) {
+                        preloadedHeightInput.value = member.height;
+                        inputHeightField.value = member.height;
+                        inputHeightField.disabled = true; // Lock height
+                        checkLabel.innerText = "✓ ใช้ส่วนสูงคงที่ตามฐานแอดมิน";
+                        checkLabel.className = "text-[10px] mt-1 block text-emerald-600 font-semibold";
+                    } else {
+                        preloadedHeightInput.value = "ไม่มีข้อมูลในระบบ";
+                        inputHeightField.value = "";
+                        inputHeightField.disabled = false; // Open for input!
+                        checkLabel.innerText = "⚠ โปรดกรอกส่วนสูงของคุณ";
+                        checkLabel.className = "text-[10px] mt-1 block text-amber-600 font-semibold";
+                    }
+                    
                     submitBtn.disabled = false;
-                    submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-teal-500 to-emerald-600 hover:shadow-lg hover:shadow-teal-600/10 text-white rounded-xl font-bold transition flex justify-center items-center gap-2 text-sm";
-                    submitBtn.innerText = "ยืนยันและส่งใบสมัครเข้าร่วมโครงการ";
+                    submitBtn.className = "w-full py-3.5 bg-gradient-to-r from-teal-500 to-emerald-600 hover:shadow-lg hover:shadow-teal-600/10 text-white rounded-xl font-bold transition flex justify-center items-center gap-2 text-sm cursor-pointer";
+                    submitBtn.innerText = "ยืนยันการสมัครเข้าร่วมโครงการ";
                 }
             } else {
                 statusEl.innerText = "✕ ไม่พบสิทธิ์พนักงาน";
                 statusEl.className = "text-xs font-semibold text-red-500";
-                firstNameInput.value = "-";
+                fullnameInput.value = "-";
                 deptInput.value = "-";
                 preloadedHeightInput.value = "-";
+                inputHeightField.value = "";
+                inputHeightField.disabled = false;
+                checkLabel.innerText = "";
                 submitBtn.disabled = true;
                 submitBtn.className = "w-full py-3.5 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex justify-center items-center gap-2 text-sm";
-                submitBtn.innerText = "ไม่พบรายชื่อในสารบบของแอดมิน (โปรดติดต่อฝ่ายแอดมินเพื่อเพิ่มรหัส)";
+                submitBtn.innerText = "ไม่พบรายชื่อในระบบ (โปรดติดต่อแอดมิน)";
             }
-        }
-
-        function validateApplyHeight() {
-            const preloadedHeight = parseFloat(document.getElementById('apply-preloaded-height').value);
-            const inputHeight = parseFloat(document.getElementById('apply-input-height').value);
-            const checkLabel = document.getElementById('height-check-match');
-
-            if (!preloadedHeight || !inputHeight) {
-                checkLabel.innerText = "";
-                return;
-            }
-
-            if (Math.abs(preloadedHeight - inputHeight) < 0.1) {
-                checkLabel.innerText = "✓ ตรงกันกับข้อมูลแอดมิน";
-                checkLabel.className = "text-[10px] mt-1 block text-emerald-600 font-semibold";
-            } else {
-                checkLabel.innerText = `⚠ ต่างจากฐานแอดมิน ${Math.abs(preloadedHeight - inputHeight).toFixed(1)} ซม. (อนุญาตให้ยืนยันตัวตน)`;
-                checkLabel.className = "text-[10px] mt-1 block text-amber-600 font-semibold";
-            }
-            calculateApplyBmi();
         }
 
         function calculateApplyBmi() {
-            const inputHeight = parseFloat(document.getElementById('apply-input-height').value);
-            const inputWeight = parseFloat(document.getElementById('apply-input-weight').value);
-            const bmiPreview = document.getElementById('apply-bmi-preview');
+            const inputHeightField = document.getElementById('apply-input-height');
+            const inputWeightField = document.getElementById('apply-input-weight');
+            const applyBmiPreview = document.getElementById('apply-bmi-preview');
 
-            if (inputHeight && inputWeight) {
-                const bmi = calculateBmi(inputWeight, inputHeight);
-                bmiPreview.innerText = bmi.toFixed(2);
+            if (!inputHeightField || !inputWeightField || !applyBmiPreview) return;
+
+            const height = parseFloat(inputHeightField.value);
+            const weight = parseFloat(inputWeightField.value);
+
+            if (height && weight) {
+                const bmi = calculateBmi(weight, height);
+                applyBmiPreview.innerText = bmi.toFixed(2);
             } else {
-                bmiPreview.innerText = "0.00";
+                applyBmiPreview.innerText = "0.00";
             }
         }
 
         function handleApplyProjectSubmit(e) {
             e.preventDefault();
             const empId = document.getElementById('apply-emp-id').value.trim();
-            const height = parseFloat(document.getElementById('apply-input-height').value);
-            const weight = parseFloat(document.getElementById('apply-input-weight').value);
-            const targetWeightLossGoal = parseFloat(document.getElementById('apply-target-goal').value);
-            const password = document.getElementById('apply-password').value;
+            const inputHeightField = document.getElementById('apply-input-height');
+            const inputWeightField = document.getElementById('apply-input-weight');
+            const targetWeightField = document.getElementById('apply-target-goal');
+            const passwordField = document.getElementById('apply-password');
+
+            if (!inputHeightField || !inputWeightField || !targetWeightField || !passwordField) return;
+
+            const height = parseFloat(inputHeightField.value);
+            const weight = parseFloat(inputWeightField.value);
+            const targetWeightLossGoal = parseFloat(targetWeightField.value);
+            const password = passwordField.value;
 
             const memberIdx = state.members.findIndex(m => m.empId === empId);
             if (memberIdx === -1) return;
@@ -1801,33 +1781,36 @@ function rewriteSheet(sheet, dataList, headers) {
             saveToLocalStorage();
             syncStateToCloud();
 
-            showToast("สมัครเข้าร่วมโครงการสำเร็จ! 🎉", `ยินดีต้อนรับคุณ ${state.members[memberIdx].firstName} และตั้งเป้าหมายลดน้ำหนัก ${targetWeightLossGoal} กก. เรียบร้อย`, "success");
+            showToast("สมัครเข้าร่วมโครงการสำเร็จ! 🎉", `ยินดีต้อนรับคุณ ${state.members[memberIdx].fullName} และตั้งเป้าหมายลดน้ำหนัก ${targetWeightLossGoal} กก. เรียบร้อย`, "success");
             
             document.getElementById('form-apply-member').reset();
             handleApplyLookup("");
-            document.getElementById('height-check-match').innerText = "";
 
             switchTab('employee-portal');
-            document.getElementById('login-emp-id').value = empId;
+            const loginEmpIdEl = document.getElementById('login-emp-id');
+            if (loginEmpIdEl) loginEmpIdEl.value = empId;
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Processing weekly submission lookups...
+         * STREAMING_CHUNK: Managing weekly logging verification and submits...
          * =========================================
          */
         function handleEmpIdLookup(val) {
-            const statusEl = document.getElementById('lookup-status');
+            const lookupStatus = document.getElementById('lookup-status');
             const nameEl = document.getElementById('submit-emp-name');
             const deptEl = document.getElementById('submit-emp-dept');
-            const heightPreview = document.getElementById('live-height-preview');
+            const weekDisplayEl = document.getElementById('submit-week-display');
             const submitBtn = document.getElementById('btn-submit-weekly');
+            const liveHeightPreview = document.getElementById('live-height-preview');
+
+            if (!lookupStatus || !nameEl || !deptEl || !weekDisplayEl || !submitBtn || !liveHeightPreview) return;
 
             if (!val) {
-                statusEl.innerText = "ตรวจสอบรหัสพนักงาน";
-                statusEl.className = "text-xs font-medium text-slate-400";
+                lookupStatus.innerText = "ตรวจสอบรหัสพนักงาน";
+                lookupStatus.className = "text-xs font-medium text-slate-400";
                 nameEl.value = "-";
                 deptEl.value = "-";
-                heightPreview.innerText = "-";
+                liveHeightPreview.innerText = "-";
                 submitBtn.disabled = true;
                 submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2";
                 submitBtn.innerText = "กรุณากรอกรหัสพนักงานให้ถูกต้อง";
@@ -1840,58 +1823,70 @@ function rewriteSheet(sheet, dataList, headers) {
                 const isActivated = (member.password && member.initWeight !== null && member.initWeight !== undefined);
                 
                 if (!isActivated) {
-                    statusEl.innerText = "✕ ไม่พบประวัติสมัคร";
-                    statusEl.className = "text-xs font-semibold text-amber-600";
-                    nameEl.value = `${member.firstName} ${member.lastName}`;
+                    lookupStatus.innerText = "✕ ไม่พบประวัติสมัคร";
+                    lookupStatus.className = "text-xs font-semibold text-amber-600";
+                    nameEl.value = member.fullName;
                     deptEl.value = member.dept;
-                    heightPreview.innerText = member.height;
+                    liveHeightPreview.innerText = member.height || "ไม่มีข้อมูล";
                     submitBtn.disabled = true;
                     submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2";
-                    submitBtn.innerText = "โปรดลงทะเบียนสมัครที่ หน้าที่ 1 ก่อนลงข้อมูลสัปดาห์ถัดไป";
+                    submitBtn.innerText = "โปรดลงทะเบียนสมัครที่ หน้าที่ 1 ก่อน";
                 } else {
-                    statusEl.innerText = "✓ ตรวจสิทธิ์ผ่าน";
-                    statusEl.className = "text-xs font-semibold text-emerald-600";
-                    nameEl.value = `${member.firstName} ${member.lastName}`;
+                    lookupStatus.innerText = "✓ ตรวจสิทธิ์ผ่าน";
+                    lookupStatus.className = "text-xs font-semibold text-emerald-600";
+                    nameEl.value = member.fullName;
                     deptEl.value = member.dept;
-                    heightPreview.innerText = member.height;
+                    liveHeightPreview.innerText = member.height;
                     submitBtn.disabled = false;
-                    submitBtn.className = "w-2/3 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/10 rounded-xl font-bold hover:shadow-emerald-500/25 transition flex items-center justify-center gap-2";
+                    submitBtn.className = "w-2/3 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/10 rounded-xl font-bold hover:shadow-emerald-500/25 transition flex items-center justify-center gap-2 cursor-pointer";
                     submitBtn.innerText = "บันทึกข้อมูลประจำสัปดาห์";
                     calculateLiveBmi();
                 }
             } else {
-                statusEl.innerText = "✕ ไม่พบรหัส";
-                statusEl.className = "text-xs font-semibold text-red-500";
+                lookupStatus.innerText = "✕ ไม่พบรหัส";
+                lookupStatus.className = "text-xs font-semibold text-red-500";
                 nameEl.value = "-";
                 deptEl.value = "-";
-                heightPreview.innerText = "-";
+                liveHeightPreview.innerText = "-";
                 submitBtn.disabled = true;
                 submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2";
                 submitBtn.innerText = "ไม่พบสารระบบรหัสพนักงาน";
-                document.getElementById('live-bmi-preview').innerText = "0.00";
+                const liveBmiPreview = document.getElementById('live-bmi-preview');
+                if (liveBmiPreview) liveBmiPreview.innerText = "0.00";
             }
         }
 
         function calculateLiveBmi() {
-            const height = parseFloat(document.getElementById('live-height-preview').innerText);
-            const weight = parseFloat(document.getElementById('submit-weight').value);
+            const liveHeightPreview = document.getElementById('live-height-preview');
+            const submitWeight = document.getElementById('submit-weight');
+            const liveBmiPreview = document.getElementById('live-bmi-preview');
+
+            if (!liveHeightPreview || !submitWeight || !liveBmiPreview) return;
+
+            const height = parseFloat(liveHeightPreview.innerText);
+            const weight = parseFloat(submitWeight.value);
             
             if (height && weight) {
                 const bmi = calculateBmi(weight, height);
-                document.getElementById('live-bmi-preview').innerText = bmi.toFixed(2);
+                liveBmiPreview.innerText = bmi.toFixed(2);
             } else {
-                document.getElementById('live-bmi-preview').innerText = "0.00";
+                liveBmiPreview.innerText = "0.00";
             }
         }
 
         function handleWeeklySubmit(e) {
             e.preventDefault();
             const empId = document.getElementById('submit-emp-id').value.trim();
-            const weight = parseFloat(document.getElementById('submit-weight').value);
-            const waist = parseFloat(document.getElementById('submit-waist').value);
-            const hip = parseFloat(document.getElementById('submit-hip').value);
+            const weightVal = document.getElementById('submit-weight').value;
+            const waistVal = document.getElementById('submit-waist').value;
+            const hipVal = document.getElementById('submit-hip').value;
+
+            if (!weightVal || !waistVal || !hipVal) return;
+
+            const weight = parseFloat(weightVal);
+            const waist = parseFloat(waistVal);
+            const hip = parseFloat(hipVal);
             
-            // Collect Weekly evaluation answers
             const q1_5groups = document.querySelector('input[name="survey-q1"]:checked')?.value || "no";
             const q2_leanMeat = document.querySelector('input[name="survey-q2"]:checked')?.value || "no";
             const q3_dietPills = document.querySelector('input[name="survey-q3"]:checked')?.value || "no";
@@ -1938,12 +1933,13 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         function clearWeeklyForm() {
-            document.getElementById('form-weekly-log').reset();
+            const form = document.getElementById('form-weekly-log');
+            if (form) form.reset();
             handleEmpIdLookup("");
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Managing employee dashboard authentication...
+         * STREAMING_CHUNK: Managing employee dashboard portals and metrics cards...
          * =========================================
          */
         function handleEmployeeLogin(e) {
@@ -1969,7 +1965,7 @@ function rewriteSheet(sheet, dataList, headers) {
             }
 
             session.currentMember = member;
-            showToast("เข้าสู่ระบบสำเร็จ", `ยินดีต้อนรับคุณ ${member.firstName}`, "success");
+            showToast("เข้าสู่ระบบสำเร็จ", `ยินดีต้อนรับคุณ ${member.fullName}`, "success");
             
             document.getElementById('employee-login-screen').classList.add('hidden');
             document.getElementById('employee-dashboard-screen').classList.remove('hidden');
@@ -1985,10 +1981,6 @@ function rewriteSheet(sheet, dataList, headers) {
             showToast("ออกจากระบบแล้ว", "ออกจากระบบพอร์ทัลส่วนบุคคลเรียบร้อย", "success");
         }
 
-        /* * =========================================
-         * STREAMING_CHUNK: Setting up employee dashboards...
-         * =========================================
-         */
         function updateEmployeeDashboard() {
             if (!session.currentMember) return;
             const empId = session.currentMember.empId;
@@ -1996,42 +1988,62 @@ function rewriteSheet(sheet, dataList, headers) {
 
             if (!stats) return;
 
-            // Goal Progress tracking values
+            // Goal Progression tracking values
             const targetLoss = stats.member.targetWeightLossGoal || 0;
             const realLoss = (stats.member.initWeight || 0) - stats.currentWeight;
             
-            document.getElementById('goal-status-text').innerText = `เป้าหมายลดลง: ${targetLoss.toFixed(1)} กก. 🏆`;
+            const goalStatusText = document.getElementById('goal-status-text');
+            if (goalStatusText) goalStatusText.innerText = `เป้าหมายลดลง: ${targetLoss.toFixed(1)} กก. 🏆`;
             
             let progressPct = 0;
             if (targetLoss > 0) {
                 progressPct = Math.min(Math.max((realLoss / targetLoss) * 100, 0), 100);
             }
-            document.getElementById('goal-percent-text').innerText = `${progressPct.toFixed(0)}%`;
-            document.getElementById('goal-progress-bar').style.width = `${progressPct}%`;
-            document.getElementById('goal-loss-achieved').innerText = `ลดได้แล้ว: ${realLoss > 0 ? realLoss.toFixed(1) : "0.0"} กก.`;
+            const goalPercentText = document.getElementById('goal-percent-text');
+            if (goalPercentText) goalPercentText.innerText = `${progressPct.toFixed(0)}%`;
+            
+            const goalProgressBar = document.getElementById('goal-progress-bar');
+            if (goalProgressBar) goalProgressBar.style.width = `${progressPct}%`;
+            
+            const goalLossAchieved = document.getElementById('goal-loss-achieved');
+            if (goalLossAchieved) goalLossAchieved.innerText = `ลดได้แล้ว: ${realLoss > 0 ? realLoss.toFixed(1) : "0.0"} กก.`;
             
             const remaining = targetLoss - realLoss;
-            document.getElementById('goal-loss-remaining').innerText = `เหลืออีก: ${remaining > 0 ? remaining.toFixed(1) : "0.0"} กก.`;
+            const goalLossRemaining = document.getElementById('goal-loss-remaining');
+            if (goalLossRemaining) goalLossRemaining.innerText = `เหลืออีก: ${remaining > 0 ? remaining.toFixed(1) : "0.0"} กก.`;
 
             // Header metadata
-            document.getElementById('member-initial').innerText = stats.member.firstName.charAt(0);
-            document.getElementById('member-fullname').innerText = `${stats.member.firstName} ${stats.member.lastName}`;
-            document.getElementById('member-dept').innerText = stats.member.dept;
-            document.getElementById('member-empid').innerText = stats.member.empId;
-            document.getElementById('member-height').innerText = stats.member.height;
+            const memberInitial = document.getElementById('member-initial');
+            if (memberInitial) memberInitial.innerText = stats.member.fullName.charAt(0);
+            const memberFullname = document.getElementById('member-fullname');
+            if (memberFullname) memberFullname.innerText = stats.member.fullName;
+            const memberDept = document.getElementById('member-dept');
+            if (memberDept) memberDept.innerText = stats.member.dept;
+            const memberEmpid = document.getElementById('member-empid');
+            if (memberEmpid) memberEmpid.innerText = stats.member.empId;
+            const memberHeight = document.getElementById('member-height');
+            if (memberHeight) memberHeight.innerText = stats.member.height;
 
             // Load Values
-            document.getElementById('current-weight-val').innerText = stats.currentWeight.toFixed(1);
-            document.getElementById('initial-weight-val').innerText = (stats.member.initWeight || 0).toFixed(1);
+            const currentWeightVal = document.getElementById('current-weight-val');
+            if (currentWeightVal) currentWeightVal.innerText = stats.currentWeight.toFixed(1);
+            const initialWeightVal = document.getElementById('initial-weight-val');
+            if (initialWeightVal) initialWeightVal.innerText = (stats.member.initWeight || 0).toFixed(1);
             
-            document.getElementById('current-bmi-val').innerText = stats.currentBmi.toFixed(2);
-            document.getElementById('initial-bmi-val').innerText = (stats.member.initBmi || 0).toFixed(2);
+            const currentBmiVal = document.getElementById('current-bmi-val');
+            if (currentBmiVal) currentBmiVal.innerText = stats.currentBmi.toFixed(2);
+            const initialBmiVal = document.getElementById('initial-bmi-val');
+            if (initialBmiVal) initialBmiVal.innerText = (stats.member.initBmi || 0).toFixed(2);
             
-            document.getElementById('current-waist-val').innerText = stats.currentWaist.toFixed(1);
-            document.getElementById('initial-waist-val').innerText = stats.member.initWaist ? stats.member.initWaist.toFixed(1) : "0.0";
+            const currentWaistVal = document.getElementById('current-waist-val');
+            if (currentWaistVal) currentWaistVal.innerText = stats.currentWaist.toFixed(1);
+            const initialWaistVal = document.getElementById('initial-waist-val');
+            if (initialWaistVal) initialWaistVal.innerText = stats.member.initWaist ? stats.member.initWaist.toFixed(1) : "0.0";
             
-            document.getElementById('current-hip-val').innerText = stats.currentHip.toFixed(1);
-            document.getElementById('initial-hip-val').innerText = stats.member.initHip ? stats.member.initHip.toFixed(1) : "0.0";
+            const currentHipVal = document.getElementById('current-hip-val');
+            if (currentHipVal) currentHipVal.innerText = stats.currentHip.toFixed(1);
+            const initialHipVal = document.getElementById('initial-hip-val');
+            if (initialHipVal) initialHipVal.innerText = stats.member.initHip ? stats.member.initHip.toFixed(1) : "0.0";
 
             // Set Pct card badges
             setMetricCardChange('badge-weight-change', 'weight-change-abs', stats.weightPct, stats.weightDiff, 'กก.');
@@ -2041,60 +2053,65 @@ function rewriteSheet(sheet, dataList, headers) {
 
             // BMI class status label
             const statusLabel = document.getElementById('bmi-status-label');
-            const bmi = stats.currentBmi;
-            if (bmi >= 30.0) {
-                statusLabel.innerText = "อ้วนระดับ 2";
-                statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-red-100 text-red-800";
-            } else if (bmi >= 25.0) {
-                statusLabel.innerText = "อ้วนระดับ 1";
-                statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-orange-100 text-orange-800";
-            } else if (bmi >= 23.0) {
-                statusLabel.innerText = "น้ำหนักเกิน";
-                statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-amber-100 text-amber-800";
-            } else if (bmi >= 18.5) {
-                statusLabel.innerText = "สมส่วน / ปกติ";
-                statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-emerald-100 text-emerald-800";
-            } else {
-                statusLabel.innerText = "น้ำหนักน้อยกว่าเกณฑ์";
-                statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-sky-100 text-sky-800";
+            if (statusLabel) {
+                const bmi = stats.currentBmi;
+                if (bmi >= 30.0) {
+                    statusLabel.innerText = "อ้วนระดับ 2";
+                    statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-red-100 text-red-800";
+                } else if (bmi >= 25.0) {
+                    statusLabel.innerText = "อ้วนระดับ 1";
+                    statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-orange-100 text-orange-800";
+                } else if (bmi >= 23.0) {
+                    statusLabel.innerText = "น้ำหนักเกิน";
+                    statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-amber-100 text-amber-800";
+                } else if (bmi >= 18.5) {
+                    statusLabel.innerText = "สมส่วน / ปกติ";
+                    statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-emerald-100 text-emerald-800";
+                } else {
+                    statusLabel.innerText = "น้ำหนักน้อยกว่าเกณฑ์";
+                    statusLabel.className = "text-[10px] px-2 py-1 rounded-md font-bold bg-sky-100 text-sky-800";
+                }
             }
 
             // Fill records history table
             const tableBody = document.getElementById('member-records-body');
-            tableBody.innerHTML = "";
-            document.getElementById('records-count').innerText = `พบ ${stats.logs.length + 1} รายการสรุปรวมสัปดาห์ที่ 1`;
+            if (tableBody) {
+                tableBody.innerHTML = "";
+                const recordsCount = document.getElementById('records-count');
+                if (recordsCount) recordsCount.innerText = `พบ ${stats.logs.length + 1} รายการสรุปรวมสัปดาห์ที่ 1`;
 
-            // Start base row
-            tableBody.innerHTML += `
-                <tr class="bg-emerald-50/40 font-semibold border-b border-slate-100">
-                    <td class="py-3 px-6 text-slate-800">สัปดาห์ที่ 1 (Start)</td>
-                    <td class="py-3 px-6 text-slate-400">ข้อมูลตั้งต้นสมัคร (แอดมิน)</td>
-                    <td class="py-3 px-6 text-center font-mono">${(stats.member.initWeight || 0).toFixed(1)}</td>
-                    <td class="py-3 px-6 text-center font-mono text-emerald-700">${(stats.member.initBmi || 0).toFixed(2)}</td>
-                    <td class="py-3 px-6 text-center font-mono">${stats.member.initWaist ? stats.member.initWaist.toFixed(1) : "-"}</td>
-                    <td class="py-3 px-6 text-center font-mono">${stats.member.initHip ? stats.member.initHip.toFixed(1) : "-"}</td>
-                    <td class="py-3 px-6 text-right"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px]">ชี้วัดหลัก</span></td>
-                </tr>
-            `;
-
-            // Sequential Logs (Real + Synthetic)
-            stats.logs.forEach(log => {
-                const statusPill = log.isVirtual 
-                    ? `<span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded text-[10px]" title="ไม่ได้ลงข้อมูลรายสัปดาห์ในวันดังกล่าว ระบบดึงค่าล่าสุดมาทดแทนให้อัตโนมัติ">ทดแทนอัตโนมัติ</span>`
-                    : `<span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-150 rounded text-[10px]">พนักงานส่งผลปกติ</span>`;
-
+                // Start base row
                 tableBody.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                        <td class="py-3 px-6 font-bold text-slate-700">สัปดาห์ที่ ${log.week}</td>
-                        <td class="py-3 px-6 text-slate-400 font-mono">${log.date}</td>
-                        <td class="py-3 px-6 text-center font-mono">${log.weight.toFixed(1)}</td>
-                        <td class="py-3 px-6 text-center font-mono text-emerald-700">${log.bmi.toFixed(2)}</td>
-                        <td class="py-3 px-6 text-center font-mono">${log.waist.toFixed(1)}</td>
-                        <td class="py-3 px-6 text-center font-mono">${log.hip.toFixed(1)}</td>
-                        <td class="py-3 px-6 text-right">${statusPill}</td>
+                    <tr class="bg-emerald-50/40 font-semibold border-b border-slate-100">
+                        <td class="py-3 px-6 text-slate-800">สัปดาห์ที่ 1 (Start)</td>
+                        <td class="py-3 px-6 text-slate-400">ข้อมูลตั้งต้นสมัคร (แอดมิน)</td>
+                        <td class="py-3 px-6 text-center font-mono">${(stats.member.initWeight || 0).toFixed(1)}</td>
+                        <td class="py-3 px-6 text-center font-mono text-emerald-700">${(stats.member.initBmi || 0).toFixed(2)}</td>
+                        <td class="py-3 px-6 text-center font-mono">${stats.member.initWaist ? stats.member.initWaist.toFixed(1) : "-"}</td>
+                        <td class="py-3 px-6 text-center font-mono">${stats.member.initHip ? stats.member.initHip.toFixed(1) : "-"}</td>
+                        <td class="py-3 px-6 text-right"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px]">ชี้วัดหลัก</span></td>
                     </tr>
                 `;
-            });
+
+                // Sequential Logs (Real + Synthetic)
+                stats.logs.forEach(log => {
+                    const statusPill = log.isVirtual 
+                        ? `<span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded text-[10px]" title="ไม่ได้ลงข้อมูลรายสัปดาห์ในวันดังกล่าว ระบบดึงค่าล่าสุดมาทดแทนให้อัตโนมัติ">ทดแทนอัตโนมัติ</span>`
+                        : `<span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-150 rounded text-[10px]">พนักงานส่งผลปกติ</span>`;
+
+                    tableBody.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                            <td class="py-3 px-6 font-bold text-slate-700">สัปดาห์ที่ ${log.week}</td>
+                            <td class="py-3 px-6 text-slate-400 font-mono">${log.date}</td>
+                            <td class="py-3 px-6 text-center font-mono">${log.weight.toFixed(1)}</td>
+                            <td class="py-3 px-6 text-center font-mono text-emerald-700">${log.bmi.toFixed(2)}</td>
+                            <td class="py-3 px-6 text-center font-mono">${log.waist.toFixed(1)}</td>
+                            <td class="py-3 px-6 text-center font-mono">${log.hip.toFixed(1)}</td>
+                            <td class="py-3 px-6 text-right">${statusPill}</td>
+                        </tr>
+                    `;
+                });
+            }
 
             renderCharts(stats);
         }
@@ -2102,6 +2119,7 @@ function rewriteSheet(sheet, dataList, headers) {
         function setMetricCardChange(badgeId, textId, pctValue, rawDiff, unit) {
             const badge = document.getElementById(badgeId);
             const text = document.getElementById(textId);
+            if (!badge || !text) return;
 
             const sign = rawDiff > 0 ? "+" : "";
             text.innerText = `${sign}${rawDiff.toFixed(1)} ${unit}`.trim();
@@ -2119,7 +2137,7 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Drawing individual employee trend lines...
+         * STREAMING_CHUNK: Drawing individual trend chart lines...
          * =========================================
          */
         function renderCharts(stats) {
@@ -2137,7 +2155,9 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         function createOrUpdateLineChart(canvasId, storageObj, key, labels, data, labelTitle, primaryColor, bgColor) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
             
             if (storageObj[key]) {
                 storageObj[key].destroy();
@@ -2181,7 +2201,7 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Executing group average calculations...
+         * STREAMING_CHUNK: Computing executive summaries and team filters...
          * =========================================
          */
         function getWeeklyOrganizationAverages(weekNum, deptFilter = "ALL") {
@@ -2230,17 +2250,11 @@ function rewriteSheet(sheet, dataList, headers) {
             };
         }
 
-        /* * =========================================
-         * STREAMING_CHUNK: Setting up department filter lists...
-         * =========================================
-         */
         function populateAdminDeptDropdown() {
             const selectEl = document.getElementById('admin-dept-filter');
             if (!selectEl) return;
 
-            // Retain "ALL" default
             selectEl.innerHTML = '<option value="ALL">ทุกแผนก (รวมทั้งหมด)</option>';
-
             const depts = [...new Set(state.members.map(m => m.dept))];
             depts.forEach(dept => {
                 const opt = document.createElement('option');
@@ -2285,7 +2299,7 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Executing comparison and bar chart renders...
+         * STREAMING_CHUNK: Processing side-by-side comparison bars...
          * =========================================
          */
         function renderAdminComparison() {
@@ -2297,50 +2311,54 @@ function rewriteSheet(sheet, dataList, headers) {
             const targetAvg = getWeeklyOrganizationAverages(targetWeek, deptFilter);
 
             const metricsGrid = document.getElementById('compare-metrics-grid');
-            if (!metricsGrid) return;
-            metricsGrid.innerHTML = "";
+            if (metricsGrid) {
+                metricsGrid.innerHTML = "";
 
-            const compareMetrics = [
-                { label: "น้ำหนักรวมเฉลี่ย", baseVal: baseAvg.weight, targetVal: targetAvg.weight, unit: "กก.", key: "weight" },
-                { label: "BMI เฉลี่ยองค์กร", baseVal: baseAvg.bmi, targetVal: targetAvg.bmi, unit: "", key: "bmi" },
-                { label: "รอบเอวเฉลี่ยรวม", baseVal: baseAvg.waist, targetVal: targetAvg.waist, unit: "นิ้ว", key: "waist" },
-                { label: "รอบสะโพกเฉลี่ยรวม", baseVal: baseAvg.hip, targetVal: targetAvg.hip, unit: "นิ้ว", key: "hip" }
-            ];
+                const compareMetrics = [
+                    { label: "น้ำหนักรวมเฉลี่ย", baseVal: baseAvg.weight, targetVal: targetAvg.weight, unit: "กก.", key: "weight" },
+                    { label: "BMI เฉลี่ยองค์กร", baseVal: baseAvg.bmi, targetVal: targetAvg.bmi, unit: "", key: "bmi" },
+                    { label: "รอบเอวเฉลี่ยรวม", baseVal: baseAvg.waist, targetVal: targetAvg.waist, unit: "นิ้ว", key: "waist" },
+                    { label: "รอบสะโพกเฉลี่ยรวม", baseVal: baseAvg.hip, targetVal: targetAvg.hip, unit: "นิ้ว", key: "hip" }
+                ];
 
-            compareMetrics.forEach(metric => {
-                const rawDiff = metric.targetVal - metric.baseVal;
-                const pctChange = metric.baseVal > 0 ? ((metric.baseVal - metric.targetVal) / metric.baseVal) * 100 : 0;
-                
-                let badgeClass = "bg-slate-100 text-slate-600";
-                let badgeText = "คงที่";
-                
-                if (pctChange > 0) {
-                    badgeClass = "bg-emerald-100 text-emerald-800 font-bold";
-                    badgeText = `ลดลง ${pctChange.toFixed(2)}%`;
-                } else if (pctChange < 0) {
-                    badgeClass = "bg-red-100 text-red-800 font-bold";
-                    badgeText = `เพิ่มขึ้น ${Math.abs(pctChange).toFixed(2)}%`;
-                }
+                compareMetrics.forEach(metric => {
+                    const rawDiff = metric.targetVal - metric.baseVal;
+                    const pctChange = metric.baseVal > 0 ? ((metric.baseVal - metric.targetVal) / metric.baseVal) * 100 : 0;
+                    
+                    let badgeClass = "bg-slate-100 text-slate-600";
+                    let badgeText = "คงที่";
+                    
+                    if (pctChange > 0) {
+                        badgeClass = "bg-emerald-100 text-emerald-800 font-bold";
+                        badgeText = `ลดลง ${pctChange.toFixed(2)}%`;
+                    } else if (pctChange < 0) {
+                        badgeClass = "bg-red-100 text-red-800 font-bold";
+                        badgeText = `เพิ่มขึ้น ${Math.abs(pctChange).toFixed(2)}%`;
+                    }
 
-                metricsGrid.innerHTML += `
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col justify-between shadow-sm">
-                        <div>
-                            <span class="text-[10px] font-bold text-slate-400 block uppercase">${metric.label}</span>
-                            <div class="flex items-baseline justify-between mt-2">
-                                <span class="text-[11px] text-slate-500">W${baseWeek}: <b class="text-slate-800 font-mono text-xs">${metric.baseVal.toFixed(1)}</b></span>
-                                <span class="text-[11px] text-slate-500">W${targetWeek}: <b class="text-slate-950 font-mono text-xs">${metric.targetVal.toFixed(1)}</b></span>
+                    metricsGrid.innerHTML += `
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col justify-between shadow-sm">
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 block uppercase">${metric.label}</span>
+                                <div class="flex items-baseline justify-between mt-2">
+                                    <span class="text-[11px] text-slate-500">W${baseWeek}: <b class="text-slate-800 font-mono text-xs">${metric.baseVal.toFixed(1)}</b></span>
+                                    <span class="text-[11px] text-slate-500">W${targetWeek}: <b class="text-slate-950 font-mono text-xs">${metric.targetVal.toFixed(1)}</b></span>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                                <span class="text-[10px] text-slate-400 font-mono font-semibold">${rawDiff >= 0 ? "+" : ""}${rawDiff.toFixed(1)} ${metric.unit}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${badgeText}</span>
                             </div>
                         </div>
-                        <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
-                            <span class="text-[10px] text-slate-400 font-mono font-semibold">${rawDiff >= 0 ? "+" : ""}${rawDiff.toFixed(1)} ${metric.unit}</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${badgeText}</span>
-                        </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
 
             // Update Side-by-Side comparison Bar Chart
-            const ctxBar = document.getElementById('chart-admin-comparison-bar').getContext('2d');
+            const canvas = document.getElementById('chart-admin-comparison-bar');
+            if (!canvas) return;
+            const ctxBar = canvas.getContext('2d');
+            
             if (activeCharts.adminComparisonBar) {
                 activeCharts.adminComparisonBar.destroy();
             }
@@ -2387,11 +2405,12 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Processing overall admin trend lines...
+         * STREAMING_CHUNK: Drawing organizational aggregate summaries...
          * =========================================
          */
         function renderAdminExecutiveCharts() {
-            const deptFilter = document.getElementById('admin-dept-filter').value || "ALL";
+            const deptFilterSelect = document.getElementById('admin-dept-filter');
+            const deptFilter = deptFilterSelect ? deptFilterSelect.value : "ALL";
 
             let registeredMembers = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined);
             if (deptFilter !== "ALL") {
@@ -2402,33 +2421,36 @@ function rewriteSheet(sheet, dataList, headers) {
             const pendingCount = registeredMembers.length - activeCount;
 
             // Doughnut Chart: Participation Status
-            const ctxParticipation = document.getElementById('chart-admin-participation').getContext('2d');
-            if (activeCharts.adminParticipation) {
-                activeCharts.adminParticipation.destroy();
-            }
+            const canvasParticipation = document.getElementById('chart-admin-participation');
+            if (canvasParticipation) {
+                const ctxParticipation = canvasParticipation.getContext('2d');
+                if (activeCharts.adminParticipation) {
+                    activeCharts.adminParticipation.destroy();
+                }
 
-            activeCharts.adminParticipation = new Chart(ctxParticipation, {
-                type: 'doughnut',
-                data: {
-                    labels: ['เปิดใช้งานแล้ว (Active)', 'ยังไม่เปิดใช้ (Pending)'],
-                    datasets: [{
-                        data: [activeCount, pendingCount],
-                        backgroundColor: ['#059669', '#cbd5e1'],
-                        borderWidth: 2,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { font: { family: 'Kanit', size: 10 } }
+                activeCharts.adminParticipation = new Chart(ctxParticipation, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['เปิดใช้งานแล้ว (Active)', 'ยังไม่เปิดใช้ (Pending)'],
+                        datasets: [{
+                            data: [activeCount, pendingCount],
+                            backgroundColor: ['#059669', '#cbd5e1'],
+                            borderWidth: 2,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { family: 'Kanit', size: 10 } }
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
             // Line Chart: Overall Average % Reduction Week by Week
             const maxWeeks = getCurrentWeekNumber();
@@ -2466,8 +2488,8 @@ function rewriteSheet(sheet, dataList, headers) {
 
                     const weightPct = m.initWeight > 0 ? ((m.initWeight - wWeight) / m.initWeight) * 100 : 0;
                     const bmiPct = m.initBmi > 0 ? ((m.initBmi - wBmi) / m.initBmi) * 100 : 0;
-                    const waistPct = m.initWaist > 0 ? ((m.initWaist - wWaist) / m.initWaist) * 100 : 0;
-                    const hipPct = m.initHip > 0 ? ((m.initHip - wHip) / m.initHip) * 100 : 0;
+                    const waistPct = (m.initWaist && m.initWaist > 0) ? ((m.initWaist - wWaist) / m.initWaist) * 100 : 0;
+                    const hipPct = (m.initHip && m.initHip > 0) ? ((m.initHip - wHip) / m.initHip) * 100 : 0;
 
                     sumWeightDropPct += weightPct;
                     sumBmiDropPct += bmiPct;
@@ -2486,67 +2508,70 @@ function rewriteSheet(sheet, dataList, headers) {
                 }
             }
 
-            const ctxTrend = document.getElementById('chart-admin-trend').getContext('2d');
-            if (activeCharts.adminTrend) {
-                activeCharts.adminTrend.destroy();
-            }
-
-            activeCharts.adminTrend = new Chart(ctxTrend, {
-                type: 'line',
-                data: {
-                    labels: weekLabels,
-                    datasets: [
-                        {
-                            label: 'น้ำหนักลดสะสมเฉลี่ย (%)',
-                            data: avgWeightDrops,
-                            borderColor: '#059669',
-                            backgroundColor: 'transparent',
-                            borderWidth: 2,
-                            tension: 0.2
-                        },
-                        {
-                            label: 'BMI พัฒนาสะสมเฉลี่ย (%)',
-                            data: avgBmiDrops,
-                            borderColor: '#0284c7',
-                            backgroundColor: 'transparent',
-                            borderWidth: 2,
-                            tension: 0.2
-                        },
-                        {
-                            label: 'เอวลดสะสมเฉลี่ย (%)',
-                            data: avgWaistDrops,
-                            borderColor: '#d97706',
-                            backgroundColor: 'transparent',
-                            borderWidth: 2,
-                            tension: 0.2
-                        },
-                        {
-                            label: 'สะโพกลดสะสมเฉลี่ย (%)',
-                            data: avgHipDrops,
-                            borderColor: '#7c3aed',
-                            backgroundColor: 'transparent',
-                            borderWidth: 2,
-                            tension: 0.2
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { font: { family: 'Kanit', size: 9 } } }
-                    },
-                    scales: {
-                        y: {
-                            ticks: {
-                                callback: function(value) { return value.toFixed(1) + '%'; },
-                                font: { family: 'Kanit', size: 9 }
-                            }
-                        },
-                        x: { ticks: { font: { family: 'Kanit', size: 9 } } }
-                    }
+            const canvasTrend = document.getElementById('chart-admin-trend');
+            if (canvasTrend) {
+                const ctxTrend = canvasTrend.getContext('2d');
+                if (activeCharts.adminTrend) {
+                    activeCharts.adminTrend.destroy();
                 }
-            });
+
+                activeCharts.adminTrend = new Chart(ctxTrend, {
+                    type: 'line',
+                    data: {
+                        labels: weekLabels,
+                        datasets: [
+                            {
+                                label: 'น้ำหนักลดสะสมเฉลี่ย (%)',
+                                data: avgWeightDrops,
+                                borderColor: '#059669',
+                                backgroundColor: 'transparent',
+                                borderWidth: 2,
+                                tension: 0.2
+                            },
+                            {
+                                label: 'BMI พัฒนาสะสมเฉลี่ย (%)',
+                                data: avgBmiDrops,
+                                borderColor: '#0284c7',
+                                backgroundColor: 'transparent',
+                                borderWidth: 2,
+                                tension: 0.2
+                            },
+                            {
+                                label: 'เอวลดสะสมเฉลี่ย (%)',
+                                data: avgWaistDrops,
+                                borderColor: '#d97706',
+                                backgroundColor: 'transparent',
+                                borderWidth: 2,
+                                tension: 0.2
+                            },
+                            {
+                                label: 'สะโพกลดสะสมเฉลี่ย (%)',
+                                data: avgHipDrops,
+                                borderColor: '#7c3aed',
+                                backgroundColor: 'transparent',
+                                borderWidth: 2,
+                                tension: 0.2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { font: { family: 'Kanit', size: 9 } } }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    callback: function(value) { return value.toFixed(1) + '%'; },
+                                    font: { family: 'Kanit', size: 9 }
+                                }
+                            },
+                            x: { ticks: { font: { family: 'Kanit', size: 9 } } }
+                        }
+                    }
+                });
+            }
 
             // Ultimate Absolute Reduction KPI Widgets for Executives
             let totalInitWeight = 0, totalCurrentWeight = 0;
@@ -2591,7 +2616,7 @@ function rewriteSheet(sheet, dataList, headers) {
             
             // Auto update drilldown if already open
             const drilldownSec = document.getElementById('admin-drilldown-section');
-            if (!drilldownSec.classList.contains('hidden') && window.currentDrilldownCategory) {
+            if (drilldownSec && !drilldownSec.classList.contains('hidden') && window.currentDrilldownCategory) {
                 showAdminDrilldown(window.currentDrilldownCategory);
             }
         }
@@ -2612,7 +2637,7 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Processing detailed category drilldowns...
+         * STREAMING_CHUNK: Filtering executive drilling queries...
          * =========================================
          */
         function showAdminDrilldown(category) {
@@ -2624,10 +2649,14 @@ function rewriteSheet(sheet, dataList, headers) {
             const headerDiff = document.getElementById('drilldown-header-diff');
             const tbody = document.getElementById('drilldown-table-body');
             
+            if (!drilldownSec || !titleEl || !headerBase || !headerCurrent || !headerDiff || !tbody) return;
+
             drilldownSec.classList.remove('hidden');
             tbody.innerHTML = "";
 
-            const deptFilter = document.getElementById('admin-dept-filter').value || "ALL";
+            const deptFilterSelect = document.getElementById('admin-dept-filter');
+            const deptFilter = deptFilterSelect ? deptFilterSelect.value : "ALL";
+
             let registeredMembers = state.members.filter(m => m.initWeight !== null && m.initWeight !== undefined);
             if (deptFilter !== "ALL") {
                 registeredMembers = registeredMembers.filter(m => m.dept === deptFilter);
@@ -2703,7 +2732,7 @@ function rewriteSheet(sheet, dataList, headers) {
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition border-b border-slate-100">
                         <td class="py-2.5 px-4 font-mono font-bold">${m.empId}</td>
-                        <td class="py-2.5 px-4 font-medium text-slate-800">${m.firstName} ${m.lastName}</td>
+                        <td class="py-2.5 px-4 font-medium text-slate-800">${m.fullName}</td>
                         <td class="py-2.5 px-4 text-slate-500">${m.dept}</td>
                         <td class="py-2.5 px-4 text-center font-mono text-slate-600">${baseVal > 0 ? baseVal.toFixed(1) + unit : "-"}</td>
                         <td class="py-2.5 px-4 text-center font-mono text-slate-900 font-bold">${currVal > 0 ? currVal.toFixed(1) + unit : "-"}</td>
@@ -2716,23 +2745,25 @@ function rewriteSheet(sheet, dataList, headers) {
                 tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">ไม่พบสมาชิกที่มีข้อมูลตามเงื่อนไขเจาะลึก</td></tr>`;
             }
 
-            // Scroll to drilldown section to highlight detail lookup
             drilldownSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function closeDrilldown() {
-            document.getElementById('admin-drilldown-section').classList.add('hidden');
+            const drilldownSec = document.getElementById('admin-drilldown-section');
+            if (drilldownSec) drilldownSec.classList.add('hidden');
             window.currentDrilldownCategory = null;
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Managing administrative actions...
+         * STREAMING_CHUNK: Managing administrative settings and sync callbacks...
          * =========================================
          */
         function handleAdminLogin(e) {
             e.preventDefault();
             try {
-                const password = document.getElementById('admin-password').value.trim();
+                const passField = document.getElementById('admin-input-pass');
+                if (!passField) return;
+                const password = passField.value.trim();
 
                 if (password === "ad2026") {
                     session.isAdmin = true;
@@ -2755,9 +2786,12 @@ function rewriteSheet(sheet, dataList, headers) {
 
         function handleAdminLogout() {
             session.isAdmin = false;
-            document.getElementById('admin-suite').classList.add('hidden');
-            document.getElementById('admin-login-screen').classList.remove('hidden');
-            document.getElementById('admin-password').value = "";
+            const suite = document.getElementById('admin-suite');
+            if (suite) suite.classList.add('hidden');
+            const screen = document.getElementById('admin-login-screen');
+            if (screen) screen.classList.remove('hidden');
+            const passField = document.getElementById('admin-input-pass');
+            if (passField) passField.value = "";
             showToast("สิทธิ์ผู้ดูแลหมดลง", "ทำการล็อกเอาต์ออกจากแผงควบคุมแล้ว", "success");
         }
 
@@ -2781,10 +2815,11 @@ function rewriteSheet(sheet, dataList, headers) {
         function handleEmployeePreRegistration(e) {
             e.preventDefault();
             const empId = document.getElementById('reg-emp-id').value.trim();
-            const firstName = document.getElementById('reg-firstname').value.trim();
-            const lastName = document.getElementById('reg-lastname').value.trim();
+            const fullName = document.getElementById('reg-firstname').value.trim();
             const dept = document.getElementById('reg-dept').value.trim();
-            const height = parseFloat(document.getElementById('reg-height').value);
+            
+            const heightInput = document.getElementById('reg-height');
+            const height = heightInput && heightInput.value ? parseFloat(heightInput.value) : null;
 
             const exists = state.members.some(m => m.empId === empId);
             if (exists) {
@@ -2793,7 +2828,7 @@ function rewriteSheet(sheet, dataList, headers) {
             }
 
             const newMember = {
-                empId, firstName, lastName, dept, height,
+                empId, fullName, dept, height,
                 initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null
             };
 
@@ -2801,9 +2836,10 @@ function rewriteSheet(sheet, dataList, headers) {
             saveToLocalStorage();
             syncStateToCloud();
 
-            showToast("เพิ่มพนักงานสำเร็จ", `กรอกประวัติคุณ ${firstName} ในระบบ รอผลวัดวันแรกรับสมัคร`, "success");
+            showToast("เพิ่มพนักงานสำเร็จ", `กรอกประวัติคุณ ${fullName} ในระบบ รอผลวัดวันแรกรับสมัคร`, "success");
             
-            document.getElementById('form-register-employee').reset();
+            const form = document.getElementById('form-register-employee');
+            if (form) form.reset();
             renderAdminMembersTable();
             populateAdminDeptDropdown();
             renderAdminExecutiveCharts();
@@ -2813,21 +2849,20 @@ function rewriteSheet(sheet, dataList, headers) {
         function renderAdminMembersTable() {
             const tbody = document.getElementById('admin-members-list');
             const empty = document.getElementById('admin-empty-state');
+            if (!tbody) return;
             tbody.innerHTML = "";
 
             if (state.members.length === 0) {
-                empty.classList.remove('hidden');
+                if (empty) empty.classList.remove('hidden');
                 return;
             } else {
-                empty.classList.add('hidden');
+                if (empty) empty.classList.add('hidden');
             }
 
             state.members.forEach(member => {
                 const stats = getEmployeeEffectiveLogs(member.empId);
                 if (!stats) return;
 
-                const fullName = `${member.firstName} ${member.lastName}`;
-                
                 let startStr = "-";
                 let currentStr = "-";
                 let bmiStr = "-";
@@ -2844,25 +2879,25 @@ function rewriteSheet(sheet, dataList, headers) {
                     currentStr = `${stats.currentWeight.toFixed(1)} กก. | เอว ${stats.currentWaist.toFixed(1)}" | สะโพก ${stats.currentHip.toFixed(1)}"`;
                     bmiStr = stats.currentBmi.toFixed(2);
                 } else {
-                    startStr = `ส่วนสูง: ${member.height} ซม.`;
+                    startStr = member.height ? `ส่วนสูง: ${member.height} ซม.` : "ไม่มีข้อมูลส่วนสูง";
                 }
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 border-b border-slate-100 transition text-[11px]">
                         <td class="py-3.5 px-6 font-mono font-bold text-slate-900">${member.empId}</td>
                         <td class="py-3.5 px-6">
-                            <div class="font-semibold text-slate-900 text-xs">${fullName}</div>
+                            <div class="font-semibold text-slate-900 text-xs">${member.fullName}</div>
                             <div class="text-[9px] text-slate-400">สิทธิ์ล็อกอิน: ${member.password ? "เปิดใช้งานแล้ว" : "✕ ยังไม่เปิดใช้"}</div>
                         </td>
                         <td class="py-3.5 px-6 text-slate-500 font-medium">${member.dept}</td>
-                        <td class="py-3.5 px-6 text-center font-mono">${member.height} ซม.</td>
+                        <td class="py-3.5 px-6 text-center font-mono">${member.height ? member.height + ' ซม.' : 'กรอกตอนสมัคร'}</td>
                         <td class="py-3.5 px-6 text-center font-mono font-bold text-teal-700">${member.targetWeightLossGoal ? member.targetWeightLossGoal.toFixed(1) : "-"}</td>
                         <td class="py-3.5 px-6 text-center font-mono text-slate-500">${startStr}</td>
                         <td class="py-3.5 px-6 text-center font-mono text-slate-950 font-bold">${currentStr}</td>
                         <td class="py-3.5 px-6 text-center font-mono text-emerald-800 font-bold">${bmiStr}</td>
                         <td class="py-3.5 px-6 text-center">${statusPill}</td>
                         <td class="py-3.5 px-6 text-right">
-                            <button onclick="deleteMemberWithConfirmation('${member.empId}')" class="text-red-500 hover:text-red-700 font-bold bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg transition text-[10px]">
+                            <button onclick="deleteMemberWithConfirmation('${member.empId}')" class="text-red-500 hover:text-red-700 font-bold bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg transition text-[10px] cursor-pointer">
                                 ลบออก
                             </button>
                         </td>
@@ -2875,7 +2910,7 @@ function rewriteSheet(sheet, dataList, headers) {
             const member = state.members.find(m => m.empId === empId);
             if (!member) return;
 
-            if (confirm(`คุณต้องการลบพนักงาน คุณ ${member.firstName} ${member.lastName} (รหัส: ${empId}) และสถิติทั้งหมดใช่หรือไม่?`)) {
+            if (confirm(`คุณต้องการลบพนักงาน คุณ ${member.fullName} (รหัส: ${empId}) และสถิติทั้งหมดใช่หรือไม่?`)) {
                 state.members = state.members.filter(m => m.empId !== empId);
                 state.logs = state.logs.filter(l => l.empId !== empId);
 
@@ -2913,9 +2948,9 @@ function rewriteSheet(sheet, dataList, headers) {
 
             let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
             csvContent += "=== MEMBERS DATABASE ===\n";
-            csvContent += "รหัสพนักงาน,ชื่อจริง,นามสกุล,แผนก,ส่วนสูง(ซม.),น้ำหนักตั้งต้นสมัคร(กก.),เป้าหมายลดน้ำหนัก(กก.),BMIตั้งต้นสมัคร\n";
+            csvContent += "รหัสพนักงาน,ชื่อจริง-นามสกุล,แผนก,ส่วนสูง(ซม.),น้ำหนักตั้งต้นสมัคร(กก.),เป้าหมายลดน้ำหนัก(กก.),BMIตั้งต้นสมัคร\n";
             state.members.forEach(m => {
-                csvContent += `"${m.empId}","${m.firstName}","${m.lastName}","${m.dept}",${m.height},${m.initWeight || ""},${m.targetWeightLossGoal || ""},${m.initBmi || ""}\n`;
+                csvContent += `"${m.empId}","${m.fullName}","${m.dept}",${m.height || ""},${m.initWeight || ""},${m.targetWeightLossGoal || ""},${m.initBmi || ""}\n`;
             });
 
             csvContent += "\n=== WEEKLY RECORD LOGS ===\n";
@@ -2945,7 +2980,7 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         /* * =========================================
-         * STREAMING_CHUNK: Synthesizing Cloud Sync features...
+         * STREAMING_CHUNK: Processing cloud spreadsheet integrations...
          * =========================================
          */
         function syncStateToCloud() {
@@ -3011,15 +3046,18 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
         function openAppsScriptModal() {
-            document.getElementById('script-modal').classList.remove('hidden');
+            const modal = document.getElementById('script-modal');
+            if (modal) modal.classList.remove('hidden');
         }
 
         function closeAppsScriptModal() {
-            document.getElementById('script-modal').classList.add('hidden');
+            const modal = document.getElementById('script-modal');
+            if (modal) modal.classList.add('hidden');
         }
 
         function copyAppsScriptCode() {
             const textarea = document.getElementById('apps-script-code-area');
+            if (!textarea) return;
             textarea.select();
             textarea.setSelectionRange(0, 99999);
             document.execCommand('copy');

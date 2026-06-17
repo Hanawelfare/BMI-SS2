@@ -1162,9 +1162,10 @@
 
 function doGet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheetMembers = getOrCreateSheet(ss, "Members");
-  var sheetLogs = getOrCreateSheet(ss, "WeeklyLogs");
-  var sheetConfig = getOrCreateSheet(ss, "Config");
+  // ปรับปรุงให้อ่านแผ่นงานชื่อ Name อัตโนมัติ หากไม่มีแผ่นงาน Members
+  var sheetMembers = ss.getSheetByName("Members") || ss.getSheetByName("Name") || ss.insertSheet("Members");
+  var sheetLogs = ss.getSheetByName("WeeklyLogs") || ss.insertSheet("WeeklyLogs");
+  var sheetConfig = ss.getSheetByName("Config") || ss.insertSheet("Config");
   
   var membersData = readSheetData(sheetMembers);
   var logsData = readSheetData(sheetLogs);
@@ -1182,9 +1183,9 @@ function doGet(e) {
 
 function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheetMembers = getOrCreateSheet(ss, "Members");
-  var sheetLogs = getOrCreateSheet(ss, "WeeklyLogs");
-  var sheetConfig = getOrCreateSheet(ss, "Config");
+  var sheetMembers = ss.getSheetByName("Members") || ss.getSheetByName("Name") || ss.insertSheet("Members");
+  var sheetLogs = ss.getSheetByName("WeeklyLogs") || ss.insertSheet("WeeklyLogs");
+  var sheetConfig = ss.getSheetByName("Config") || ss.insertSheet("Config");
   
   var postData = JSON.parse(e.postData.contents);
   var action = postData.action;
@@ -1202,14 +1203,6 @@ function doPost(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-function getOrCreateSheet(ss, name) {
-  var sheet = ss.getSheetByName(name);
-  if (!sheet) {
-    sheet = ss.insertSheet(name);
-  }
-  return sheet;
-}
-
 function readSheetData(sheet) {
   var lastRow = sheet.getLastRow();
   var lastCol = sheet.getLastColumn();
@@ -1223,7 +1216,7 @@ function readSheetData(sheet) {
     var obj = {};
     for (var c = 0; c < headers.length; c++) {
       var val = values[r][c];
-      if (headers[c] === "empId" || headers[c] === "รหัสพนักงาน") {
+      if (headers[c] === "empId" || headers[c] === "รหัสพนักงาน" || headers[c] === "รหัส") {
         obj[headers[c]] = String(val);
       } else {
         obj[headers[c]] = val;
@@ -1245,7 +1238,7 @@ function rewriteSheet(sheet, dataList, headers) {
     var row = [];
     for (var j = 0; j < headers.length; j++) {
       var val = item[headers[j]];
-      row.push(val !== undefined ? val : "");
+      row.push(val !== undefined && val !== null ? val : "");
     }
     rows.push(row);
   }
@@ -1598,6 +1591,18 @@ function rewriteSheet(sheet, dataList, headers) {
             if (menu) {
                 menu.classList.toggle('hidden');
             }
+        }
+
+        // เพิ่มฟังก์ชัน highlightSyncSection ที่ตกหล่นเพื่อแก้บัคปุ่มกดไม่ได้
+        function highlightSyncSection() {
+            setTimeout(() => {
+                const box = document.getElementById('section-cloud-sync');
+                if (box) {
+                    box.classList.add('ring-4', 'ring-sky-500/30', 'border-sky-500');
+                    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => box.classList.remove('ring-4', 'ring-sky-500/30'), 2500);
+                }
+            }, 200);
         }
 
         function getCurrentWeekNumber() {

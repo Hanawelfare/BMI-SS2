@@ -3181,6 +3181,71 @@ function rewriteSheet(sheet, dataList, headers) {
             showToast("ดาวน์โหลดสำเร็จ", "ระบบดึงข้อมูลส่งออกเรียบร้อย", "success");
         }
 
+        // --- MISSING FUNCTIONS RESTORED BELOW ---
+
+        function highlightSyncSection() {
+            setTimeout(() => {
+                const box = document.getElementById('section-cloud-sync');
+                if (box) {
+                    box.classList.add('ring-4', 'ring-sky-500/30', 'border-sky-500');
+                    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => box.classList.remove('ring-4', 'ring-sky-500/30'), 2500);
+                }
+            }, 200);
+        }
+
+        function handleTestDataSync() {
+            if (!state.config.apiUrl) {
+                showToast("ไม่มีพิกัดเชื่อมต่อ", "โปรดกรอกพิกัด URL Google Web App เพื่อดำเนินการซิงก์", "warning");
+                return;
+            }
+
+            showToast("กำลังติดต่อ API...", "กำลังเรียกข้อมูลจากฐานสเปรดชีตมาแทนที่ข้อมูลเดิมในเบราว์เซอร์", "warning");
+
+            fetch(state.config.apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                if (data.members && data.logs) {
+                    state.members = data.members;
+                    state.logs = data.logs;
+                    if (data.config) {
+                        state.config.isRegOpen = data.config.isRegOpen !== undefined ? (data.config.isRegOpen === true || data.config.isRegOpen === "true") : state.config.isRegOpen;
+                        state.config.isLeaderboardOpen = data.config.isLeaderboardOpen !== undefined ? (data.config.isLeaderboardOpen === true || data.config.isLeaderboardOpen === "true") : state.config.isLeaderboardOpen;
+                        state.config.projectStartDate = data.config.projectStartDate || state.config.projectStartDate;
+                    }
+                    saveToLocalStorage();
+                    
+                    initAppUI();
+                    showToast("ดึงฐานข้อมูลคลาวด์สำเร็จ ☁️", "สถิติล่าสุดประสานเข้ากับหน้าจอแอดมินเรียบร้อย!", "success");
+                } else {
+                    showToast("โครงสร้างขัดข้อง", "โครงสร้าง Sheets ไม่ตรงตามคอลัมน์มาตรฐาน", "warning");
+                }
+            })
+            .catch(err => {
+                console.error("Test API Connection issue: ", err);
+                showToast("เชื่อมต่อฐานคลาวด์ไม่สำเร็จ", "โปรดตรวจสอบการอนุญาตสิทธิ์เข้าถึง (Access) บนเว็บแอปเป็น Everyone", "error");
+            });
+        }
+
+        function openAppsScriptModal() {
+            const modal = document.getElementById('script-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeAppsScriptModal() {
+            const modal = document.getElementById('script-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function copyAppsScriptCode() {
+            const textarea = document.getElementById('apps-script-code-area');
+            if (!textarea) return;
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            showToast("คัดลอกสำเร็จ", "โค้ด Apps Script พร้อมสำหรับจัดวางใน Google Sheets แล้ว", "success");
+        }
+
     </script>
 </body>
 </html>

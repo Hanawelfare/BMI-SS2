@@ -1593,7 +1593,7 @@ function rewriteSheet(sheet, dataList, headers) {
             }
         }
 
-        // เพิ่มฟังก์ชัน highlightSyncSection ที่ตกหล่นเพื่อแก้บัคปุ่มกดไม่ได้
+        // --- แก้ไขบัคปุ่มกดไม่ได้: ประกาศฟังก์ชัน highlightSyncSection ---
         function highlightSyncSection() {
             setTimeout(() => {
                 const box = document.getElementById('section-cloud-sync');

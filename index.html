@@ -141,7 +141,7 @@
                         <div>
                             <label for="apply-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">ระบุรหัสพนักงานของคุณ</label>
                             <div class="relative">
-                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 003049" oninput="handleApplyLookup(this.value)" required
+                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 082120" oninput="handleApplyLookup(this.value)" required
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                     <span id="apply-lookup-status" class="text-xs font-medium text-slate-400">ระบุรหัสพนักงาน</span>
@@ -338,7 +338,7 @@
                         <div class="border-b border-slate-200 pb-2 flex justify-between items-center">
                             <h4 class="text-sm font-bold text-slate-900 flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 bg-sky-500 rounded-full"></span> 
-                                3. แบบประเมินพฤทีพฤติกรรมสุขภาพประจำสัปดาห์นี้
+                                3. แบบประเมินพฤติกรรมสุขภาพประจำสัปดาห์นี้
                             </h4>
                             <span class="text-xxs font-bold text-sky-600 uppercase tracking-wide">สำรวจสุขภาพ</span>
                         </div>
@@ -1191,7 +1191,7 @@ function doPost(e) {
   
   if (action === "syncWholeState") {
     rewriteSheet(sheetMembers, postData.members, ["empId", "fullName", "dept", "height", "initWeight", "initWaist", "initHip", "initBmi", "password", "targetWeightLossGoal"]);
-    rewriteSheet(sheetLogs, postData.logs, ["empId", "week", "date", "weight", "waist", "hip", "bmi", "q1", "q2", "q3", "q4", "q5"]);
+    rewriteSheet(sheetLogs, postData.logs, ["empId", "week", "date", "weight", "waist", "hip", "bmi", "q1_5groups", "q2_leanMeat", "q3_dietPills", "q4_dinnerGap", "q5_enoughProtein"]);
     rewriteSheet(sheetConfig, [postData.config], ["isRegOpen", "isLeaderboardOpen", "projectStartDate"]);
     
     return ContentService.createTextOutput(JSON.stringify({status: "success", message: "ซิงก์ข้อมูลภาพรวมสำเร็จ"}))
@@ -1223,7 +1223,7 @@ function readSheetData(sheet) {
     var obj = {};
     for (var c = 0; c < headers.length; c++) {
       var val = values[r][c];
-      if (headers[c] === "empId") {
+      if (headers[c] === "empId" || headers[c] === "รหัสพนักงาน") {
         obj[headers[c]] = String(val);
       } else {
         obj[headers[c]] = val;
@@ -1298,7 +1298,7 @@ function rewriteSheet(sheet, dataList, headers) {
             }, 3000);
         }
 
-        // 2. ULTRA-DEFENSIVE DOM WRITE HELPER TO PREVENT "innerText of null" RUNTIME ERROR
+        // 2. ULTRA-DEFENSIVE DOM WRITE HELPER
         function safeSetText(id, text) {
             const el = document.getElementById(id);
             if (el) {
@@ -1320,14 +1320,12 @@ function rewriteSheet(sheet, dataList, headers) {
             }
         }
 
-
-        // 3. SMART ID MATCHING - Handles string spaces and removes stripped leading zeros from Google Sheets / Excel
+        // 3. SMART ID MATCHING
         function matchEmpId(idA, idB) {
             if (idA === undefined || idA === null || idB === undefined || idB === null) return false;
             const cleanA = String(idA).trim();
             const cleanB = String(idB).trim();
             if (cleanA === cleanB) return true;
-            // Fallback: If both IDs are purely numeric, compare their base integer values (e.g. "084843" === "84843")
             if (/^\d+$/.test(cleanA) && /^\d+$/.test(cleanB)) {
                 return parseInt(cleanA, 10) === parseInt(cleanB, 10);
             }
@@ -1351,7 +1349,6 @@ function rewriteSheet(sheet, dataList, headers) {
 
 
         // 4. DEFENSIVE STATE LOADER AND DECLARATION
-        // Synchronized precisely with spreadsheet image_5984e4.png (35 real employees with pre-recorded heights)
         let state = {
             members: [
                 { empId: "003049", fullName: "วิชัย สุขประเสริฐกุล", dept: "OPT", height: null, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
@@ -1388,8 +1385,7 @@ function rewriteSheet(sheet, dataList, headers) {
                 { empId: "011016", fullName: "ซ่อนกลิ่น ศรีอ่อน", dept: "OP1S", height: 160.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
                 { empId: "011333", fullName: "กัญจน์ชญาน์ ปัญญา", dept: "QMSS", height: 167.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
                 { empId: "011382", fullName: "เพียงอัมพร องค์ศิริษฐ์", dept: "TRF", height: 158.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
-                { empId: "011389", fullName: "วิชัย สายโอ้ะ", dept: "OP4", height: 173.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null },
-                { empId: "084843", fullName: "พนักงาน ทดสอบระบบ", dept: "TEST", height: 160.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null }
+                { empId: "011389", fullName: "วิชัย สายโอ้ะ", dept: "OP4", height: 173.0, initWeight: null, initWaist: null, initHip: null, initBmi: null, password: null, targetWeightLossGoal: null }
             ],
             logs: [],
             config: {
@@ -1477,11 +1473,11 @@ function rewriteSheet(sheet, dataList, headers) {
             if (state.config.apiUrl) {
                 banner.className = "mb-6 bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3";
                 bannerTitle.innerText = "เชื่อมต่อระบบคลาวด์ภายนอกแล้ว";
-                bannerDesc.innerText = "ข้อมูลของคุณได้รับการตั้งค่าให้ผูกโดยตรงกับ API Google Sheets";
+                bannerDesc.innerText = "ซิงก์ข้อมูลตรงกับ Google Sheets เรียบร้อยแล้ว สถิติเป็นปัจจุบัน";
             } else {
                 banner.className = "mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3";
                 bannerTitle.innerText = "แอปกำลังทำงานแบบ Local Storage";
-                bannerDesc.innerText = "ข้อมูลของคุณจะถูกจัดเก็บในเครื่องนี้ คุณสามารถกด \"เชื่อมต่อ Google Sheet\" ที่แผงควบคุมแอดมิน เพื่อผูกข้อมูลเข้ากับชีตจริงได้";
+                bannerDesc.innerText = "ข้อมูลของคุณจะถูกจัดเก็บในเครื่องนี้ คุณสามารถกด \"เชื่อมต่อ Google Sheet\" ที่แผงควบคุมแอดมิน เพื่อส่งค่าขึ้นชีตจริงได้";
             }
         }
 
@@ -2015,6 +2011,8 @@ function rewriteSheet(sheet, dataList, headers) {
 
             if (!lookupStatus || !nameEl || !deptEl || !weekDisplayEl || !submitBtn || !liveHeightPreview) return;
 
+            const currentWeek = getCurrentWeekNumber();
+
             if (!val) {
                 lookupStatus.innerText = "ตรวจสอบรหัสพนักงาน";
                 lookupStatus.className = "text-xs font-medium text-slate-400";
@@ -2042,26 +2040,36 @@ function rewriteSheet(sheet, dataList, headers) {
                     submitBtn.disabled = true;
                     submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2 text-sm";
                     submitBtn.innerText = "โปรดลงทะเบียนสมัครที่ หน้าที่ 1 ก่อน";
+                } else if (currentWeek <= 1) {
+                    // Lock for week 1
+                    lookupStatus.innerText = "✕ สัปดาห์ที่ 1 ถูกล็อก";
+                    lookupStatus.className = "text-xs font-semibold text-red-500";
+                    nameEl.value = member.fullName;
+                    deptEl.value = member.dept;
+                    liveHeightPreview.innerText = member.height;
+                    submitBtn.disabled = true;
+                    submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2 text-sm";
+                    submitBtn.innerText = "ส่งผลเริ่มจากสัปดาห์ที่ 2 เป็นต้นไป";
                 } else {
-                    lookupStatus.innerText = "✓ ตรวจสิทธิ์ผ่าน";
+                    lookupStatus.innerText = "✓ มีสิทธิ์บันทึกผล";
                     lookupStatus.className = "text-xs font-semibold text-emerald-600 font-mono";
                     nameEl.value = member.fullName;
                     deptEl.value = member.dept;
                     liveHeightPreview.innerText = member.height;
                     submitBtn.disabled = false;
                     submitBtn.className = "w-2/3 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/10 rounded-xl font-bold hover:shadow-emerald-500/25 transition flex items-center justify-center gap-2 text-sm cursor-pointer";
-                    submitBtn.innerText = "บันทึกข้อมูลประจำสัปดาห์";
+                    submitBtn.innerText = "บันทึกผลประจำสัปดาห์";
                     calculateLiveBmi();
                 }
             } else {
-                lookupStatus.innerText = "✕ ไม่พบรหัส";
+                lookupStatus.innerText = "✕ ไม่พบคลังข้อมูล";
                 lookupStatus.className = "text-xs font-semibold text-red-500 font-mono";
                 nameEl.value = "-";
                 deptEl.value = "-";
                 liveHeightPreview.innerText = "-";
                 submitBtn.disabled = true;
                 submitBtn.className = "w-2/3 py-3 bg-slate-300 text-slate-500 cursor-not-allowed rounded-xl font-bold transition flex items-center justify-center gap-2 text-sm";
-                submitBtn.innerText = "ไม่พบรายชื่อในระบบ";
+                submitBtn.innerText = "ไม่พบรหัสพนักงานในฐานระบบ";
                 const liveBmiPreview = document.getElementById('live-bmi-preview');
                 if (liveBmiPreview) liveBmiPreview.innerText = "0.00";
             }
@@ -2818,29 +2826,80 @@ function rewriteSheet(sheet, dataList, headers) {
         }
 
 
-        // 5. AUTO-FETCH DATA ON PAGE LOAD: If Google Sheets URL exists, fetch shared values seamlessly!
+        // 5. AUTO-DATA NORMALIZER & CLOUD SYNC
+        // Maps Thai Google Sheets headers automatically to internal App standard keys
+        function normalizeCloudData(data) {
+            if (!data) return false;
+            let hasValidData = false;
+
+            if (data.members && Array.isArray(data.members)) {
+                const normalizedMembers = data.members.map(m => {
+                    return {
+                        empId: String(m.empId || m["รหัสพนักงาน"] || m["รหัส"] || m.ID || "").trim(),
+                        fullName: String(m.fullName || m["ชื่อ-นามสกุล"] || m["ชื่อพนักงาน"] || m["ชื่อ"] || "").trim(),
+                        dept: String(m.dept || m["แผนก"] || m["ฝ่าย"] || "").trim(),
+                        height: (m.height !== undefined && m.height !== "") ? parseFloat(m.height) : (m["ส่วนสูง"] ? parseFloat(m["ส่วนสูง"]) : null),
+                        initWeight: (m.initWeight !== undefined && m.initWeight !== "") ? parseFloat(m.initWeight) : (m["น้ำหนักตั้งต้นสมัคร(กก.)"] || m["น้ำหนัก"] || m["น้ำหนักเริ่มต้น"] ? parseFloat(m["น้ำหนักตั้งต้นสมัคร(กก.)"] || m["น้ำหนัก"] || m["น้ำหนักเริ่มต้น"]) : null),
+                        initWaist: (m.initWaist !== undefined && m.initWaist !== "") ? parseFloat(m.initWaist) : (m["รอบเอวตั้งต้น(นิ้ว)"] || m["รอบเอว"] ? parseFloat(m["รอบเอวตั้งต้น(นิ้ว)"] || m["รอบเอว"]) : null),
+                        initHip: (m.initHip !== undefined && m.initHip !== "") ? parseFloat(m.initHip) : (m["รอบสะโพกตั้งต้น(นิ้ว)"] || m["รอบสะโพก"] ? parseFloat(m["รอบสะโพกตั้งต้น(นิ้ว)"] || m["รอบสะโพก"]) : null),
+                        initBmi: (m.initBmi !== undefined && m.initBmi !== "") ? parseFloat(m.initBmi) : (m["BMIตั้งต้นสมัคร"] || m["BMI"] ? parseFloat(m["BMIตั้งต้นสมัคร"] || m["BMI"]) : null),
+                        password: m.password || m["รหัสผ่าน"] || null,
+                        targetWeightLossGoal: (m.targetWeightLossGoal !== undefined && m.targetWeightLossGoal !== "") ? parseFloat(m.targetWeightLossGoal) : (m["เป้าหมายลดน้ำหนัก(กก.)"] || m["เป้าหมายลดน้ำหนัก"] ? parseFloat(m["เป้าหมายลดน้ำหนัก(กก.)"] || m["เป้าหมายลดน้ำหนัก"]) : null)
+                    };
+                }).filter(m => m.empId !== "");
+
+                if (normalizedMembers.length > 0) {
+                    state.members = normalizedMembers;
+                    hasValidData = true;
+                }
+            }
+
+            if (data.logs && Array.isArray(data.logs)) {
+                const normalizedLogs = data.logs.map(l => {
+                    return {
+                        empId: String(l.empId || l["รหัสพนักงาน"] || "").trim(),
+                        week: parseInt(l.week || l["สัปดาห์ที่"] || l["สัปดาห์"] || 0),
+                        date: l.date || l["วันที่รายงาน"] || l["วันที่"] || "",
+                        weight: parseFloat(l.weight || l["น้ำหนัก(กก.)"] || l["น้ำหนัก"] || 0),
+                        waist: parseFloat(l.waist || l["รอบเอว(นิ้ว)"] || l["รอบเอว"] || 0),
+                        hip: parseFloat(l.hip || l["รอบสะโพก(นิ้ว)"] || l["รอบสะโพก"] || 0),
+                        bmi: parseFloat(l.bmi || l["BMIคำนวณได้"] || l["BMI"] || 0),
+                        q1_5groups: l.q1_5groups || l.Q1 || l.q1 || "no",
+                        q2_leanMeat: l.q2_leanMeat || l.Q2 || l.q2 || "no",
+                        q3_dietPills: l.q3_dietPills || l.Q3 || l.q3 || "no",
+                        q4_dinnerGap: l.q4_dinnerGap || l.Q4 || l.q4 || "no",
+                        q5_enoughProtein: l.q5_enoughProtein || l.Q5 || l.q5 || "no"
+                    };
+                }).filter(l => l.empId !== "" && l.week > 0);
+                
+                state.logs = normalizedLogs;
+                hasValidData = true;
+            }
+
+            if (data.config) {
+                state.config.isRegOpen = data.config.isRegOpen !== undefined ? (String(data.config.isRegOpen) === "true") : state.config.isRegOpen;
+                state.config.isLeaderboardOpen = data.config.isLeaderboardOpen !== undefined ? (String(data.config.isLeaderboardOpen) === "true") : state.config.isLeaderboardOpen;
+                state.config.projectStartDate = data.config.projectStartDate || state.config.projectStartDate;
+                hasValidData = true;
+            }
+
+            return hasValidData;
+        }
+
         function autoFetchCloudData() {
             if (!state.config.apiUrl) return;
 
             const loader = document.getElementById('banner-sync-loader');
             const statusText = document.getElementById('sync-status-text');
             if (loader) loader.classList.remove('hidden');
-            if (statusText) statusText.innerText = "กำลังซิงก์ข้อมูลอัปเดตแบบเรียลไทม์จาก Google Sheets คลาวด์...";
+            if (statusText) statusText.innerText = "กำลังแปลภาษาหัวคอลัมน์และซิงก์ข้อมูลจาก Google Sheets คลาวด์...";
 
             fetch(state.config.apiUrl)
             .then(res => res.json())
             .then(data => {
-                if (data && data.members && data.logs) {
-                    state.members = data.members;
-                    state.logs = data.logs;
-                    if (data.config) {
-                        state.config.isRegOpen = data.config.isRegOpen !== undefined ? (data.config.isRegOpen === true || data.config.isRegOpen === "true") : state.config.isRegOpen;
-                        state.config.isLeaderboardOpen = data.config.isLeaderboardOpen !== undefined ? (data.config.isLeaderboardOpen === true || data.config.isLeaderboardOpen === "true") : state.config.isLeaderboardOpen;
-                        state.config.projectStartDate = data.config.projectStartDate || state.config.projectStartDate;
-                    }
+                if (normalizeCloudData(data)) {
                     saveToLocalStorage();
-                    initAppUI(); // Reload UI with fresh Google Sheets records!
-                    showToast("ซิงก์ข้อมูลจาก Sheets สำเร็จ ☁️", "ระบบอัปเดตฐานข้อมูลเป็นสถิติล่าสุดเรียบร้อยแล้ว", "success");
+                    initAppUI(); 
                     if (statusText) statusText.innerText = "ซิงก์ข้อมูลตรงกับ Google Sheets เรียบร้อยแล้ว สถิติเป็นปัจจุบัน";
                 }
             })
@@ -2853,6 +2912,32 @@ function rewriteSheet(sheet, dataList, headers) {
             });
         }
 
+        function handleTestDataSync() {
+            if (!state.config.apiUrl) {
+                showToast("ไม่มีพิกัดเชื่อมต่อ", "โปรดกรอกพิกัด URL Google Web App เพื่อดำเนินการซิงก์", "warning");
+                return;
+            }
+
+            showToast("กำลังติดต่อ API...", "กำลังเรียกและแปลงหัวคอลัมน์ภาษาไทยจาก Google Sheets", "warning");
+
+            fetch(state.config.apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                if (normalizeCloudData(data)) {
+                    saveToLocalStorage();
+                    initAppUI();
+                    showToast("ดึงฐานข้อมูลคลาวด์สำเร็จ ☁️", "ระบบอ่านคอลัมน์ภาษาไทยและอัปเดตสถิติเรียบร้อย!", "success");
+                } else {
+                    showToast("โครงสร้างขัดข้อง", "ไม่พบข้อมูลพนักงาน โปรดตรวจสอบ Google Sheet", "warning");
+                }
+            })
+            .catch(err => {
+                console.error("Test API Connection issue: ", err);
+                showToast("เชื่อมต่อฐานคลาวด์ไม่สำเร็จ", "โปรดตรวจสอบการอนุญาตสิทธิ์เข้าถึง (Access) บนเว็บแอปเป็น Everyone", "error");
+            });
+        }
+
+        // Drilldown features
         function showAdminDrilldown(category) {
             window.currentDrilldownCategory = category;
             const drilldownSec = document.getElementById('admin-drilldown-section');
@@ -3179,52 +3264,6 @@ function rewriteSheet(sheet, dataList, headers) {
             link.click();
             document.body.removeChild(link);
             showToast("ดาวน์โหลดสำเร็จ", "ระบบดึงข้อมูลส่งออกเรียบร้อย", "success");
-        }
-
-        // --- MISSING FUNCTIONS RESTORED BELOW ---
-
-        function highlightSyncSection() {
-            setTimeout(() => {
-                const box = document.getElementById('section-cloud-sync');
-                if (box) {
-                    box.classList.add('ring-4', 'ring-sky-500/30', 'border-sky-500');
-                    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    setTimeout(() => box.classList.remove('ring-4', 'ring-sky-500/30'), 2500);
-                }
-            }, 200);
-        }
-
-        function handleTestDataSync() {
-            if (!state.config.apiUrl) {
-                showToast("ไม่มีพิกัดเชื่อมต่อ", "โปรดกรอกพิกัด URL Google Web App เพื่อดำเนินการซิงก์", "warning");
-                return;
-            }
-
-            showToast("กำลังติดต่อ API...", "กำลังเรียกข้อมูลจากฐานสเปรดชีตมาแทนที่ข้อมูลเดิมในเบราว์เซอร์", "warning");
-
-            fetch(state.config.apiUrl)
-            .then(res => res.json())
-            .then(data => {
-                if (data.members && data.logs) {
-                    state.members = data.members;
-                    state.logs = data.logs;
-                    if (data.config) {
-                        state.config.isRegOpen = data.config.isRegOpen !== undefined ? (data.config.isRegOpen === true || data.config.isRegOpen === "true") : state.config.isRegOpen;
-                        state.config.isLeaderboardOpen = data.config.isLeaderboardOpen !== undefined ? (data.config.isLeaderboardOpen === true || data.config.isLeaderboardOpen === "true") : state.config.isLeaderboardOpen;
-                        state.config.projectStartDate = data.config.projectStartDate || state.config.projectStartDate;
-                    }
-                    saveToLocalStorage();
-                    
-                    initAppUI();
-                    showToast("ดึงฐานข้อมูลคลาวด์สำเร็จ ☁️", "สถิติล่าสุดประสานเข้ากับหน้าจอแอดมินเรียบร้อย!", "success");
-                } else {
-                    showToast("โครงสร้างขัดข้อง", "โครงสร้าง Sheets ไม่ตรงตามคอลัมน์มาตรฐาน", "warning");
-                }
-            })
-            .catch(err => {
-                console.error("Test API Connection issue: ", err);
-                showToast("เชื่อมต่อฐานคลาวด์ไม่สำเร็จ", "โปรดตรวจสอบการอนุญาตสิทธิ์เข้าถึง (Access) บนเว็บแอปเป็น Everyone", "error");
-            });
         }
 
         function openAppsScriptModal() {

@@ -129,7 +129,7 @@
                         <div>
                             <label for="apply-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">ระบุรหัสพนักงานของคุณ</label>
                             <div class="flex gap-2">
-                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 082120" onkeydown="if(event.key==='Enter'){event.preventDefault(); triggerApplyLookup();}" required
+                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 012345" onkeydown="if(event.key==='Enter'){event.preventDefault(); triggerApplyLookup();}" required
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition">
                                 <button type="button" onclick="triggerApplyLookup()" class="bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-xl px-6 shadow-sm transition whitespace-nowrap">
                                     🔍 ค้นหา
@@ -780,7 +780,7 @@
                 <form onsubmit="handleAdminLogin(event)" class="p-6 space-y-4">
                     <div>
                         <label for="admin-input-pass" class="block text-xs font-semibold text-slate-500 mb-1 text-left">รหัสผ่านผู้ดูแล</label>
-                        <input type="password" id="admin-input-pass" placeholder="กรอกรหัสผ่าน ad2026" required
+                        <input type="password" id="admin-input-pass" placeholder="กรอกรหัสผ่าน" required
                             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition">
                     </div>
                     <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition">
@@ -3166,6 +3166,45 @@ function rewriteSheet(sheet, dataList, headers) {
             link.click();
             document.body.removeChild(link);
             showToast("ดาวน์โหลดสำเร็จ", "ระบบดึงข้อมูลส่งออกเรียบร้อย", "success");
+        }
+
+        function saveApiUrl(val) {
+            state.config.apiUrl = val.trim();
+            saveToLocalStorage();
+            updateBannerStatus();
+            
+            if (val.trim()) {
+                showToast("บันทึกการซิงก์สำเร็จ", "พิกัด URL คลาวด์ของแอปได้รับการอัปเดต", "success");
+            }
+        }
+
+        function syncStateToCloud() {
+            if (!state.config.apiUrl) return;
+
+            const payload = {
+                action: "syncWholeState",
+                members: state.members,
+                logs: state.logs,
+                config: {
+                    isRegOpen: state.config.isRegOpen,
+                    isLeaderboardOpen: state.config.isLeaderboardOpen,
+                    projectStartDate: state.config.projectStartDate
+                }
+            };
+
+            fetch(state.config.apiUrl, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                showToast("ซิงก์ข้อมูลอัตโนมัติสำเร็จ", "สถิติล่าสุดสำรองขึ้นคลาวด์เรียบร้อยแล้ว", "success");
+            })
+            .catch(err => {
+                console.error("Cloud syncing issue: ", err);
+                showToast("ระบบซิงก์คลาวด์ขัดข้อง", "ไม่สามารถติดต่อ Google API ได้ในขณะนี้ ข้อมูลเก็บแบบ Local ในเครื่อง", "warning");
+            });
         }
 
         function openAppsScriptModal() {

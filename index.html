@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>90-Day BMI Tracker - ระบบติดตามสุขภาพและ BMI พนักงาน</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Kanit', sans-serif; }
@@ -17,9 +22,11 @@
 </head>
 <body class="flex flex-col min-h-screen text-slate-800">
 
+    <!-- Top Navigation Header -->
     <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-lg sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo -->
                 <div class="flex items-center space-x-3">
                     <div class="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -27,19 +34,21 @@
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-lg font-bold leading-tight tracking-wider font-mono font-sans">FIT & FIRM 90 DAYS</h1>
+                        <h1 class="text-lg font-bold leading-tight tracking-wider font-mono">FIT & FIRM 90 DAYS</h1>
                         <p class="text-xs text-emerald-100 font-light font-mono">ระบบติดตามและประเมินผลค่า BMI พนักงาน</p>
                     </div>
                 </div>
 
-                <nav class="hidden md:flex space-x-1">
-                    <button onclick="switchTab('apply-project')" id="btn-tab-apply-project" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition duration-200 bg-white/10 text-white">1. สมัครเข้าโครงการ</button>
-                    <button onclick="switchTab('weekly-submit')" id="btn-tab-weekly-submit" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition duration-200 hover:bg-white/10 text-emerald-50">2. ส่งผลรายสัปดาห์</button>
-                    <button onclick="switchTab('home')" id="btn-tab-home" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition duration-200 hover:bg-white/10 text-emerald-50">3. ตารางอันดับ %BMI</button>
-                    <button onclick="switchTab('employee-portal')" id="btn-tab-employee-portal" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition duration-200 hover:bg-white/10 text-emerald-50">4. แดชบอร์ดพนักงาน</button>
-                    <button onclick="switchTab('admin-panel')" id="btn-tab-admin-panel" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition duration-200 hover:bg-white/10 text-emerald-50">5. แผงควบคุมแอดมิน</button>
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-1 font-medium">
+                    <button onclick="switchTab('apply-project')" id="btn-tab-apply-project" class="tab-btn px-4 py-2 rounded-lg text-sm transition duration-200 bg-white/10 text-white">1. สมัครเข้าโครงการ</button>
+                    <button onclick="switchTab('weekly-submit')" id="btn-tab-weekly-submit" class="tab-btn px-4 py-2 rounded-lg text-sm transition duration-200 hover:bg-white/10 text-emerald-50">2. ส่งผลรายสัปดาห์</button>
+                    <button onclick="switchTab('home')" id="btn-tab-home" class="tab-btn px-4 py-2 rounded-lg text-sm transition duration-200 hover:bg-white/10 text-emerald-50">3. ตารางอันดับ %BMI</button>
+                    <button onclick="switchTab('employee-portal')" id="btn-tab-employee-portal" class="tab-btn px-4 py-2 rounded-lg text-sm transition duration-200 hover:bg-white/10 text-emerald-50">4. แดชบอร์ดพนักงาน</button>
+                    <button onclick="switchTab('admin-panel')" id="btn-tab-admin-panel" class="tab-btn px-4 py-2 rounded-lg text-sm transition duration-200 hover:bg-white/10 text-emerald-50">5. แผงควบคุมแอดมิน</button>
                 </nav>
 
+                <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-emerald-100 hover:text-white focus:outline-none p-1">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -50,6 +59,7 @@
             </div>
         </div>
 
+        <!-- Mobile Navigation Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-teal-850 border-t border-teal-700 transition duration-300">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-sm">
                 <button onclick="switchTab('apply-project'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-white hover:bg-teal-700">1. สมัครเข้าโครงการ</button>
@@ -61,11 +71,12 @@
         </div>
     </header>
 
+    <!-- Main Content Area -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <!-- Sync Banner -->
         <div id="sync-banner" class="mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-3 text-left">
                 <span class="p-2 bg-amber-500/10 text-amber-600 rounded-lg">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -73,7 +84,7 @@
                 </span>
                 <div>
                     <h4 class="text-sm font-semibold text-amber-900">แอปกำลังทำงานแบบ Local Storage</h4>
-                    <p class="text-xs text-amber-700" id="sync-status-text">โปรดเข้าแท็บ แผงควบคุมแอดมิน และกดปุ่ม ทดสอบดึงฐานข้อมูลจากคลาวด์ เพื่อดึงข้อมูล</p>
+                    <p class="text-xs text-amber-700" id="sync-status-text">โปรดเข้าแท็บ แผงควบคุมแอดมิน และกดปุ่ม ทดสอบดึงฐานข้อมูลจากคลาวด์ เพื่อดึงข้อมูลรายชื่อพนักงานจาก Google Sheet</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -86,40 +97,44 @@
 
         <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2 pointer-events-none text-slate-800"></div>
 
-        <!-- TAB 1: Apply Project -->
+        <!-- TAB 1: Apply Project (หน้าสมัครเข้าโครงการ) -->
         <section id="tab-apply-project" class="tab-content block animate-fade-in max-w-3xl mx-auto">
             <div id="apply-screen-wrapper" class="relative bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                
+                <!-- Registration Closed Overlay -->
                 <div id="apply-closed-overlay" class="hidden absolute inset-0 bg-slate-900/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-8 text-center text-white">
                     <span class="p-5 bg-white/15 rounded-full text-4xl mb-4">🚫</span>
                     <h3 class="text-xl font-extrabold">ขณะนี้ปิดระบบรับสมัครเข้าร่วมโครงการชั่วคราว</h3>
-                    <p class="text-xs text-slate-300 max-w-md mt-1.5">ผู้ดูแลระบบได้ทำการเปิดหรือปิดสิทธิ์รับสมัครตามเป้าหมายเวลาของบริษัทเรียบร้อยแล้ว</p>
+                    <p class="text-xs text-slate-300 max-w-md mt-1.5">ผู้ดูแลระบบได้ทำการปิดสิทธิ์รับสมัครชั่วคราวตามแนวทางของโครงการ</p>
                 </div>
 
                 <div class="p-6 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex justify-between items-center">
-                    <div>
+                    <div class="text-left">
                         <h3 class="text-xl font-bold">กรอกใบสมัครเข้าร่วมโครงการ FIT & FIRM</h3>
                         <p class="text-xs text-emerald-100">พิมพ์รหัสพนักงานแล้วกดปุ่มค้นหา เพื่อดึงข้อมูลตั้งต้นและตั้งเป้าหมาย</p>
                     </div>
                 </div>
 
                 <form id="form-apply-member" onsubmit="handleApplyProjectSubmit(event)" class="p-6 space-y-6">
+                    <!-- Step 1: Employee ID Lookup -->
                     <div class="space-y-4">
-                        <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                        <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2 text-left">
                             <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span> 1. ค้นหารหัสพนักงานและประวัติส่วนสูง
                         </h4>
                         <div>
-                            <label for="apply-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">ระบุรหัสพนักงานของคุณ</label>
+                            <label for="apply-emp-id" class="block text-xs font-semibold text-slate-500 mb-1 text-left">ระบุรหัสพนักงานของคุณ</label>
                             <div class="flex gap-2">
-                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 012345" onkeydown="if(event.key==='Enter'){event.preventDefault(); triggerApplyLookup();}" required
+                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 082120" onkeydown="if(event.key==='Enter'){event.preventDefault(); triggerApplyLookup();}" required
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition">
-                                <button type="button" onclick="triggerApplyLookup()" class="bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-xl px-6 shadow-sm transition whitespace-nowrap">
+                                <button type="button" onclick="triggerApplyLookup()" class="bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-xl px-6 shadow-sm transition whitespace-nowrap cursor-pointer">
                                     🔍 ค้นหา
                                 </button>
                             </div>
-                            <div id="apply-lookup-status" class="text-xs font-medium text-slate-400 mt-2">พิมพ์รหัสพนักงานแล้วกดปุ่มค้นหา</div>
+                            <div id="apply-lookup-status" class="text-xs font-medium text-slate-400 mt-2 text-left">พิมพ์รหัสพนักงานแล้วกดปุ่มค้นหา</div>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <!-- Autofilled Employee Info -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left font-sans">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">ชื่อพนักงาน</label>
                                 <input type="text" id="apply-fullname" disabled placeholder="-" class="w-full bg-slate-100/85 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
@@ -130,42 +145,44 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">ส่วนสูงคงที่เดิมในระบบ (ซม.)</label>
-                                <input type="text" id="apply-preloaded-height" disabled placeholder="-" class="w-full bg-slate-100/85 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-500 font-bold text-sm">
+                                <input type="text" id="apply-preloaded-height" disabled placeholder="-" class="w-full bg-slate-100/85 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-500 font-bold text-sm font-mono">
                             </div>
                         </div>
                     </div>
 
-                    <div class="space-y-4">
+                    <!-- Step 2: Employee Inputs Measurements for Validation & Setup -->
+                    <div class="space-y-4 text-left">
                         <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
                             <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span> 2. ยืนยันข้อมูลสัดส่วนและเป้าหมายของคุณ
                         </h4>
                         
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono">
                             <div>
-                                <label for="apply-input-height" class="block text-xs font-semibold text-slate-500 mb-1">ส่วนสูงที่ใช้วัดผล (ซม.)</label>
+                                <label for="apply-input-height" class="block text-xs font-semibold text-slate-500 mb-1 font-sans">ส่วนสูงที่ใช้วัดผล (ซม.)</label>
                                 <input type="number" id="apply-input-height" step="0.1" required placeholder="00.0" oninput="calculateApplyBmi()"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition">
                                 <span id="height-check-match" class="text-[10px] mt-1 block"></span>
                             </div>
                             <div>
-                                <label for="apply-input-weight" class="block text-xs font-semibold text-slate-500 mb-1">น้ำหนักวัดครั้งแรก (กก.)</label>
+                                <label for="apply-input-weight" class="block text-xs font-semibold text-slate-500 mb-1 font-sans">น้ำหนักวัดครั้งแรก (กก.)</label>
                                 <input type="number" id="apply-input-weight" step="0.1" required placeholder="00.0" oninput="calculateApplyBmi()"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition">
                             </div>
                             <div>
-                                <label for="apply-target-goal" class="block text-xs font-semibold text-slate-500 mb-1">เป้าหมายน้ำหนักที่ต้องการลดลง (กก.)</label>
+                                <label for="apply-target-goal" class="block text-xs font-semibold text-slate-500 mb-1 font-sans">เป้าหมายน้ำหนักที่ต้องการลดลง (กก.)</label>
                                 <input type="number" id="apply-target-goal" step="0.1" min="1" max="50" required placeholder="เช่น 5.0"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-800 placeholder-slate-400 font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition">
                             </div>
                         </div>
 
-                        <div class="bg-teal-50 rounded-2xl p-4 border border-teal-100 flex justify-between items-center text-sm mt-2">
+                        <div class="bg-teal-50 rounded-2xl p-4 border border-teal-100 flex justify-between items-center text-sm mt-2 font-sans">
                             <span class="font-bold text-teal-800">ค่า BMI สัปดาห์แรกรับสมัครประเมิน:</span>
-                            <span class="text-xl font-black text-teal-700" id="apply-bmi-preview">0.00</span>
+                            <span class="text-xl font-black text-teal-700 font-mono" id="apply-bmi-preview">0.00</span>
                         </div>
                     </div>
 
-                    <div class="space-y-4">
+                    <!-- Step 3: Password setup -->
+                    <div class="space-y-4 text-left">
                         <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
                             <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span> 3. กำหนดรหัสผ่านสำหรับการเข้าพอร์ทัลส่วนบุคคล
                         </h4>
@@ -184,23 +201,24 @@
             </div>
         </section>
 
-        <!-- TAB 2: Weekly Submit -->
+        <!-- TAB 2: Weekly Submit (หน้าส่งผลรายสัปดาห์) -->
         <section id="tab-weekly-submit" class="tab-content hidden animate-fade-in max-w-2xl mx-auto">
             <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="p-6 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex justify-between items-center">
-                    <div>
+                    <div class="text-left">
                         <h3 class="text-xl font-bold">ส่งสถิติวัดสัดส่วนร่างกายประจำสัปดาห์</h3>
                         <p class="text-xs text-emerald-100">พิมพ์รหัสพนักงาน กดปุ่มค้นหา เพื่อตรวจสอบสิทธิ์และส่งผลอัปเดตสัปดาห์นี้</p>
                     </div>
                 </div>
 
                 <form id="form-weekly-log" onsubmit="handleWeeklySubmit(event)" class="p-6 space-y-6">
-                    <div class="space-y-4">
+                    <!-- Step 1: Employee Verification -->
+                    <div class="space-y-4 text-left">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
                             <h4 class="text-sm font-bold text-slate-900 flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> 1. ระบุรหัสผ่านพนักงานผู้ร่วมโครงการ
                             </h4>
-                            <span class="text-xs bg-slate-100 border border-slate-200 text-slate-700 font-bold px-2.5 py-1 rounded-md" id="weekly-locked-indicator">
+                            <span class="text-xs bg-slate-100 border border-slate-200 text-slate-700 font-bold px-2.5 py-1 rounded-md font-mono" id="weekly-locked-indicator">
                                 สัปดาห์ปัจจุบันเปิดกรอก: -
                             </span>
                         </div>
@@ -209,73 +227,75 @@
                             <div class="flex gap-2">
                                 <input type="text" id="submit-emp-id" placeholder="ตัวอย่าง: 004148" onkeydown="if(event.key==='Enter'){event.preventDefault(); triggerEmpIdLookup();}" required
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition">
-                                <button type="button" onclick="triggerEmpIdLookup()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl px-6 shadow-sm transition whitespace-nowrap">
+                                <button type="button" onclick="triggerEmpIdLookup()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl px-6 shadow-sm transition whitespace-nowrap cursor-pointer">
                                     🔍 ค้นหา
                                 </button>
                             </div>
                             <div id="lookup-status" class="text-xs font-medium text-slate-400 mt-2">พิมพ์รหัสพนักงานแล้วกดปุ่มค้นหาตรวจสอบสิทธิ์</div>
                         </div>
 
+                        <!-- Autofill fields -->
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">ชื่อพนักงาน</label>
-                                <input type="text" id="submit-emp-name" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
+                                <input type="text" id="submit-emp-name" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm font-sans">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">แผนก</label>
-                                <input type="text" id="submit-emp-dept" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm">
+                                <input type="text" id="submit-emp-dept" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-slate-500 font-medium text-sm font-sans">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">รอบส่งผลสัปดาห์นี้</label>
-                                <input type="text" id="submit-week-display" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-emerald-700 font-bold text-sm">
+                                <input type="text" id="submit-week-display" disabled placeholder="-" class="w-full bg-slate-100/80 border border-slate-150 rounded-xl px-4 py-2.5 text-emerald-700 font-bold text-sm font-mono">
                             </div>
                         </div>
                     </div>
 
-                    <div id="submit-notice-box" class="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-1"></div>
+                    <div id="submit-notice-box" class="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-1 text-left"></div>
 
-                    <div class="space-y-4">
+                    <!-- Step 3: Current Metrics Inputs -->
+                    <div class="space-y-4 text-left">
                         <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
                             <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> 2. ระบุสถิติสัดส่วนร่างกายปัจจุบันประจำสัปดาห์
                         </h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono">
                             <div>
-                                <label for="submit-weight" class="block text-xs font-semibold text-slate-500 mb-1">น้ำหนักสัปดาห์นี้ (กก.)</label>
+                                <label for="submit-weight" class="block text-xs font-semibold text-slate-500 mb-1 font-sans">น้ำหนักสัปดาห์นี้ (กก.)</label>
                                 <div class="relative">
                                     <input type="number" id="submit-weight" step="0.1" min="20" max="300" placeholder="00.0" required oninput="calculateLiveBmi()"
-                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-10 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition">
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition">
                                 </div>
                             </div>
                             <div>
-                                <label for="submit-waist" class="block text-xs font-semibold text-slate-500 mb-1">รอบเอวสัปดาห์นี้ (นิ้ว)</label>
+                                <label for="submit-waist" class="block text-xs font-semibold text-slate-500 mb-1 font-sans">รอบเอวสัปดาห์นี้ (นิ้ว)</label>
                                 <div class="relative">
                                     <input type="number" id="submit-waist" step="0.1" min="15" max="100" placeholder="00.0" required
-                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-12 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition">
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition">
                                 </div>
                             </div>
                             <div>
-                                <label for="submit-hip" class="block text-xs font-semibold text-slate-500 mb-1">รอบสะโพกสัปดาห์นี้ (นิ้ว)</label>
+                                <label for="submit-hip" class="block text-xs font-semibold text-slate-500 mb-1 font-sans">รอบสะโพกสัปดาห์นี้ (นิ้ว)</label>
                                 <div class="relative">
                                     <input type="number" id="submit-hip" step="0.1" min="15" max="100" placeholder="00.0" required
-                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-12 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition">
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-100 flex justify-between items-center">
+                        <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-100 flex justify-between items-center font-sans">
                             <div>
-                                <p class="text-xs text-emerald-800 font-medium">ส่วนสูงคงที่เดิมของคุณ: <span id="live-height-preview" class="font-bold">-</span> ซม.</p>
-                                <p class="text-[10px] text-emerald-600/80">ระบบคัดลอกส่วนสูงเริ่มต้นมาประมวลผลดัชนี BMI ล่าสุดแบบเรียลไทม์</p>
+                                <p class="text-xs text-emerald-800 font-medium">ส่วนสูงคงที่เดิมของคุณ: <span id="live-height-preview" class="font-bold font-mono">-</span> ซม.</p>
+                                <p class="text-[10px] text-emerald-600/80">ระบบคำนวณ BMI อิงความสูงแรกรับ</p>
                             </div>
                             <div class="text-right">
                                 <span class="block text-xxs text-emerald-600/80 uppercase font-bold">BMI โดยประมาณสัปดาห์นี้</span>
-                                <span class="text-xl font-black text-emerald-700" id="live-bmi-preview">0.00</span>
+                                <span class="text-xl font-black text-emerald-700 font-mono" id="live-bmi-preview">0.00</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Step 4: Health Evaluation Surveys -->
-                    <div class="space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-150">
+                    <div class="space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-150 text-left">
                         <div class="border-b border-slate-200 pb-2 flex justify-between items-center">
                             <h4 class="text-sm font-bold text-slate-900 flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 bg-sky-500 rounded-full"></span> 3. แบบประเมินพฤติกรรมสุขภาพประจำสัปดาห์นี้
@@ -286,7 +306,7 @@
                         <!-- Q1 -->
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-white rounded-xl border border-slate-200/60">
                             <p class="text-xs font-semibold text-slate-700">1. กินอาหารครบ 5 หมู่ (ข้าว แป้ง ผัก ผลไม้ เนื้อสัตว์ นม)</p>
-                            <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-1.5 self-end sm:self-auto">
                                 <label class="cursor-pointer"><input type="radio" name="survey-q1" value="yes" required class="sr-only peer"><span class="px-3 py-1 bg-slate-100 peer-checked:bg-emerald-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ใช่</span></label>
                                 <label class="cursor-pointer"><input type="radio" name="survey-q1" value="no" class="sr-only peer"><span class="px-3 py-1 bg-slate-100 peer-checked:bg-red-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ไม่ใช่</span></label>
                             </div>
@@ -295,7 +315,7 @@
                         <!-- Q2 -->
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-white rounded-xl border border-slate-200/60">
                             <p class="text-xs font-semibold text-slate-700">2. เลือกกินเนื้อสัตว์แบบไม่ติดมัน สัปดาห์ละ 2-3 มื้อขึ้นไป</p>
-                            <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-1.5 self-end sm:self-auto">
                                 <label class="cursor-pointer"><input type="radio" name="survey-q2" value="yes" required class="sr-only peer"><span class="px-3 py-1 bg-slate-100 peer-checked:bg-emerald-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ใช่</span></label>
                                 <label class="cursor-pointer"><input type="radio" name="survey-q2" value="no" class="sr-only peer"><span class="px-3 py-1 bg-slate-100 peer-checked:bg-red-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ไม่ใช่</span></label>
                             </div>
@@ -304,7 +324,7 @@
                         <!-- Q3 -->
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-white rounded-xl border border-slate-200/60">
                             <p class="text-xs font-semibold text-slate-700">3. ทานยาลดความอ้วนหรือผลิตภัณฑ์สลายไขมันทางเคมีเป็นตัวช่วย</p>
-                            <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-1.5 self-end sm:self-auto">
                                 <label class="cursor-pointer"><input type="radio" name="survey-q3" value="yes" required class="sr-only peer"><span class="px-3 py-1 bg-slate-100 peer-checked:bg-emerald-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ใช่</span></label>
                                 <label class="cursor-pointer"><input type="radio" name="survey-q3" value="no" class="sr-only peer"><span class="px-3 py-1 bg-slate-100 peer-checked:bg-red-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ไม่ใช่</span></label>
                             </div>
@@ -313,7 +333,7 @@
                         <!-- Q4 -->
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-white rounded-xl border border-slate-200/60">
                             <p class="text-xs font-semibold text-slate-700">4. กินอาหารมื้อเย็นห่างจากเวลานอนหลับจริงไม่น้อยกว่า 4 ชั่วโมง</p>
-                            <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-1.5 self-end sm:self-auto">
                                 <label class="cursor-pointer"><input type="radio" name="survey-q4" value="yes" required class="sr-only peer"><span class="px-3 py-1 bg-slate-100 peer-checked:bg-emerald-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ใช่</span></label>
                                 <label class="cursor-pointer"><input type="radio" name="survey-q4" value="no" class="sr-only peer"><span class="px-3 py-1 bg-slate-100 peer-checked:bg-red-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ไม่ใช่</span></label>
                             </div>
@@ -331,7 +351,7 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-1.5 self-end sm:self-auto">
                                 <label class="cursor-pointer"><input type="radio" name="survey-q5" value="yes" required class="sr-only peer"><span class="px-3 py-1 bg-slate-100 peer-checked:bg-emerald-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ใช่</span></label>
                                 <label class="cursor-pointer"><input type="radio" name="survey-q5" value="no" class="sr-only peer"><span class="px-3 py-1 bg-slate-100 peer-checked:bg-red-500 peer-checked:text-white rounded-lg text-xs font-bold text-slate-600 transition block">ไม่ใช่</span></label>
                             </div>
@@ -340,7 +360,7 @@
 
                     <div class="pt-2 flex gap-3">
                         <button type="button" onclick="clearWeeklyForm()"
-                            class="w-1/3 py-3 border border-slate-200 text-slate-600 rounded-xl font-semibold hover:bg-slate-50 transition">
+                            class="w-1/3 py-3 border border-slate-200 text-slate-600 rounded-xl font-semibold hover:bg-slate-50 transition cursor-pointer">
                             ล้างแบบฟอร์ม
                         </button>
                         <button type="submit" id="btn-submit-weekly" disabled
@@ -365,19 +385,19 @@
                     <div class="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 backdrop-blur-md">
                         <div class="flex justify-between items-center text-xs">
                             <span class="font-medium text-slate-300">วันคืบหน้าโครงการ</span>
-                            <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-md font-medium" id="project-days">วันที่ 1/90</span>
+                            <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-md font-medium font-mono" id="project-days font-mono">วันที่ 1/90</span>
                         </div>
                         <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
                             <div id="project-progress-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 1%"></div>
                         </div>
-                        <div class="grid grid-cols-2 gap-3 text-center">
+                        <div class="grid grid-cols-2 gap-3 text-center font-mono">
                             <div class="p-2 bg-white/5 rounded-xl">
-                                <span class="block text-lg font-bold text-white font-mono" id="count-active-members">0</span>
-                                <span class="text-[9px] text-slate-400">สมัครแล้ว (คน)</span>
+                                <span class="block text-lg font-bold text-white" id="count-active-members">0</span>
+                                <span class="text-[9px] text-slate-400 font-sans">สมัครแล้ว (คน)</span>
                             </div>
                             <div class="p-2 bg-white/5 rounded-xl">
-                                <span class="block text-lg font-bold text-emerald-400 font-mono" id="count-weight-loss">0.0</span>
-                                <span class="text-[9px] text-slate-400 font-mono">ลดรวม (กก.)</span>
+                                <span class="block text-lg font-bold text-emerald-400" id="count-weight-loss">0.0</span>
+                                <span class="text-[9px] text-slate-400 font-sans">ลดรวม (กก.)</span>
                             </div>
                         </div>
                     </div>
@@ -405,14 +425,14 @@
                     <div class="overflow-x-auto custom-scrollbar flex-grow">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="border-b border-slate-150 text-slate-400 text-xs uppercase tracking-wider bg-slate-50">
-                                    <th class="py-3.5 px-6 font-semibold">อันดับ</th>
+                                <tr class="border-b border-slate-150 text-slate-400 text-xs uppercase tracking-wider bg-slate-50 font-mono">
+                                    <th class="py-3.5 px-6 font-semibold font-sans">อันดับ</th>
                                     <th class="py-3.5 px-6 font-semibold">รหัสพนักงาน</th>
-                                    <th class="py-3.5 px-6 font-semibold">ชื่อ-นามสกุล</th>
-                                    <th class="py-3.5 px-6 font-semibold">แผนก</th>
-                                    <th class="py-3.5 px-6 font-semibold text-center">BMI แรกเริ่ม</th>
-                                    <th class="py-3.5 px-6 font-semibold text-center">BMI ปัจจุบัน</th>
-                                    <th class="py-3.5 px-6 font-semibold text-right text-emerald-700">% BMI ที่ลดได้</th>
+                                    <th class="py-3.5 px-6 font-semibold font-sans">ชื่อ-นามสกุล</th>
+                                    <th class="py-3.5 px-6 font-semibold font-sans">แผนก</th>
+                                    <th class="py-3.5 px-6 font-semibold text-center font-sans">BMI แรกเริ่ม</th>
+                                    <th class="py-3.5 px-6 font-semibold text-center font-sans">BMI ปัจจุบัน</th>
+                                    <th class="py-3.5 px-6 font-semibold text-right text-emerald-700 font-sans">% BMI ที่ลดได้</th>
                                 </tr>
                             </thead>
                             <tbody id="leaderboard-list-body" class="divide-y divide-slate-100 text-sm text-slate-600"></tbody>
@@ -431,15 +451,15 @@
                 </div>
                 <div class="p-6 space-y-4" id="box-login-form">
                     <form onsubmit="handleEmployeeLogin(event)" class="space-y-4">
-                        <div>
+                        <div class="text-left">
                             <label class="block text-xs font-semibold text-slate-500 mb-1">รหัสพนักงาน</label>
                             <input type="text" id="login-emp-id" placeholder="ตัวอย่าง: 082120" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
                         </div>
-                        <div>
+                        <div class="text-left">
                             <label class="block text-xs font-semibold text-slate-500 mb-1">รหัสผ่านล็อกอิน</label>
                             <input type="password" id="login-password" placeholder="••••••••" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
                         </div>
-                        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-bold hover:shadow-lg transition">เข้าสู่แผงประวัติและผลงาน</button>
+                        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-bold hover:shadow-lg transition cursor-pointer">เข้าสู่แผงประวัติและผลงาน</button>
                     </form>
                 </div>
             </div>
@@ -453,7 +473,7 @@
                             <p class="text-xs text-slate-500 mt-1">รหัส: <span id="member-empid" class="font-semibold font-mono">0000</span> | แผนก: <span id="member-dept" class="font-bold"></span></p>
                         </div>
                     </div>
-                    <button onclick="handleLogout()" class="px-4 py-2 border border-slate-200 text-slate-600 text-xs rounded-xl font-semibold hover:bg-slate-50 transition">ออกจากระบบ</button>
+                    <button onclick="handleLogout()" class="px-4 py-2 border border-slate-200 text-slate-600 text-xs rounded-xl font-semibold hover:bg-slate-50 transition cursor-pointer">ออกจากระบบ</button>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gradient-to-br from-emerald-650 to-teal-750 text-white rounded-3xl p-6 shadow-md text-left">
@@ -474,26 +494,26 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left">
-                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div class="flex justify-between items-start"><span class="text-xs font-semibold text-slate-400">น้ำหนักปัจจุบัน</span><span id="badge-weight-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold">0.0%</span></div>
-                        <div class="my-3"><span class="text-3xl font-black text-slate-900" id="current-weight-val">0.0</span><span class="text-xs text-slate-400 ml-1">กก.</span></div>
-                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between"><span>เริ่มต้น: <b id="initial-weight-val">0</b> กก.</span><span class="text-slate-400 font-semibold" id="weight-change-abs">-0 กก.</span></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left font-mono">
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between font-sans">
+                        <div class="flex justify-between items-start"><span class="text-xs font-semibold text-slate-400">น้ำหนักปัจจุบัน</span><span id="badge-weight-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold font-sans">0.0%</span></div>
+                        <div class="my-3"><span class="text-3xl font-black text-slate-900 font-mono" id="current-weight-val">0.0</span><span class="text-xs text-slate-400 ml-1 font-sans">กก.</span></div>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between"><span>เริ่มต้น: <b id="initial-weight-val" class="font-mono">0</b> กก.</span><span class="text-slate-400 font-semibold" id="weight-change-abs">-0 กก.</span></div>
                     </div>
-                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div class="flex justify-between items-start"><span class="text-xs font-semibold text-slate-400">BMI ปัจจุบัน</span><span id="badge-bmi-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold">0.0%</span></div>
-                        <div class="my-3 flex items-center justify-between"><span class="text-3xl font-black text-slate-900" id="current-bmi-val">0.00</span></div>
-                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between"><span>เริ่มต้น: <b id="initial-bmi-val">0</b></span><span class="text-slate-400 font-semibold" id="bmi-change-abs">-0.00</span></div>
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between font-sans">
+                        <div class="flex justify-between items-start"><span class="text-xs font-semibold text-slate-400">BMI ปัจจุบัน</span><span id="badge-bmi-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold font-sans">0.0%</span></div>
+                        <div class="my-3 flex items-center justify-between"><span class="text-3xl font-black text-slate-900 font-mono" id="current-bmi-val">0.00</span></div>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between"><span>เริ่มต้น: <b id="initial-bmi-val" class="font-mono">0</b></span><span class="text-slate-400 font-semibold font-mono" id="bmi-change-abs">-0.00</span></div>
                     </div>
-                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div class="flex justify-between items-start"><span class="text-xs font-semibold text-slate-400">รอบเอวปัจจุบัน</span><span id="badge-waist-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold">0.0%</span></div>
-                        <div class="my-3"><span class="text-3xl font-black text-slate-900" id="current-waist-val">0.0</span><span class="text-xs text-slate-400 ml-1">นิ้ว</span></div>
-                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between"><span>เริ่มต้น: <b id="initial-waist-val">0</b> นิ้ว</span><span class="text-slate-400 font-semibold" id="waist-change-abs">-0 นิ้ว</span></div>
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between font-sans">
+                        <div class="flex justify-between items-start"><span class="text-xs font-semibold text-slate-400">รอบเอวปัจจุบัน</span><span id="badge-waist-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold font-sans">0.0%</span></div>
+                        <div class="my-3"><span class="text-3xl font-black text-slate-900 font-mono" id="current-waist-val">0.0</span><span class="text-xs text-slate-400 ml-1 font-sans">นิ้ว</span></div>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between"><span>เริ่มต้น: <b id="initial-waist-val" class="font-mono">0</b> นิ้ว</span><span class="text-slate-400 font-semibold" id="waist-change-abs">-0 นิ้ว</span></div>
                     </div>
-                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div class="flex justify-between items-start"><span class="text-xs font-semibold text-slate-400">รอบสะโพกปัจจุบัน</span><span id="badge-hip-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold font-mono">0.0%</span></div>
-                        <div class="my-3"><span class="text-3xl font-black text-slate-900" id="current-hip-val">0.0</span><span class="text-xs text-slate-400 ml-1">นิ้ว</span></div>
-                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between"><span>เริ่มต้น: <b id="initial-hip-val">0</b> นิ้ว</span><span class="text-slate-400 font-semibold" id="hip-change-abs">-0 นิ้ว</span></div>
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between font-sans">
+                        <div class="flex justify-between items-start"><span class="text-xs font-semibold text-slate-400">รอบสะโพกปัจจุบัน</span><span id="badge-hip-change" class="text-xs px-2.5 py-0.5 rounded-full font-bold font-sans">0.0%</span></div>
+                        <div class="my-3"><span class="text-3xl font-black text-slate-900 font-mono" id="current-hip-val">0.0</span><span class="text-xs text-slate-400 ml-1 font-sans">นิ้ว</span></div>
+                        <div class="text-xxs text-slate-500 border-t border-slate-100 pt-2 flex justify-between"><span>เริ่มต้น: <b id="initial-hip-val" class="font-mono">0</b> นิ้ว</span><span class="text-slate-400 font-semibold" id="hip-change-abs">-0 นิ้ว</span></div>
                     </div>
                 </div>
 
@@ -512,7 +532,7 @@
                         <table class="w-full text-left">
                             <thead>
                                 <tr class="text-xs uppercase bg-slate-100 text-slate-500 border-b border-slate-200 font-mono">
-                                    <th class="py-3 px-6">สัปดาห์ที่</th><th class="py-3 px-6">วันที่ส่ง</th><th class="py-3 px-6 text-center">น้ำหนัก</th><th class="py-3 px-6 text-center">BMI</th><th class="py-3 px-6 text-center">รอบเอว</th><th class="py-3 px-6 text-center">รอบสะโพก</th><th class="py-3 px-6 text-right">สถานะ</th>
+                                    <th class="py-3 px-6 font-sans">สัปดาห์ที่</th><th class="py-3 px-6 font-sans">วันที่ส่ง</th><th class="py-3 px-6 text-center font-sans">น้ำหนัก</th><th class="py-3 px-6 text-center font-sans">BMI</th><th class="py-3 px-6 text-center font-sans">รอบเอว</th><th class="py-3 px-6 text-center font-sans">รอบสะโพก</th><th class="py-3 px-6 text-right font-sans">สถานะ</th>
                                 </tr>
                             </thead>
                             <tbody id="member-records-body" class="divide-y divide-slate-150 text-xs text-slate-600"></tbody>
@@ -523,28 +543,35 @@
         </section>
 
         <!-- TAB 5: Admin Panel -->
-        <section id="tab-admin-panel" class="tab-content hidden animate-fade-in space-y-8">
+        <section id="tab-admin-panel" class="tab-content hidden space-y-8">
+            <!-- Non Logged In State: Admin Password Verification -->
             <div id="admin-login-screen" class="max-w-md mx-auto bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="p-6 bg-slate-900 text-white text-center">
                     <h3 class="text-xl font-bold font-mono">เข้าสู่แผงจัดการควบคุม (แอดมิน)</h3>
                 </div>
                 <form onsubmit="handleAdminLogin(event)" class="p-6 space-y-4">
-                    <div>
+                    <div class="text-left">
                         <label for="admin-input-pass" class="block text-xs font-semibold text-slate-500 mb-1 text-left">รหัสผ่านผู้ดูแล</label>
-                        <input type="password" id="admin-input-pass" placeholder="กรอกรหัสผ่าน ad2026" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500/20">
+                        <input type="password" id="admin-input-pass" placeholder="กรอกรหัสผ่าน ad2026" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition">
                     </div>
-                    <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition">ยืนยันสิทธิ์แอดมิน</button>
+                    <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition cursor-pointer">
+                        ยืนยันสิทธิ์แอดมิน
+                    </button>
                 </form>
             </div>
 
+            <!-- Logged In State: Admin Suite Container -->
             <div id="admin-suite" class="hidden space-y-8 animate-fade-in text-left">
-                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex justify-between gap-4">
+                <!-- Suite Header -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
-                        <h3 class="text-xl font-extrabold text-slate-900">แผงจัดการโครงการและรายงานสรุปผู้บริหาร 🏢</h3>
+                        <h3 class="text-xl font-extrabold text-slate-900 animate-pulse">แผงจัดการโครงการและรายงานสรุปผู้บริหาร 🏢</h3>
                     </div>
-                    <button onclick="handleAdminLogout()" class="px-3.5 py-2 border border-slate-200 text-slate-600 text-xs rounded-xl font-semibold hover:bg-slate-50 transition">ออกจากโหมดแอดมิน</button>
+                    <button onclick="handleAdminLogout()" class="px-3.5 py-2 border border-slate-200 text-slate-600 text-xs rounded-xl font-semibold hover:bg-slate-50 transition cursor-pointer">ออกจากโหมดแอดมิน</button>
                 </div>
 
+                <!-- EXECUTIVE REPORT PANEL -->
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-6">
                     <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
                         <h4 class="text-base font-bold text-slate-900 flex items-center gap-2"><span>📊</span> สถิติสรุปเสนอผู้บริหารระดับสูง (Executive Summaries)</h4>
@@ -575,9 +602,9 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="bg-slate-50 border border-slate-150 rounded-2xl p-5"><span class="font-bold text-slate-800 text-xs uppercase block">1. อัตราความคืบหน้าเปิดบัญชีพนักงาน</span><div class="h-44 relative flex justify-center items-center"><canvas id="chart-admin-participation"></canvas></div></div>
-                        <div class="lg:col-span-2 bg-slate-50 border border-slate-150 rounded-2xl p-5"><span class="font-bold text-slate-800 text-xs uppercase block">2. สถิติการพัฒนาเฉลี่ยสะสมรายสัปดาห์ (%)</span><div class="h-44 relative"><canvas id="chart-admin-trend"></canvas></div></div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 font-mono">
+                        <div class="bg-slate-50 border border-slate-150 rounded-2xl p-5 font-sans"><span class="font-bold text-slate-800 text-xs uppercase block">1. อัตราความคืบหน้าเปิดบัญชีพนักงาน</span><div class="h-44 relative flex justify-center items-center"><canvas id="chart-admin-participation"></canvas></div></div>
+                        <div class="lg:col-span-2 bg-slate-50 border border-slate-150 rounded-2xl p-5 font-sans"><span class="font-bold text-slate-800 text-xs uppercase block">2. สถิติการพัฒนาเฉลี่ยสะสมรายสัปดาห์ (%)</span><div class="h-44 relative"><canvas id="chart-admin-trend"></canvas></div></div>
                     </div>
 
                     <div class="bg-slate-50 border border-slate-150 rounded-2xl p-5 space-y-4">
@@ -595,8 +622,8 @@
                 </div>
 
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-6 font-mono">
-                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2"><span class="block text-xs font-bold text-slate-500 font-sans">ระบบรับสมัคร</span><div class="flex items-center justify-between pt-1"><span class="text-xs font-medium text-slate-700 font-sans" id="text-toggle-reg">สถานะ: เปิดรับสมัคร</span><button onclick="toggleAdminSetting('isRegOpen')" id="btn-toggle-reg" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition">เปิดอยู่ (คลิกปิด)</button></div></div>
-                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2"><span class="block text-xs font-bold text-slate-500 font-sans">ตารางอันดับหน้าหลัก (Leaderboard)</span><div class="flex items-center justify-between pt-1"><span class="text-xs font-medium text-slate-700 font-sans" id="text-toggle-board">สถานะ: เปิดแสดงผล</span><button onclick="toggleAdminSetting('isLeaderboardOpen')" id="btn-toggle-board" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition">เปิดอยู่ (คลิกปิด)</button></div></div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2"><span class="block text-xs font-bold text-slate-500 font-sans">ระบบรับสมัคร</span><div class="flex items-center justify-between pt-1"><span class="text-xs font-medium text-slate-700 font-sans" id="text-toggle-reg">สถานะ: เปิดรับสมัคร</span><button onclick="toggleAdminSetting('isRegOpen')" id="btn-toggle-reg" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition cursor-pointer">เปิดอยู่ (คลิกปิด)</button></div></div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2"><span class="block text-xs font-bold text-slate-500 font-sans">ตารางอันดับหน้าหลัก (Leaderboard)</span><div class="flex items-center justify-between pt-1"><span class="text-xs font-medium text-slate-700 font-sans" id="text-toggle-board">สถานะ: เปิดแสดงผล</span><button onclick="toggleAdminSetting('isLeaderboardOpen')" id="btn-toggle-board" class="px-4 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold transition cursor-pointer font-sans">เปิดอยู่ (คลิกปิด)</button></div></div>
                     <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2"><label class="block text-xs font-bold text-slate-500 mb-1 font-sans">วันเริ่มโครงการจริง</label><input type="date" id="config-start-date" onchange="handleStartDateChange(this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-700 font-mono"></div>
                 </div>
 
@@ -605,27 +632,27 @@
                         <h4 class="font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">บันทึกรายชื่อพนักงานล่วงหน้า (Offline)</h4>
                         <form id="form-register-employee" onsubmit="handleEmployeePreRegistration(event)" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div><label class="block text-xs font-semibold text-slate-500 mb-1">รหัสพนักงาน</label><input type="text" id="reg-emp-id" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800"></div>
-                                <div><label class="block text-xs font-semibold text-slate-500 mb-1">แผนก</label><input type="text" id="reg-dept" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800"></div>
+                                <div class="text-left"><label class="block text-xs font-semibold text-slate-500 mb-1">รหัสพนักงาน</label><input type="text" id="reg-emp-id" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800"></div>
+                                <div class="text-left"><label class="block text-xs font-semibold text-slate-500 mb-1">แผนก</label><input type="text" id="reg-dept" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800"></div>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div><label class="block text-xs font-semibold text-slate-500 mb-1">ชื่อ-นามสกุลจริง</label><input type="text" id="reg-firstname" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800"></div>
-                                <div><label class="block text-xs font-semibold text-slate-500 mb-1">ส่วนสูงคงที่ (ซม.) (*เว้นได้)</label><input type="number" id="reg-height" step="0.1" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800"></div>
+                                <div class="text-left"><label class="block text-xs font-semibold text-slate-500 mb-1">ชื่อ-นามสกุลจริง</label><input type="text" id="reg-firstname" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800"></div>
+                                <div class="text-left"><label class="block text-xs font-semibold text-slate-500 mb-1">ส่วนสูงคงที่ (ซม.) (*เว้นได้)</label><input type="number" id="reg-height" step="0.1" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800"></div>
                             </div>
-                            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs">บันทึกพนักงาน</button>
+                            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs cursor-pointer">บันทึกพนักงาน</button>
                         </form>
                     </div>
 
                     <div id="section-cloud-sync" class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
                         <div class="space-y-4">
                             <h4 class="font-bold text-slate-900 border-b border-slate-100 pb-3">เชื่อมโยง Google Sheet</h4>
-                            <div class="space-y-2">
+                            <div class="space-y-2 text-left">
                                 <label class="block text-xs font-semibold text-slate-500 font-mono">URL ของ Google Web App</label>
-                                <input type="url" id="cloud-api-url" onchange="saveApiUrl(this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700">
+                                <input type="url" id="cloud-api-url" onchange="saveApiUrl(this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
                             </div>
                         </div>
                         <div class="pt-4 space-y-2 font-mono">
-                            <button onclick="handleTestDataSync()" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold rounded-xl transition font-sans">ทดสอบดึงฐานข้อมูลจากคลาวด์</button>
+                            <button onclick="handleTestDataSync()" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold rounded-xl transition font-sans cursor-pointer">ทดสอบดึงฐานข้อมูลจากคลาวด์</button>
                         </div>
                     </div>
                 </div>
@@ -634,15 +661,15 @@
                     <div class="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
                         <h4 class="text-base font-bold text-slate-900 font-sans">ฐานข้อมูลรายละเอียดการสมัครและสัดส่วนพนักงาน</h4>
                         <div class="flex gap-2">
-                            <button onclick="exportToCsv()" class="bg-white border border-slate-200 text-slate-700 px-4 py-2 text-xs rounded-xl font-bold">ดาวน์โหลด CSV</button>
-                            <button onclick="resetWholeProjectWithConfirmation()" class="bg-red-50 text-red-600 px-4 py-2 text-xs rounded-xl font-bold">รีเซ็ตโครงสร้าง</button>
+                            <button onclick="exportToCsv()" class="bg-white border border-slate-200 text-slate-700 px-4 py-2 text-xs rounded-xl font-bold cursor-pointer font-sans">ดาวน์โหลด CSV</button>
+                            <button onclick="resetWholeProjectWithConfirmation()" class="bg-red-50 text-red-600 px-4 py-2 text-xs rounded-xl font-bold cursor-pointer font-sans">รีเซ็ตโครงสร้าง</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
                         <table class="w-full text-left">
                             <thead>
-                                <tr class="text-xxs uppercase bg-slate-100 text-slate-500 border-b border-slate-200">
-                                    <th class="py-3.5 px-6 font-semibold">รหัสพนักงาน</th><th class="py-3.5 px-6 font-semibold">ชื่อ-นามสกุล</th><th class="py-3.5 px-6 font-semibold">แผนก</th><th class="py-3.5 px-6 text-center">ความสูง (ซม.)</th><th class="py-3.5 px-6 text-center">เป้าหมายลด (กก.)</th><th class="py-3.5 px-6 text-center">สัดส่วนสมัครแรกเริ่ม</th><th class="py-3.5 px-6 text-center">สัดส่วนล่าสุด</th><th class="py-3.5 px-6 text-center">BMI ล่าสุด</th><th class="py-3.5 px-6 text-center">สถานะ</th><th class="py-3.5 px-6 text-right">ดำเนินการ</th>
+                                <tr class="text-xxs uppercase bg-slate-100 text-slate-500 border-b border-slate-200 font-mono">
+                                    <th class="py-3.5 px-6 font-semibold font-sans">รหัสพนักงาน</th><th class="py-3.5 px-6 font-semibold font-sans">ชื่อ-นามสกุล</th><th class="py-3.5 px-6 font-semibold font-sans">แผนก</th><th class="py-3.5 px-6 text-center font-sans">ความสูง (ซม.)</th><th class="py-3.5 px-6 text-center font-sans">เป้าหมายลด (กก.)</th><th class="py-3.5 px-6 text-center font-sans">สัดส่วนสมัครแรกเริ่ม</th><th class="py-3.5 px-6 text-center font-sans">สัดส่วนล่าสุด</th><th class="py-3.5 px-6 text-center font-sans">BMI ล่าสุด</th><th class="py-3.5 px-6 text-center font-sans">สถานะ</th><th class="py-3.5 px-6 text-right font-sans">ดำเนินการ</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-members-list" class="divide-y divide-slate-150 text-xs text-slate-600 font-mono"></tbody>
@@ -1450,7 +1477,7 @@
                         height: (getVal(["height", "ส่วนสูง"]) !== null && getVal(["height", "ส่วนสูง"]) !== "") ? parseFloat(getVal(["height", "ส่วนสูง"])) : null,
                         initWeight: (getVal(["initWeight", "น้ำหนักตั้งต้นสมัคร(กก.)", "น้ำหนัก", "น้ำหนักเริ่มต้น", "initweight"]) !== null && getVal(["initWeight", "น้ำหนักตั้งต้นสมัคร(กก.)", "น้ำหนัก", "น้ำหนักเริ่มต้น", "initweight"]) !== "") ? parseFloat(getVal(["initWeight", "น้ำหนักตั้งต้นสมัคร(กก.)", "น้ำหนัก", "น้ำหนักเริ่มต้น", "initweight"])) : null,
                         initWaist: (getVal(["initWaist", "รอบเอวตั้งต้น(นิ้ว)", "รอบเอว", "initwaist"]) !== null && getVal(["initWaist", "รอบเอวตั้งต้น(นิ้ว)", "รอบเอว", "initwaist"]) !== "") ? parseFloat(getVal(["initWaist", "รอบเอวตั้งต้น(นิ้ว)", "รอบเอว", "initwaist"])) : null,
-                        initHip: (getVal(["initHip", "รอบสะโพกตั้งต้น(นิ้ว)", "รอบสะโพก", "inithip"]) !== null && getVal(["initHip", "รอบสะโพกตั้งต้น(นิ้ว)"] || m["รอบสะโพก"], "inithip") !== "") ? parseFloat(getVal(["initHip", "รอบสะโพกตั้งต้น(นิ้ว)", "รอบสะโพก", "inithip"])) : null,
+                        initHip: (getVal(["initHip", "รอบสะโพกตั้งต้น(นิ้ว)", "รอบสะโพก", "inithip"]) !== null && getVal(["initHip", "รอบสะโพกตั้งต้น(นิ้ว)", "รอบสะโพก", "inithip"]) !== "") ? parseFloat(getVal(["initHip", "รอบสะโพกตั้งต้น(นิ้ว)", "รอบสะโพก", "inithip"])) : null,
                         initBmi: (getVal(["initBmi", "BMIตั้งต้นสมัคร", "BMI", "initbmi"]) !== null && getVal(["initBmi", "BMIตั้งต้นสมัคร", "BMI", "initbmi"]) !== "") ? parseFloat(getVal(["initBmi", "BMIตั้งต้นสมัคร", "BMI", "initbmi"])) : null,
                         password: getVal(["password", "รหัสผ่าน"]) || null,
                         targetWeightLossGoal: (getVal(["targetWeightLossGoal", "เป้าหมายลดน้ำหนัก(กก.)", "เป้าหมายลดน้ำหนัก", "targetweightlossgoal"]) !== null && getVal(["targetWeightLossGoal", "เป้าหมายลดน้ำหนัก(กก.)", "เป้าหมายลดน้ำหนัก", "targetweightlossgoal"]) !== "") ? parseFloat(getVal(["targetWeightLossGoal", "เป้าหมายลดน้ำหนัก(กก.)", "เป้าหมายลดน้ำหนัก", "targetweightlossgoal"])) : null

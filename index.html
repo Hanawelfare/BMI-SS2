@@ -27,7 +27,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-lg font-bold leading-tight tracking-wider font-mono">FIT & FIRM 90 DAYS</h1>
+                        <h1 class="text-lg font-bold leading-tight tracking-wider font-mono font-sans">FIT & FIRM 90 DAYS</h1>
                         <p class="text-xs text-emerald-100 font-light font-mono">ระบบติดตามและประเมินผลค่า BMI พนักงาน</p>
                     </div>
                 </div>
@@ -63,6 +63,7 @@
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+        <!-- Sync Banner -->
         <div id="sync-banner" class="mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div class="flex items-center space-x-3">
                 <span class="p-2 bg-amber-500/10 text-amber-600 rounded-lg">
@@ -109,7 +110,7 @@
                         <div>
                             <label for="apply-emp-id" class="block text-xs font-semibold text-slate-500 mb-1">ระบุรหัสพนักงานของคุณ</label>
                             <div class="flex gap-2">
-                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 082120" onkeydown="if(event.key==='Enter'){event.preventDefault(); triggerApplyLookup();}" required
+                                <input type="text" id="apply-emp-id" placeholder="ระบุเช่น 012345" onkeydown="if(event.key==='Enter'){event.preventDefault(); triggerApplyLookup();}" required
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition">
                                 <button type="button" onclick="triggerApplyLookup()" class="bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold rounded-xl px-6 shadow-sm transition whitespace-nowrap">
                                     🔍 ค้นหา
@@ -674,18 +675,16 @@
 
         function matchEmpId(idA, idB) {
             if (idA === undefined || idA === null || idB === undefined || idB === null) return false;
-            const cleanA = String(idA).trim();
-            const cleanB = String(idB).trim();
-            if (cleanA === cleanB) return true;
-            if (/^\d+$/.test(cleanA) && /^\d+$/.test(cleanB)) { return parseInt(cleanA, 10) === parseInt(cleanB, 10); }
-            return false;
+            // ลบเลข 0 นำหน้าออกทั้งหมดในการเปรียบเทียบ เพื่อป้องกันปัญหาชนิดข้อมูลตัวเลขจากชีตปนเปกัน
+            const cleanA = String(idA).trim().replace(/^0+/, '');
+            const cleanB = String(idB).trim().replace(/^0+/, '');
+            return cleanA === cleanB && cleanA !== "";
         }
 
         function findMemberById(empId) { return state.members.find(m => matchEmpId(m.empId, empId)); }
         function findMemberIndexById(empId) { return state.members.findIndex(m => matchEmpId(m.empId, empId)); }
         function getLogsByEmpId(empId) { return state.logs.filter(l => matchEmpId(l.empId, empId)); }
 
-        // ปล่อยฐานข้อมูลเป็นค่าว่าง เพื่อบังคับให้ระบบไปดึงรายชื่อจริงจาก Google Sheet เสมอ!
         let state = {
             members: [],
             logs: [],
@@ -1431,53 +1430,69 @@
 
             if (data.members && Array.isArray(data.members)) {
                 const normalizedMembers = data.members.map(rawM => {
-                    const m = {};
-                    for (let key in rawM) {
-                        const cleanKey = key.replace(/\s+/g, '').toLowerCase(); // แปลงคีย์ทั้งหมด ตัดช่องว่างและตัวเล็ก
-                        m[cleanKey] = rawM[key];
-                    }
+                    const getVal = (keysArray) => {
+                        for (let k of keysArray) {
+                            for (let rawKey in rawM) {
+                                const cleanRaw = rawKey.trim().replace(/\s+/g, '').toLowerCase();
+                                const cleanTarget = k.trim().replace(/\s+/g, '').toLowerCase();
+                                if (cleanRaw === cleanTarget) {
+                                    return rawM[rawKey];
+                                }
+                            }
+                        }
+                        return null;
+                    };
+
                     return {
-                        empId: String(m.empid || m["รหัสพนักงาน"] || m["รหัส"] || m.id || "").trim(),
-                        fullName: String(m.fullname || m["ชื่อ-นามสกุล"] || m["ชื่อพนักงาน"] || m["ชื่อ"] || "").trim(),
-                        dept: String(m.dept || m["แผนก"] || m["ฝ่าย"] || "").trim(),
-                        height: (m.height !== undefined && m.height !== "") ? parseFloat(m.height) : (m["ส่วนสูง"] ? parseFloat(m["ส่วนสูง"]) : null),
-                        initWeight: (m.initweight !== undefined && m.initweight !== "") ? parseFloat(m.initweight) : (m["น้ำหนักตั้งต้นสมัคร(กก.)"] || m["น้ำหนัก"] || m["น้ำหนักเริ่มต้น"] ? parseFloat(m["น้ำหนักตั้งต้นสมัคร(กก.)"] || m["น้ำหนัก"] || m["น้ำหนักเริ่มต้น"]) : null),
-                        initWaist: (m.initwaist !== undefined && m.initwaist !== "") ? parseFloat(m.initwaist) : (m["รอบเอวตั้งต้น(นิ้ว)"] || m["รอบเอว"] ? parseFloat(m["รอบเอวตั้งต้น(นิ้ว)"] || m["รอบเอว"]) : null),
-                        initHip: (m.inithip !== undefined && m.inithip !== "") ? parseFloat(m.inithip) : (m["รอบสะโพกตั้งต้น(นิ้ว)"] || m["รอบสะโพก"] ? parseFloat(m["รอบสะโพกตั้งต้น(นิ้ว)"] || m["รอบสะโพก"]) : null),
-                        initBmi: (m.initbmi !== undefined && m.initbmi !== "") ? parseFloat(m.initbmi) : (m["bmiตั้งต้นสมัคร"] || m["bmi"] ? parseFloat(m["bmiตั้งต้นสมัคร"] || m["bmi"]) : null),
-                        password: m.password || m["รหัสผ่าน"] || null,
-                        targetWeightLossGoal: (m.targetweightlossgoal !== undefined && m.targetweightlossgoal !== "") ? parseFloat(m.targetweightlossgoal) : (m["เป้าหมายลดน้ำหนัก(กก.)"] || m["เป้าหมายลดน้ำหนัก"] ? parseFloat(m["เป้าหมายลดน้ำหนัก(กก.)"] || m["เป้าหมายลดน้ำหนัก"]) : null)
+                        empId: String(getVal(["empId", "รหัสพนักงาน", "รหัส", "id"]) || "").trim(),
+                        fullName: String(getVal(["fullName", "ชื่อ-นามสกุล", "ชื่อพนักงาน", "ชื่อ", "fullname"]) || "").trim(),
+                        dept: String(getVal(["dept", "แผนก", "ฝ่าย"]) || "").trim(),
+                        height: (getVal(["height", "ส่วนสูง"]) !== null && getVal(["height", "ส่วนสูง"]) !== "") ? parseFloat(getVal(["height", "ส่วนสูง"])) : null,
+                        initWeight: (getVal(["initWeight", "น้ำหนักตั้งต้นสมัคร(กก.)", "น้ำหนัก", "น้ำหนักเริ่มต้น", "initweight"]) !== null && getVal(["initWeight", "น้ำหนักตั้งต้นสมัคร(กก.)", "น้ำหนัก", "น้ำหนักเริ่มต้น", "initweight"]) !== "") ? parseFloat(getVal(["initWeight", "น้ำหนักตั้งต้นสมัคร(กก.)", "น้ำหนัก", "น้ำหนักเริ่มต้น", "initweight"])) : null,
+                        initWaist: (getVal(["initWaist", "รอบเอวตั้งต้น(นิ้ว)", "รอบเอว", "initwaist"]) !== null && getVal(["initWaist", "รอบเอวตั้งต้น(นิ้ว)", "รอบเอว", "initwaist"]) !== "") ? parseFloat(getVal(["initWaist", "รอบเอวตั้งต้น(นิ้ว)", "รอบเอว", "initwaist"])) : null,
+                        initHip: (getVal(["initHip", "รอบสะโพกตั้งต้น(นิ้ว)", "รอบสะโพก", "inithip"]) !== null && getVal(["initHip", "รอบสะโพกตั้งต้น(นิ้ว)"] || m["รอบสะโพก"], "inithip") !== "") ? parseFloat(getVal(["initHip", "รอบสะโพกตั้งต้น(นิ้ว)", "รอบสะโพก", "inithip"])) : null,
+                        initBmi: (getVal(["initBmi", "BMIตั้งต้นสมัคร", "BMI", "initbmi"]) !== null && getVal(["initBmi", "BMIตั้งต้นสมัคร", "BMI", "initbmi"]) !== "") ? parseFloat(getVal(["initBmi", "BMIตั้งต้นสมัคร", "BMI", "initbmi"])) : null,
+                        password: getVal(["password", "รหัสผ่าน"]) || null,
+                        targetWeightLossGoal: (getVal(["targetWeightLossGoal", "เป้าหมายลดน้ำหนัก(กก.)", "เป้าหมายลดน้ำหนัก", "targetweightlossgoal"]) !== null && getVal(["targetWeightLossGoal", "เป้าหมายลดน้ำหนัก(กก.)", "เป้าหมายลดน้ำหนัก", "targetweightlossgoal"]) !== "") ? parseFloat(getVal(["targetWeightLossGoal", "เป้าหมายลดน้ำหนัก(กก.)", "เป้าหมายลดน้ำหนัก", "targetweightlossgoal"])) : null
                     };
                 }).filter(m => m.empId !== "" && m.empId !== "undefined");
 
-                state.members = normalizedMembers; // Overwrite data from Google Sheets!
+                state.members = normalizedMembers;
                 hasValidData = true;
             }
 
             if (data.logs && Array.isArray(data.logs)) {
                 const normalizedLogs = data.logs.map(rawL => {
-                    const l = {};
-                    for (let key in rawL) {
-                        const cleanKey = key.replace(/\s+/g, '').toLowerCase();
-                        l[cleanKey] = rawL[key];
-                    }
+                    const getVal = (keysArray) => {
+                        for (let k of keysArray) {
+                            for (let rawKey in rawL) {
+                                const cleanRaw = rawKey.trim().replace(/\s+/g, '').toLowerCase();
+                                const cleanTarget = k.trim().replace(/\s+/g, '').toLowerCase();
+                                if (cleanRaw === cleanTarget) {
+                                    return rawL[rawKey];
+                                }
+                            }
+                        }
+                        return null;
+                    };
+
                     return {
-                        empId: String(l.empid || l["รหัสพนักงาน"] || "").trim(),
-                        week: parseInt(l.week || l["สัปดาห์ที่"] || l["สัปดาห์"] || 0),
-                        date: l.date || l["วันที่รายงาน"] || l["วันที่"] || "",
-                        weight: parseFloat(l.weight || l["น้ำหนัก(กก.)"] || l["น้ำหนัก"] || 0),
-                        waist: parseFloat(l.waist || l["รอบเอว(นิ้ว)"] || l["รอบเอว"] || 0),
-                        hip: parseFloat(l.hip || l["รอบสะโพก(นิ้ว)"] || l["รอบสะโพก"] || 0),
-                        bmi: parseFloat(l.bmi || l["bmiคำนวณได้"] || l["bmi"] || 0),
-                        q1_5groups: l.q1_5groups || l.q1 || "no",
-                        q2_leanMeat: l.q2_leanmeat || l.q2 || "no",
-                        q3_dietPills: l.q3_dietpills || l.q3 || "no",
-                        q4_dinnerGap: l.q4_dinnergap || l.q4 || "no",
-                        q5_enoughProtein: l.q5_enoughprotein || l.q5 || "no"
+                        empId: String(getVal(["empId", "รหัสพนักงาน", "id"]) || "").trim(),
+                        week: parseInt(getVal(["week", "สัปดาห์ที่", "สัปดาห์"]) || 0),
+                        date: getVal(["date", "วันที่รายงาน", "วันที่"]) || "",
+                        weight: parseFloat(getVal(["weight", "น้ำหนัก(กก.)", "น้ำหนัก"]) || 0),
+                        waist: parseFloat(getVal(["waist", "รอบเอว(นิ้ว)", "รอบเอว"]) || 0),
+                        hip: parseFloat(getVal(["hip", "รอบสะโพก(นิ้ว)", "รอบสะโพก"]) || 0),
+                        bmi: parseFloat(getVal(["bmi", "BMIคำนวณได้", "BMI"]) || 0),
+                        q1_5groups: getVal(["q1_5groups", "กินครบ5หมู่", "q1"]) || "no",
+                        q2_leanMeat: getVal(["q2_leanMeat", "กินเนื้อสัตว์ไม่ติดมัน", "q2"]) || "no",
+                        q3_dietPills: getVal(["q3_dietPills", "ทานยาลดความอ้วน", "q3"]) || "no",
+                        q4_dinnerGap: getVal(["q4_dinnerGap", "กินห่างเวลานอน", "q4"]) || "no",
+                        q5_enoughProtein: getVal(["q5_enoughProtein", "ได้โปรตีนเพียงพอ", "q5"]) || "no"
                     };
                 }).filter(l => l.empId !== "" && l.empId !== "undefined" && l.week > 0);
                 
-                state.logs = normalizedLogs; // Overwrite data
+                state.logs = normalizedLogs;
                 hasValidData = true;
             }
 
@@ -1499,7 +1514,6 @@
             if (loader) loader.classList.remove('hidden');
             if (statusText) statusText.innerText = "กำลังซิงก์ข้อมูลอัปเดตแบบเรียลไทม์จาก Google Sheets คลาวด์...";
 
-            // ใช้ระบบ Timestamp แนบไปใน URL เพื่อล้างแคชเก่าของเบราว์เซอร์
             const urlWithTimestamp = state.config.apiUrl + (state.config.apiUrl.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
 
             fetch(urlWithTimestamp, { cache: 'no-store' })
@@ -1525,7 +1539,6 @@
 
             showToast("กำลังติดต่อ API...", "กำลังเรียกข้อมูลและล้างแคชเพื่อดึงฐานจาก Google Sheets จริง", "warning");
 
-            // ล้าง Cache ของการดึงข้อมูล 100%
             const urlWithTimestamp = state.config.apiUrl + (state.config.apiUrl.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
 
             fetch(urlWithTimestamp, { cache: 'no-store' })

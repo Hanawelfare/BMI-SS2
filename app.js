@@ -5,7 +5,7 @@
 // Application State
 const STATE = {
   apiSettings: {
-    apiUrl: "", // Put Web App URL here. If blank, systems operates in Mock Mode.
+    apiUrl: "https://script.google.com/macros/s/AKfycbxOPvQGwoLlkIBwI_HQwooFS2PHMZWXTBmxbyKeznm0_szDhsbkZsqwsx5Ij3t_sNNH/exec", // Put Web App URL here. If blank, systems operates in Mock Mode.
     isMockMode: true
   },
   project: {

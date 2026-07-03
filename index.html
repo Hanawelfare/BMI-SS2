@@ -115,7 +115,7 @@
       <!-- PAGE 1: REGISTRATION PAGE -->
       <!-- ---------------------------------------------------- -->
       <section id="register-page" class="page active">
-        <h1>สมัครเข้าโครงการ Challenge 90 วัน</h1>
+        <h1>สมัครเข้าโครงการ Challenge 90 Days ลด BMI SS2</h1>
         <p class="subtitle">กรอกรหัสพนักงานของท่านเพื่อสืบค้นข้อมูล และระบุรายละเอียดเป้าหมายเพื่อลงทะเบียนเข้าร่วมโครงการ</p>
         
         <!-- Rules & Conditions Card -->
@@ -144,7 +144,7 @@
             <div class="form-group">
               <label for="reg-empid">รหัสพนักงาน *</label>
               <div class="flex gap-2">
-                <input type="text" id="reg-empid" placeholder="กรอกรหัสพนักงาน เช่น 0026 หรือ 0001" required>
+                <input type="text" id="reg-empid" placeholder="กรอกรหัสพนักงาน เช่น 012345" required>
                 <button type="button" id="reg-search-btn" class="btn btn-primary">ค้นหารายชื่อ</button>
               </div>
             </div>
@@ -164,7 +164,7 @@
               <div class="grid-2">
                 <div class="form-group">
                   <label for="reg-dept">แผนก / ฝ่าย *</label>
-                  <input type="text" id="reg-dept" placeholder="เช่น ฝ่ายผลิต, การเงิน, ไอที" required>
+                  <input type="text" id="reg-dept" placeholder="เช่น OP1,OP2S,IT" required>
                 </div>
                 <div class="form-group">
                   <label for="reg-phone">เบอร์โทรภายใน (1-4 หลัก) *</label>
@@ -274,7 +274,7 @@
           <form id="report-login-form">
             <div class="form-group">
               <label for="report-login-empid">รหัสพนักงาน</label>
-              <input type="text" id="report-login-empid" placeholder="เช่น 0001" required>
+              <input type="text" id="report-login-empid" placeholder="เช่น 012345" required>
             </div>
             <button type="submit" class="btn btn-primary btn-full">เข้าสู่หน้าส่งผล</button>
           </form>
@@ -288,8 +288,8 @@
               <span class="badge badge-success" style="font-size:0.8rem; margin-bottom: 0.25rem;">พนักงานผู้เข้าร่วม</span>
               <h2 id="report-user-name" class="m-b-0">สมชาย รักดี</h2>
               <p class="m-b-0" style="color: var(--gray-text); font-size: 0.9rem;">
-                แผนก: <span id="report-user-dept" style="font-weight:600; color:var(--dark-slate);">ฝ่ายผลิต</span> | 
-                รหัสพนักงาน: <span id="report-user-id" style="font-weight:600; color:var(--dark-slate);">0001</span>
+                แผนก: <span id="report-user-dept" style="font-weight:600; color:var(--dark-slate);">OP1</span> | 
+                รหัสพนักงาน: <span id="report-user-id" style="font-weight:600; color:var(--dark-slate);">012345</span>
               </p>
               <div id="report-user-goals" style="margin-top: 10px; display: flex; flex-direction: column; gap: 4px;"></div>
             </div>
@@ -448,7 +448,7 @@
           <form id="dashboard-login-form">
             <div class="form-group">
               <label for="dashboard-login-empid">รหัสพนักงาน</label>
-              <input type="text" id="dashboard-login-empid" placeholder="เช่น 0001" required>
+              <input type="text" id="dashboard-login-empid" placeholder="เช่น 012345" required>
             </div>
             <div class="form-group">
               <label for="dashboard-login-password">รหัสผ่าน</label>
@@ -466,8 +466,8 @@
               <span class="badge badge-success" style="font-size:0.75rem; margin-bottom: 0.25rem;">ข้อมูลบัญชีผู้ใช้งาน</span>
               <h2 id="db-user-name" class="m-b-0">สมชาย รักดี</h2>
               <p class="m-b-0" style="color: var(--gray-text); font-size: 0.9rem;">
-                รหัสพนักงาน: <span id="db-user-id" style="font-weight:600; color:var(--dark-slate);">0001</span> | 
-                แผนก: <span id="db-user-dept" style="font-weight:600; color:var(--dark-slate);">ฝ่ายผลิต</span> | 
+                รหัสพนักงาน: <span id="db-user-id" style="font-weight:600; color:var(--dark-slate);">012345</span> | 
+                แผนก: <span id="db-user-dept" style="font-weight:600; color:var(--dark-slate);">OP1</span> | 
                 ส่วนสูง: <span id="db-user-height" style="font-weight:600; color:var(--dark-slate);">-</span> ซม.
               </p>
               <p id="db-user-appointments" class="m-b-0" style="color: var(--gray-text); font-size: 0.85rem; margin-top: 6px; display: none;">

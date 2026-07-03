@@ -1973,7 +1973,7 @@ function renderEmployeeDashboard() {
     
     encourageBox.className = "alert alert-warning";
     encourageBox.style.display = "flex";
-    encourageBox.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> <span>อยู่ระหว่างรอแอดมินนำเข้าข้อมูลการวัดเริ่มต้น (สัปดาห์ที่ 1) ของท่านลงใน Google Sheet ค่ะ หลังจากแอดมินกรอกเรียบร้อยแล้ว กราฟและข้อมูลจะเริ่มแสดงผลที่นี่</span>`;
+    encourageBox.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> <span>อยู่ระหว่างรอแอดมินนำเข้าข้อมูลการวัดเริ่มต้น (สัปดาห์ที่ 1) ของท่านลงใน Google Sheet ค่ะ หลังจากแอดมินกรอกเรียบร้อยแล้ว กราฟและข้อมูลจะเริ่มแสดงผลที่นี่ และให้ท่านส่งผลด้วยตนเองของสัปดาห์ที่ 2 ได้ตั้งแต่วันที่ 20 ก.ค.2569 เป็นต้นไป</span>`;
     
     // Clear chart
     if (STATE.charts.employeeMain) {

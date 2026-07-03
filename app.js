@@ -1286,7 +1286,7 @@ function setupWeeklyReportForm() {
   
   if (metrics.currentWeek === 1) {
     allowSubmit = false;
-    validationMessage = `ขณะนี้อยู่ในสัปดาห์ที่ 1 ซึ่งแอดมินเป็นคนจัดการกรอกข้อมูลแรกรับใน Google Sheets พนักงานเริ่มลงข้อมูลสัปดาห์ที่ 2 เป็นต้นไปค่ะ`;
+    validationMessage = `ขณะนี้อยู่ในสัปดาห์ที่ 1 ซึ่งแอดมินเป็นคนจัดการกรอกข้อมูลแรกรับใน Google Sheets พนักงานเริ่มลงข้อมูลสัปดาห์ที่ 2 เริ่มส่งได้ตั้งแต่วันที่ 20 ก.ค.2569 เป็นต้นไปค่ะ`;
   } else if (metrics.currentWeek >= metrics.maxWeeks) {
     allowSubmit = false;
     validationMessage = `ขณะนี้ถึงสัปดาห์สุดท้าย (สัปดาห์ที่ ${metrics.maxWeeks}) แล้ว ผลการวัดสุดท้ายจะคัดกรองโดยแอดมินเท่านั้นเพื่อความโปร่งใส พนักงานไม่ต้องส่งข้อมูลรอบสุดท้ายเองค่ะ`;

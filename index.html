@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบติดตามค่า BMI พนักงาน 90 วัน | BMI 90-Day Challenge</title>
+  <!-- Google Fonts for Premium Look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet link -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Chart.js CDN for interactive graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Global Loader Spinner -->
+  <div id="global-loader" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.7); backdrop-filter: blur(2px); z-index: 2000; justify-content: center; align-center; display: flex; align-items: center;">
+    <div style="text-align: center;">
+      <svg width="48" height="48" viewBox="0 0 24 24" style="animation: spin 1s linear infinite; stroke: #10b981; fill: none; stroke-width: 2; stroke-linecap: round;"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+      <div style="margin-top: 1rem; font-weight: 600; color: #047857;">กำลังประมวลผลข้อมูล...</div>
+    </div>
+  </div>
+  <style>
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+
+  <!-- Main Container -->
+  <div class="app-container">
+
+    <!-- Desktop Navigation Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <!-- Heart / Pulse Health SVG Icon -->
+        <svg viewBox="0 0 24 24">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+        </svg>
+        <div>
+          <div class="brand-name">BMI Challenge</div>
+          <div class="brand-subtitle">ติดตามสุขภาพ 90 วัน</div>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a class="nav-item" data-page="register-page">
+          <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
+          สมัครเข้าโครงการ
+        </a>
+        <a class="nav-item active" data-page="report-page">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          หน้าส่งผลรายสัปดาห์
+        </a>
+        <a class="nav-item" data-page="leaderboard-page">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+          ทำเนียบอันดับ %BMI
+        </a>
+        <a class="nav-item" data-page="dashboard-page">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="18" y1="9" x2="9" y2="9"/><line x1="18" y1="15" x2="9" y2="15"/></svg>
+          แดชบอร์ดพนักงาน
+        </a>
+        <a class="nav-item" data-page="admin-page">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          แผงควบคุมแอดมิน
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        © 2026 BMI 90-Day Challenge
+      </div>
+    </aside>
+
+    <!-- Mobile Bottom Navigation Bar (Visible on mobile screens) -->
+    <nav class="mobile-nav">
+      <a class="mobile-nav-item" data-page="register-page">
+        <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        สมัครเข้าโครงการ
+      </a>
+      <a class="mobile-nav-item active" data-page="report-page">
+        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        ส่งผล
+      </a>
+      <a class="mobile-nav-item" data-page="leaderboard-page">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        อันดับ %BMI
+      </a>
+      <a class="mobile-nav-item" data-page="dashboard-page">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        แดชบอร์ด
+      </a>
+      <a class="mobile-nav-item" data-page="admin-page">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        แอดมิน
+      </a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Bar with Mock Badge Indicator -->
+      <div class="flex justify-between align-center" style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+        <div>
+          <span id="mock-badge" class="badge badge-danger" style="display: none; padding: 0.35rem 0.75rem; font-size: 0.8rem; border-radius: 9999px;">
+            โหมดจำลองข้อมูล (Mock Data Active)
+          </span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--gray-text); font-weight: 500;">
+          อัปเดตล่าสุด: <span id="current-time-display">25 มิ.ย. 2026</span>
+        </div>
+      </div>
+
+      <!-- ---------------------------------------------------- -->
+      <!-- PAGE 1: REGISTRATION PAGE -->
+      <!-- ---------------------------------------------------- -->
+      <section id="register-page" class="page">
+        <h1>สมัครเข้าโครงการ Challenge 90 วัน</h1>
+        <p class="subtitle">กรอกรหัสพนักงานของท่านเพื่อสืบค้นข้อมูล และระบุรายละเอียดเป้าหมายเพื่อลงทะเบียนเข้าร่วมโครงการ</p>
+        
+        <!-- Rules & Conditions Card -->
+        <div class="alert alert-info" style="margin-bottom: 1.5rem; padding: 1.25rem; border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 0.75rem;">
+          <h4 style="margin: 0; color: var(--primary-dark); font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+            📢 กติกาและสิทธิ์การชิงรางวัลในโครงการ 90 วัน
+          </h4>
+          <ol style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.5; color: var(--dark-slate); font-weight: 500; display: flex; flex-direction: column; gap: 4px;">
+            <li><strong>เข้าร่วมได้ทุกคน</strong>: พนักงานทุกคนทุกช่วงสัดส่วนและน้ำหนัก สามารถสมัครเพื่อรายงานและติดตามสุขภาพรายบุคคลได้ค่ะ</li>
+            <li><strong>สิทธิ์ลุ้นรางวัล</strong>: รางวัลโครงการจะมอบให้เฉพาะกลุ่มพนักงานที่มีดัชนีมวลกายแรกรับ (Starting BMI) <strong>ตั้งแต่ 23.0 ขึ้นไป</strong> เท่านั้น</li>
+            <li><strong>เกณฑ์การตัดสิน</strong>: พนักงานในกลุ่มชิงรางวัลที่มี <strong>% การลดลงของ BMI มากที่สุด 3 อันดับแรก</strong> ตลอดโครงการ 90 วัน จะได้รับรางวัลใหญ่</li>
+          </ol>
+        </div>
+        
+        <div class="card">
+          <div id="reg-alert-box" class="alert alert-info" style="display: none;"></div>
+          
+          <!-- Closed registration section notice -->
+          <div id="reg-closed-section" class="alert alert-warning" style="display: none; padding: 1.5rem; text-align: center; font-weight: 700; color: #b45309; font-size: 1.1rem; flex-direction: column; align-items: center; gap: 0.75rem; border-radius: var(--radius-md);">
+            <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" fill="none" stroke-width="2" style="margin-bottom: 0.5rem;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>ขออภัยค่ะ ขณะนี้ปิดระบบรับสมัครเข้าร่วมโครงการ Challenge 90 วัน เรียบร้อยแล้วค่ะ</span>
+          </div>
+          
+          <form id="reg-form">
+            <!-- Employee ID Lookup Section -->
+            <div class="form-group">
+              <label for="reg-empid">รหัสพนักงาน *</label>
+              <div class="flex gap-2">
+                <input type="text" id="reg-empid" placeholder="กรอกรหัสพนักงาน เช่น 0026 หรือ 0001" required>
+                <button type="button" id="reg-search-btn" class="btn btn-primary">ค้นหารายชื่อ</button>
+              </div>
+            </div>
+
+            <div id="reg-details-fields" style="display: none;">
+              <div class="grid-2">
+                <div class="form-group">
+                  <label for="reg-name">ชื่อจริง *</label>
+                  <input type="text" id="reg-name" placeholder="ชื่อภาษาไทย" required>
+                </div>
+                <div class="form-group">
+                  <label for="reg-surname">นามสกุล *</label>
+                  <input type="text" id="reg-surname" placeholder="นามสกุลภาษาไทย" required>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label for="reg-dept">แผนก / ฝ่าย *</label>
+                  <input type="text" id="reg-dept" placeholder="เช่น ฝ่ายผลิต, การเงิน, ไอที" required>
+                </div>
+                <div class="form-group">
+                  <label for="reg-phone">เบอร์โทรภายใน (1-4 หลัก) *</label>
+                  <input type="text" id="reg-phone" placeholder="เช่น 1234" pattern="\d{1,4}" title="กรุณากรอกตัวเลข 1 ถึง 4 หลัก" required>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label for="reg-shift">กะทำงาน *</label>
+                  <select id="reg-shift" required>
+                    <option value="" disabled selected>-- เลือกกะทำงาน --</option>
+                    <option value="ทีม A">ทีม A</option>
+                    <option value="ทีม B">ทีม B</option>
+                    <option value="เช้าตลอด">เช้าตลอด</option>
+                    <option value="คร่อมกะ">คร่อมกะ</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="reg-height">ส่วนสูง *</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="reg-height" placeholder="170" min="100" max="250" step="0.1" required>
+                    <span class="input-unit">ซม.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid-2" style="margin-top: 1rem;">
+                <div class="form-group">
+                  <label for="reg-location">เลือกสถานที่ตรวจ *</label>
+                  <select id="reg-location" required>
+                    <option value="" disabled selected>-- เลือกสถานที่ตรวจ --</option>
+                    <option value="LPN1">LPN1</option>
+                    <option value="LPN2">LPN2</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="reg-measure-date">เลือกวันสะดวกเข้ารับการตรวจวัดน้ำหนัก/สัดส่วนครั้งแรก *</label>
+                  <select id="reg-measure-date" required disabled>
+                    <option value="" disabled selected>-- กรุณาเลือกสถานที่ตรวจก่อน --</option>
+                  </select>
+                </div>
+              </div>
+
+              <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label for="reg-weight">น้ำหนักตัววัดครั้งแรก *</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="reg-weight" placeholder="เช่น 75.5" min="30" max="250" step="0.1" required>
+                    <span class="input-unit">กก.</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="reg-target-loss">เป้าหมายน้ำหนักที่ท่านต้องการลดลงใน 90 วัน *</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="reg-target-loss" placeholder="เช่น 5" min="1" max="50" step="0.1" required>
+                    <span class="input-unit">กก.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Target weight loss safety evaluation box (Real-time update) -->
+              <div id="target-feedback" class="alert alert-info" style="display: none;"></div>
+
+              <!-- Questionnaire section for self-evaluation -->
+              <div id="dynamic-initial-survey-container" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem; color: var(--primary-dark); font-weight: 800;">แบบประเมินตนเองและเป้าหมายก่อนเข้าร่วมโครงการ</h3>
+                <div id="dynamic-initial-survey">
+                  <!-- Initial questions loaded dynamically from app.js -->
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-password">ตั้งรหัสผ่านสำหรับเข้าตรวจสอบแดชบอร์ดส่วนตัว *</label>
+                <input type="password" id="reg-password" placeholder="พิมพ์รหัสผ่านของท่าน" autocomplete="new-password" required>
+              </div>
+
+              <!-- PDPA Consent Checkbox -->
+              <div class="form-group" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                <label class="flex items-start gap-2" style="font-weight: 500; font-size: 0.85rem; color: var(--dark-slate); cursor: pointer; user-select: none;">
+                  <input type="checkbox" id="reg-pdpa" style="margin-top: 3px;" required>
+                  <span>ฉันยินยอมและยอมรับข้อกำหนดในการจัดเก็บข้อมูลสุขภาพและประวัติส่วนบุคคล โดยระบบจะรักษาข้อมูลทั้งหมดเป็นความลับตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) เพื่อใช้ประโยชน์สำหรับการประเมินสุขภาพและลุ้นสิทธิ์ชิงรางวัลในโครงการลดน้ำหนัก 90 วันนี้เท่านั้น</span>
+                </label>
+              </div>
+
+              <button type="submit" id="reg-submit-btn" class="btn btn-primary btn-full m-t-2">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
+                ยืนยันการสมัครเข้าร่วมโครงการ
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------- -->
+      <!-- PAGE 2: WEEKLY SUBMISSION PAGE -->
+      <!-- ---------------------------------------------------- -->
+      <section id="report-page" class="page active">
+        <h1>หน้าส่งผลความก้าวหน้ารายสัปดาห์ (สัปดาห์ที่ 2-12)</h1>
+        <p class="subtitle">ระบบเปิดให้ส่งรายงานความก้าวหน้าได้ทุกวัน (จันทร์ - อาทิตย์) สัปดาห์ละ 1 ครั้งเท่านั้น</p>
+
+        <!-- Login Block for Submission Page (Password removed) -->
+        <div id="report-login-section" class="card" style="max-width: 500px; margin: 0 auto;">
+          <h3 class="text-center" style="margin-bottom: 1.5rem;">ระบุรหัสพนักงานเพื่อลงรายงานรายสัปดาห์</h3>
+          <form id="report-login-form">
+            <div class="form-group">
+              <label for="report-login-empid">รหัสพนักงาน</label>
+              <input type="text" id="report-login-empid" placeholder="เช่น 0001" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">เข้าสู่หน้าส่งผล</button>
+          </form>
+        </div>
+
+        <!-- Weekly Submission Form Block (Hidden by default) -->
+        <div id="report-form-section" style="display: none;">
+          <!-- User brief profile header card -->
+          <div class="card flex justify-between align-center" style="background-color: var(--primary-light); border-color: var(--primary); padding: 1.25rem 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <span class="badge badge-success" style="font-size:0.8rem; margin-bottom: 0.25rem;">พนักงานผู้เข้าร่วม</span>
+              <h2 id="report-user-name" class="m-b-0">สมชาย รักดี</h2>
+              <p class="m-b-0" style="color: var(--gray-text); font-size: 0.9rem;">
+                แผนก: <span id="report-user-dept" style="font-weight:600; color:var(--dark-slate);">ฝ่ายผลิต</span> | 
+                รหัสพนักงาน: <span id="report-user-id" style="font-weight:600; color:var(--dark-slate);">0001</span>
+              </p>
+              <div id="report-user-goals" style="margin-top: 10px; display: flex; flex-direction: column; gap: 4px;"></div>
+            </div>
+            <button id="report-logout-btn" class="btn btn-secondary btn-sm">ออกจากระบบ</button>
+          </div>
+
+          <!-- Timeline constraint message box -->
+          <div id="report-timeline-info" class="alert alert-info"></div>
+
+          <!-- Final Measurement Appointment Selection Card -->
+          <div id="report-final-booking-container" class="card" style="display: none; margin-bottom: 1.5rem; border: 1px solid var(--warning); background-color: #fffdf5;">
+            <h3 style="color: #b45309; margin-top: 0; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              จองคิวตรวจวัดน้ำหนัก/สัดส่วนวันสุดท้าย
+            </h3>
+            <p class="subtitle" style="font-size: 0.82rem; margin-bottom: 1rem; color: #92400e;">กรุณาเลือกวันนัดหมายที่สะดวกเข้ามารับการวัดน้ำหนัก รอบเอว และรอบสะโพกสำหรับสัปดาห์สุดท้ายของโครงการค่ะ</p>
+            <form id="final-booking-form">
+              <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="font-weight: 700; color: #78350f;">ระบุวันนัดหมายตรวจวัดวันสุดท้าย *</label>
+                <div id="final-booking-options-group" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                  <!-- Dynamically loaded inputs -->
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="background-color: #d97706; border-color: #d97706; color: #fff;">บันทึกวันจองคิวรอบสุดท้าย</button>
+            </form>
+          </div>
+
+          <div id="report-fields-container" class="card">
+            <form id="weekly-report-form">
+              <h3>1. กรอกผลลัพธ์สัปดาห์นี้</h3>
+              
+              <div class="grid-3">
+                <div class="form-group">
+                  <label for="rep-weight">น้ำหนักตัว *</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="rep-weight" placeholder="เช่น 74.2" min="30" max="250" step="0.1" required>
+                    <span class="input-unit">กก.</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="rep-waist">รอบเอว *</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="rep-waist" placeholder="เช่น 36.5" min="10" max="100" step="0.1" required>
+                    <span class="input-unit">นิ้ว</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="rep-hip">รอบสะโพก *</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="rep-hip" placeholder="เช่น 41" min="15" max="100" step="0.1" required>
+                    <span class="input-unit">นิ้ว</span>
+                  </div>
+                </div>
+              </div>
+
+              <hr style="margin: 1.5rem 0; border:0; border-top: 1px solid var(--border-color);">
+
+              <!-- Protein Calculator banner placement inside form page -->
+              <div class="protein-calculator-box">
+                <div>
+                  <h4 style="color: var(--primary-dark); font-weight:700; margin-bottom: 0.25rem;">คำนวณปริมาณโปรตีนที่เหมาะสมต่อวัน</h4>
+                  <p class="m-b-0" style="font-size: 0.8rem; color: var(--gray-text);">ท่านสามารถตรวจสอบว่าจากน้ำหนักตัวปัจจุบัน ควรทานโปรตีนกี่กรัมต่อวันได้ที่นี่</p>
+                </div>
+                <a href="https://hdmall.co.th/health-tools/protein-calculator.html" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm protein-link">เครื่องคำนวณโปรตีน</a>
+              </div>
+
+              <h3>2. แบบประเมินพฤติกรรมสุขภาพประจำสัปดาห์</h3>
+              
+              <!-- Container for dynamic questions -->
+              <div id="dynamic-questions-container">
+                <!-- Dynamically loaded questions from App JS state -->
+              </div>
+
+              <button type="submit" id="report-submit-btn" class="btn btn-primary btn-full m-t-2">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                บันทึกและส่งรายงานความก้าวหน้า
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------- -->
+      <!-- PAGE 3: LEADERBOARD PAGE -->
+      <!-- ---------------------------------------------------- -->
+      <section id="leaderboard-page" class="page">
+        <h1>ทำเนียบความก้าวหน้าพนักงาน (%BMI ที่ลดลงสูงสุด)</h1>
+        <p class="subtitle">จัดอันดับจากอัตราการลดลงของ %BMI เปรียบเทียบระว่างผลสัปดาห์เริ่มต้น (Initial) และครั้งล่าสุดของท่าน</p>
+
+        <!-- Announcement banner when leaderboard is hidden -->
+        <div id="leaderboard-announcement-box" class="card alert alert-warning" style="display: none; padding: 2.5rem 2rem; text-align: center; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; border-left: 5px solid var(--warning);">
+          <div style="background-color: #fef3c7; padding: 12px; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; margin-bottom: 0.5rem;">
+            <svg viewBox="0 0 24 24" width="36" height="36" stroke="#b45309" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <h2 style="margin: 0; color: #b45309; font-weight: 800; font-size: 1.5rem;">📢 อยู่ระหว่างการตรวจสอบและยืนยันข้อมูลรอบสุดท้าย</h2>
+          <p style="margin: 0; max-width: 650px; color: #78350f; font-size: 0.95rem; line-height: 1.6; font-weight: 500;">
+            ขณะนี้ผู้ดูแลระบบได้ปิดการแสดงผลทำเนียบอันดับชั่วคราว เพื่อทำการตรวจสอบความถูกต้องและคัดกรองข้อมูลของพนักงานทั้งหมดในทุกกะทำงาน 
+            การจัดอันดับอย่างเป็นทางการจะเปิดให้เข้าชมอีกครั้งหลังจากกระบวนการตรวจสอบข้อมูลเสร็จสิ้นค่ะ ขออภัยในความไม่สะดวกและขอขอบคุณพนักงานทุกท่านที่ร่วมโครงการ!
+          </p>
+        </div>
+
+        <div id="leaderboard-main-card" class="card">
+          <!-- Filter Controls -->
+          <div class="card-header">
+            <div class="flex gap-2" style="width: 100%; max-width: 600px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 200px;">
+                <input type="text" id="leader-search" placeholder="ค้นหา รหัสพนักงาน หรือ ชื่อพนักงาน...">
+              </div>
+              <div style="width: 180px;">
+                <select id="leader-dept-filter">
+                  <option value="all">ทุกแผนก (ทั้งหมด)</option>
+                </select>
+              </div>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--gray-text); font-weight: 500;">
+              * ค่า %BMI ที่ลดลงคำนวณสัมพันธ์กับน้ำหนักตัวพนักงานโดยตรง
+            </div>
+          </div>
+
+          <!-- Leaderboard Table -->
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>อันดับ</th>
+                  <th>รหัสพนักงาน</th>
+                  <th>ชื่อ-นามสกุล</th>
+                  <th>แผนก</th>
+                  <th>น้ำหนักเริ่มต้น ➔ ล่าสุด</th>
+                  <th>น้ำหนักผลต่าง</th>
+                  <th>BMI เริ่มต้น ➔ ล่าสุด</th>
+                  <th>ผลต่าง BMI</th>
+                  <th>%BMI ลดลงสะสม</th>
+                  <th>ข้อมูลล่าสุดจาก</th>
+                  <th>กราฟผลลัพธ์</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------- -->
+      <!-- PAGE 4: EMPLOYEE DASHBOARD PAGE -->
+      <!-- ---------------------------------------------------- -->
+      <section id="dashboard-page" class="page">
+        <h1>แดชบอร์ดรายงานความเปลี่ยนแปลงของท่าน</h1>
+        <p class="subtitle">ระบบวิเคราะห์ข้อมูลส่วนบุคคล กราฟประเมินผลความก้าวหน้า และเครื่องมือเปรียบเทียบสัปดาห์</p>
+
+        <!-- Login Block for Personal Dashboard -->
+        <div id="dashboard-login-section" class="card" style="max-width: 500px; margin: 0 auto;">
+          <h3 class="text-center" style="margin-bottom: 1.5rem;">ล็อกอินเพื่อเข้าสู่ระบบแดชบอร์ดส่วนบุคคล</h3>
+          <form id="dashboard-login-form">
+            <div class="form-group">
+              <label for="dashboard-login-empid">รหัสพนักงาน</label>
+              <input type="text" id="dashboard-login-empid" placeholder="เช่น 0001" required>
+            </div>
+            <div class="form-group">
+              <label for="dashboard-login-password">รหัสผ่าน</label>
+              <input type="password" id="dashboard-login-password" placeholder="ระบุรหัสผ่านของท่าน" autocomplete="new-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">เข้าสู่หน้าแดชบอร์ด</button>
+          </form>
+        </div>
+
+        <!-- Dashboard UI View (Hidden by default until authenticated) -->
+        <div id="dashboard-main-section" style="display: none;">
+          <!-- User Profile Card -->
+          <div class="card flex justify-between align-center" style="background-color: #fff; padding: 1.5rem 2rem; border-left: 5px solid var(--primary); flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <span class="badge badge-success" style="font-size:0.75rem; margin-bottom: 0.25rem;">ข้อมูลบัญชีผู้ใช้งาน</span>
+              <h2 id="db-user-name" class="m-b-0">สมชาย รักดี</h2>
+              <p class="m-b-0" style="color: var(--gray-text); font-size: 0.9rem;">
+                รหัสพนักงาน: <span id="db-user-id" style="font-weight:600; color:var(--dark-slate);">0001</span> | 
+                แผนก: <span id="db-user-dept" style="font-weight:600; color:var(--dark-slate);">ฝ่ายผลิต</span> | 
+                ส่วนสูง: <span id="db-user-height" style="font-weight:600; color:var(--dark-slate);">-</span> ซม.
+              </p>
+              <p id="db-user-appointments" class="m-b-0" style="color: var(--gray-text); font-size: 0.85rem; margin-top: 6px; display: none;">
+                📅 <strong>นัดหมายวัดตัวแรกรับ:</strong> <span id="db-user-first-date" style="font-weight:600; color:var(--dark-slate);">-</span>
+                <span id="db-user-location-time-wrapper" style="display: none; margin-left: 12px;"> (สถานที่: <span id="db-user-location" style="font-weight:600; color:var(--dark-slate);">-</span> เวลา: <span id="db-user-time" style="font-weight:600; color:var(--dark-slate);">-</span>)</span>
+                <span id="db-user-final-date-wrapper" style="display: none; margin-left: 12px;"> | <strong>นัดหมายวัดตัวรอบสุดท้าย:</strong> <span id="db-user-final-date" style="font-weight:600; color:var(--dark-slate);">-</span></span>
+              </p>
+            </div>
+            <button id="dashboard-logout-btn" class="btn btn-secondary btn-sm">ออกจากระบบ</button>
+          </div>
+
+          <!-- Encouragement Alerts & Warning Messages -->
+          <div id="db-encourage-box" class="alert alert-info" style="display: none;"></div>
+
+          <!-- Dynamic Metrics Grid -->
+          <div class="grid-4" style="margin-bottom: 2rem;">
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #e0f2fe; color: #0284c7;"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
+              <div class="stat-info">
+                <span class="stat-label">น้ำหนักปัจจุบัน</span>
+                <span id="db-weight-current" class="stat-value">-</span>
+                <span id="db-weight-diff" class="stat-change">-</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #d1fae5; color: #059669;"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+              <div class="stat-info">
+                <span class="stat-label">ค่า BMI ปัจจุบัน</span>
+                <span id="db-bmi-current" class="stat-value">-</span>
+                <span id="db-bmi-diff" class="stat-change">-</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #fce7f3; color: #db2777;"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><circle cx="12" cy="12" r="2"/></svg></div>
+              <div class="stat-info">
+                <span class="stat-label">รอบเอวล่าสุด</span>
+                <span id="db-waist-current" class="stat-value">-</span>
+                <span id="db-waist-diff" class="stat-change">-</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #f3e8ff; color: #7c3aed;"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div class="stat-info">
+                <span class="stat-label">รอบสะโพกล่าสุด</span>
+                <span id="db-hip-current" class="stat-value">-</span>
+                <span style="font-size:0.7rem; color:var(--gray-text);">ดัชนีสะโพกภาพรวม</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Unified Main Line Chart Card -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3>กราฟวิเคราะห์ความก้าวหน้า 90 วัน</h3>
+                <p class="subtitle m-b-0" style="font-size:0.8rem;">รวมดัชนี BMI น้ำหนักตัว รอบเอว และรอบสะโพกไว้ในที่เดียว</p>
+              </div>
+              
+              <!-- Checkboxes to show/hide lines dynamically -->
+              <div class="chart-controls">
+                <label class="control-checkbox c-bmi active">
+                  <input type="checkbox" id="chk-bmi" checked> แสดงผล BMI (แกนขวา)
+                </label>
+                <label class="control-checkbox c-weight active">
+                  <input type="checkbox" id="chk-weight" checked> น้ำหนัก กก. (แกนซ้าย)
+                </label>
+                <label class="control-checkbox c-waist active">
+                  <input type="checkbox" id="chk-waist" checked> รอบเอว นิ้ว (แกนซ้าย)
+                </label>
+                <label class="control-checkbox c-hip active">
+                  <input type="checkbox" id="chk-hip" checked> รอบสะโพก นิ้ว (แกนซ้าย)
+                </label>
+              </div>
+            </div>
+            
+            <div style="height: 380px; position: relative; width: 100%;">
+              <canvas id="employeeCombinedChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Weekly Comparison Tool -->
+          <div class="card">
+            <h3>เปรียบเทียบผลย้อนหลังรายรอบรายสัปดาห์</h3>
+            <p class="subtitle" style="font-size: 0.85rem; margin-bottom: 1rem;">เลือกสัปดาห์ที่ต้องการเพื่อคำนวณและเปรียบเทียบส่วนต่างทางสถิติและเป้าหมาย</p>
+            
+            <div class="flex gap-4" style="align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+              <div class="flex align-center gap-2">
+                <label for="comp-week-1" class="m-b-0">เปรียบเทียบ</label>
+                <select id="comp-week-1" style="width: 140px; padding: 0.5rem 1rem;">
+                  <!-- Dynamically populated options -->
+                </select>
+              </div>
+              <div class="flex align-center gap-2">
+                <label for="comp-week-2" class="m-b-0">เทียบกับ</label>
+                <select id="comp-week-2" style="width: 140px; padding: 0.5rem 1rem;">
+                  <!-- Dynamically populated options -->
+                </select>
+              </div>
+            </div>
+
+            <!-- Dynamic Comparison Cards Wrapper -->
+            <div id="comparison-result">
+              <!-- Rendered dynamically via App JS -->
+            </div>
+          </div>
+          
+          <!-- Static Quick Link to Protein Calculator at bottom of employee dashboard -->
+          <div class="protein-calculator-box">
+            <div>
+              <h4 style="color: var(--primary-dark); font-weight:700; margin-bottom: 0.25rem;">เครื่องคำนวณปริมาณโปรตีนประจำวัน</h4>
+              <p class="m-b-0" style="font-size: 0.8rem; color: var(--gray-text);">คุณสามารถเข้าตรวจสอบว่าน้ำหนักเท่านี้ควรทานโปรตีนกี่กรัมต่อวันได้ตลอดระยะเวลาโครงการ</p>
+            </div>
+            <a href="https://hdmall.co.th/health-tools/protein-calculator.html" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm protein-link">เข้าคำนวณโปรตีน ➔</a>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------- -->
+      <!-- PAGE 5: ADMIN DASHBOARD PANEL -->
+      <!-- ---------------------------------------------------- -->
+      <section id="admin-page" class="page">
+        <h1>แผงควบคุมระบบการประเมินและการจัดการ (แอดมิน)</h1>
+        <p class="subtitle">ระบบตั้งค่าวันที่โครงการ คัดลอกข้อมูลจาก Excel และดูกราฟสรุปรายงานความก้าวหน้าสำหรับส่งผู้บริหาร</p>
+
+        <!-- Admin Login Block -->
+        <div id="admin-login-section" class="card" style="max-width: 500px; margin: 0 auto;">
+          <h3 class="text-center" style="margin-bottom: 1.5rem;">ล็อกอินความปลอดภัยสำหรับแอดมิน</h3>
+          <form id="admin-login-form">
+            <div class="form-group">
+              <label for="admin-password-input">รหัสผ่านผู้ดูแลระบบ (Admin Password)</label>
+              <input type="password" id="admin-password-input" placeholder="ระบุรหัสผ่านผู้จัดการ" autocomplete="new-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">เข้าสู่แผงควบคุมแอดมิน</button>
+          </form>
+        </div>
+
+        <!-- Admin Main Panel (Hidden by default) -->
+        <div id="admin-main-section" style="display: none;">
+          
+          <!-- Admin Panel Logout Header -->
+          <div class="card flex justify-between align-center" style="background-color: var(--dark-slate); color: #fff; padding: 1.25rem 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; gap:1rem;">
+            <div>
+              <span class="badge" style="background-color: rgba(255,255,255,0.2); color: #fff; font-size:0.75rem; margin-bottom: 0.25rem;">แอดมินผู้จัดการ</span>
+              <h2 class="m-b-0" style="color: #fff;">แผงควบคุมโครงการ Challenge 90 วัน</h2>
+            </div>
+            <button id="admin-logout-btn" class="btn btn-secondary btn-sm" style="background-color: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">ออกจากระบบแอดมิน</button>
+          </div>
+
+          <!-- Late Submissions Warnings Block (Calculated on Thu/Fri) -->
+          <div id="admin-late-submission-container"></div>
+
+          <!-- Core Configuration & Settings Grid -->
+          <div class="grid-2">
+            <!-- 1. Timeline configuration -->
+            <div class="card">
+              <h3>1. ตั้งค่าและควบคุมระยะเวลาโครงการ</h3>
+              <p class="subtitle" style="font-size:0.8rem; margin-bottom: 1rem;">กำหนดวันเริ่มต้น วันสิ้นสุด และเปิด-ปิดการแสดงประกาศอันดับผลการแข่งขัน</p>
+              
+              <form id="admin-settings-form">
+                <div class="grid-2" style="margin-bottom: 1rem;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="admin-config-start-date">วันเริ่มโครงการ (Start Date)</label>
+                    <input type="date" id="admin-config-start-date" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="admin-config-end-date">วันสิ้นสุดโครงการ (End Date)</label>
+                    <input type="date" id="admin-config-end-date" required>
+                  </div>
+                </div>
+                
+                <h4 style="margin-top: 1rem; margin-bottom: 0.5rem; color: var(--dark-slate); font-weight: 700; font-size: 0.85rem;">📅 กำหนดการวันวัดตัวเริ่มต้น (First Measurement Dates)</h4>
+                <div class="grid-2" style="margin-bottom: 0.5rem;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="admin-config-measure-start-a-lpn1">ทีม A วัดเริ่มต้น (LPN1)</label>
+                    <input type="date" id="admin-config-measure-start-a-lpn1" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="admin-config-measure-start-a-lpn2">ทีม A วัดเริ่มต้น (LPN2)</label>
+                    <input type="date" id="admin-config-measure-start-a-lpn2" required>
+                  </div>
+                </div>
+                <div class="grid-2" style="margin-bottom: 1rem;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="admin-config-measure-start-b-lpn1">ทีม B วัดเริ่มต้น (LPN1)</label>
+                    <input type="date" id="admin-config-measure-start-b-lpn1" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="admin-config-measure-start-b-lpn2">ทีม B วัดเริ่มต้น (LPN2)</label>
+                    <input type="date" id="admin-config-measure-start-b-lpn2" required>
+                  </div>
+                </div>
+                
+                <h4 style="margin-top: 1.25rem; margin-bottom: 0.5rem; color: var(--dark-slate); font-weight: 700; font-size: 0.85rem;">📅 กำหนดการวันวัดตัววันสุดท้าย (Final Measurement Dates)</h4>
+                <p class="subtitle" style="font-size:0.75rem; margin-bottom: 0.5rem; margin-top: -0.25rem;">ระบุวันที่เพื่อเปิดให้พนักงานจองคิวตรวจวัดรอบสุดท้ายในหน้าส่งผล</p>
+                <div class="grid-2" style="margin-bottom: 0.5rem;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="admin-config-measure-end-a-lpn1">ทีม A วัดสุดท้าย (LPN1)</label>
+                    <input type="date" id="admin-config-measure-end-a-lpn1">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="admin-config-measure-end-a-lpn2">ทีม A วัดสุดท้าย (LPN2)</label>
+                    <input type="date" id="admin-config-measure-end-a-lpn2">
+                  </div>
+                </div>
+                <div class="grid-2" style="margin-bottom: 1rem;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="admin-config-measure-end-b-lpn1">ทีม B วัดสุดท้าย (LPN1)</label>
+                    <input type="date" id="admin-config-measure-end-b-lpn1">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="admin-config-measure-end-b-lpn2">ทีม B วัดสุดท้าย (LPN2)</label>
+                    <input type="date" id="admin-config-measure-end-b-lpn2">
+                  </div>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                  <label class="flex align-center gap-2" style="cursor: pointer; font-weight: 600; color: var(--dark-slate); font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="admin-config-hide-results" style="width: 18px; height: 18px; cursor: pointer; margin: 0;">
+                    <span>ปิดการแสดงหน้าทำเนียบอันดับ (%BMI) ชั่วคราว (เพื่อตรวจสอบข้อมูลรอบสุดท้าย)</span>
+                  </label>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                  <label class="flex align-center gap-2" style="cursor: pointer; font-weight: 600; color: var(--dark-slate); font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="admin-config-close-registration" style="width: 18px; height: 18px; cursor: pointer; margin: 0;">
+                    <span>ปิดระบบรับสมัครเข้าร่วมโครงการ</span>
+                  </label>
+                </div>
+                
+                <h4 style="margin-top: 1.25rem; margin-bottom: 0.5rem; color: var(--dark-slate); font-weight: 700; font-size: 0.85rem;">🏥 กำหนดข้อความสถานที่และเวลาตรวจวัดเริ่มต้น</h4>
+                <p class="subtitle" style="font-size:0.75rem; margin-bottom: 0.5rem; margin-top: -0.25rem;">ข้อความนี้จะแสดงในใบสมัครและแดชบอร์ดของพนักงานตามสถานที่ที่พนักงานเลือก</p>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                  <label for="admin-config-loc-lpn1">ข้อความสำหรับสถานที่ LPN1</label>
+                  <input type="text" id="admin-config-loc-lpn1" placeholder="เช่น LPN1 ณ ห้อง Old lobby Plant2 เวลา 9.00 - 11.30 น." style="width: 100%; padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                  <label for="admin-config-loc-lpn2">ข้อความสำหรับสถานที่ LPN2</label>
+                  <input type="text" id="admin-config-loc-lpn2" placeholder="เช่น LPN2 ณ ห้อง Locker ชั้น 2 เวลา 13.30 - 15.30 น." style="width: 100%; padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">บันทึกการตั้งค่าโครงการ</button>
+              </form>
+            </div>
+
+            <!-- 2. Sheet API Connection -->
+            <div class="card">
+              <h3>2. กำหนดที่อยู่ Google Sheets Web App</h3>
+              <p class="subtitle" style="font-size:0.8rem; margin-bottom: 1rem;">ระบุ URL ของ Web App หลังจาก Deploy ใน Apps Script เพื่อเปิดใช้งานฐานข้อมูลจริง</p>
+              
+              <form id="api-settings-form">
+                <div class="form-group">
+                  <label for="api-url-input">Web App URL (Apps Script)</label>
+                  <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/.../exec">
+                </div>
+                <div class="flex gap-2">
+                  <button type="submit" class="btn btn-primary">เชื่อมต่อ Google Sheets</button>
+                  <button type="button" onclick="document.getElementById('api-url-input').value=''; localStorage.removeItem('bmi_api_url'); location.reload();" class="btn btn-secondary">ยกเลิก/ใช้โหมดทดสอบ</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Copy-Paste Excel Uploader Block (IMPORTANT for Week 1 & 13) -->
+          <div class="card">
+            <h3>3. นำเข้าข้อมูลผลวัดน้ำหนัก/สัดส่วนพนักงานจาก Excel</h3>
+            <p class="subtitle" style="font-size:0.85rem; margin-bottom: 1rem;">
+              แอดมินนำเข้าข้อมูลวัดผล **สัปดาห์แรก (เริ่มต้น)** และ **สัปดาห์สุดท้าย (สัปดาห์ที่ 13)** ที่นี่ 
+              โดยคัดลอกคอลัมน์ข้อมูลใน Excel แล้วนำมาวางลงในช่องด้านล่าง (คอลัมน์ต้องเรียงลำดับ: 
+              <strong>รหัสพนักงาน [แท็บ] น้ำหนัก [แท็บ] รอบเอว [แท็บ] รอบสะโพก</strong>)
+            </p>
+
+            <div class="flex gap-2 align-center" style="margin-bottom: 1.25rem;">
+              <label for="bulk-week-select" class="m-b-0">เลือกสัปดาห์นำเข้า:</label>
+              <select id="bulk-week-select" style="width: 200px; padding: 0.5rem 1rem;">
+                <option value="1">สัปดาห์ที่ 1 (เริ่มต้น/แอดมินวัด)</option>
+                <option value="13">สัปดาห์ที่ 13 (สัปดาห์สุดท้าย/แอดมินยืนยันผล)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="bulk-copy-paste-area">คัดลอกแถวตารางจาก Excel แล้ววางที่นี่</label>
+              <textarea id="bulk-copy-paste-area" class="copy-paste-area" placeholder="ตัวอย่างรูปแบบการวางข้อมูล:&#10;0001&#9;85.5&#9;38.0&#9;42.0&#10;0002&#9;68.2&#9;32.5&#9;38.5&#10;0003&#9;95.0&#9;40.0&#9;44.0"></textarea>
+            </div>
+            
+            <button type="button" id="admin-bulk-upload-btn" class="btn btn-primary">นำเข้าข้อมูลลงระบบ</button>
+          </div>
+
+          <!-- 4. บันทึกสัดส่วนพนักงานรายบุคคล (ด่วน) -->
+          <div class="card" style="margin-bottom: 2rem;">
+            <h3>4. บันทึก/แก้ไขสัดส่วนพนักงานรายบุคคล (ด่วน)</h3>
+            <p class="subtitle" style="font-size:0.85rem; margin-bottom: 1.25rem;">
+              ค้นหารหัสพนักงานเพื่อบันทึกหรืออัปเดตข้อมูลน้ำหนักตัว, รอบเอว และรอบสะโพกของสัปดาห์ใดสัปดาห์หนึ่ง (สัปดาห์ที่ 1 - 13) ลงชีตโดยตรงทันที
+            </p>
+            
+            <form id="admin-single-entry-form">
+              <div class="grid-4" style="align-items: flex-end; gap: 15px; margin-bottom: 1.25rem;">
+                <div class="form-group" style="margin-bottom:0;">
+                  <label for="admin-single-empid">รหัสพนักงาน</label>
+                  <div class="flex gap-2">
+                    <input type="text" id="admin-single-empid" placeholder="เช่น 0001" style="padding: 0.5rem;" required>
+                    <button type="button" id="admin-single-search-btn" class="btn btn-secondary btn-sm" style="padding: 0.5rem 1rem;">ค้นหา</button>
+                  </div>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label for="admin-single-week">สัปดาห์ที่บันทึก</label>
+                  <select id="admin-single-week" style="padding: 0.5rem; height: 38px;" required>
+                    <option value="1">สัปดาห์ที่ 1 (แรกรับ)</option>
+                    <option value="2">สัปดาห์ที่ 2</option>
+                    <option value="3">สัปดาห์ที่ 3</option>
+                    <option value="4">สัปดาห์ที่ 4</option>
+                    <option value="5">สัปดาห์ที่ 5</option>
+                    <option value="6">สัปดาห์ที่ 6</option>
+                    <option value="7">สัปดาห์ที่ 7</option>
+                    <option value="8">สัปดาห์ที่ 8</option>
+                    <option value="9">สัปดาห์ที่ 9</option>
+                    <option value="10">สัปดาห์ที่ 10</option>
+                    <option value="11">สัปดาห์ที่ 11</option>
+                    <option value="12">สัปดาห์ที่ 12</option>
+                    <option value="13">สัปดาห์ที่ 13 (สุดท้าย)</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0; grid-column: span 2;">
+                  <div style="font-size:0.85rem; color:var(--gray-text); margin-bottom:4px;">ชื่อพนักงาน: <span id="admin-single-empname" style="font-weight:700; color:var(--dark-slate);">-</span></div>
+                  <div style="font-size:0.85rem; color:var(--gray-text);">แผนก/ฝ่าย: <span id="admin-single-empdept" style="font-weight:600; color:var(--dark-slate);">-</span></div>
+                </div>
+              </div>
+              
+              <div class="grid-3">
+                <div class="form-group">
+                  <label for="admin-single-weight">น้ำหนักตัว (กก.) *</label>
+                  <input type="number" id="admin-single-weight" placeholder="เช่น 75.5" step="0.1" required>
+                </div>
+                <div class="form-group">
+                  <label for="admin-single-waist">รอบเอว (นิ้ว) *</label>
+                  <input type="number" id="admin-single-waist" placeholder="เช่น 32" step="0.1" required>
+                </div>
+                <div class="form-group">
+                  <label for="admin-single-hip">รอบสะโพก (นิ้ว) *</label>
+                  <input type="number" id="admin-single-hip" placeholder="เช่น 38" step="0.1" required>
+                </div>
+              </div>
+              
+              <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" style="margin-right:6px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                บันทึกสัดส่วนพนักงานรายบุคคล
+              </button>
+            </form>
+          </div>
+
+          <!-- Dynamic Questions Management Panel -->
+          <div class="card">
+            <h3>4. จัดการคำถามแบบประเมินโครงการ</h3>
+            <p class="subtitle" style="font-size:0.8rem; margin-bottom: 1.5rem;">กำหนดหัวข้อคำถามสำหรับใช้คัดกรองพฤติกรรมแรกรับ และคำถามติดตามผลรายสัปดาห์</p>
+            
+            <!-- Survey Manager Tab Buttons -->
+            <div class="toggle-group" style="margin-bottom: 1.5rem; max-width: 500px;">
+              <button class="toggle-btn active" id="survey-tab-initial" onclick="switchSurveyManagerTab('initial')">แบบประเมินแรกรับ (Initial)</button>
+              <button class="toggle-btn" id="survey-tab-weekly" onclick="switchSurveyManagerTab('weekly')">แบบประเมินรายสัปดาห์ (Weekly)</button>
+            </div>
+            
+            <!-- Question Editor Form -->
+            <div id="survey-q-editor-card" style="background-color: #f8fafc; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem; margin-bottom: 1.5rem;">
+              <h4 id="survey-form-title" style="margin-bottom: 1rem; color: var(--primary-dark); font-weight: 700;">+ เพิ่มคำถามใหม่</h4>
+              <form id="survey-question-form" onsubmit="saveSurveyQuestion(event)">
+                <input type="hidden" id="survey-q-id">
+                
+                <div class="form-group">
+                  <label for="survey-q-text">ข้อความคำถาม *</label>
+                  <input type="text" id="survey-q-text" placeholder="ระบุข้อความคำถาม เช่น กินอาหารครบ 5 หมู่..." required>
+                </div>
+                
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label for="survey-q-type">ประเภทการตอบคำถาม *</label>
+                    <select id="survey-q-type" onchange="handleSurveyTypeChange(this.value)" required>
+                      <option value="boolean">ใช่ / ไม่ใช่ (Yes/No)</option>
+                      <option value="select">หลายตัวเลือก (Choice)</option>
+                      <option value="scale_1_10">ระดับคะแนน 1-10 (Scale 1-10)</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group" id="survey-q-section-group">
+                    <label for="survey-q-section">ส่วนของแบบประเมินแรกรับ</label>
+                    <select id="survey-q-section">
+                      <option value="lifestyle">พฤติกรรมเดิม (lifestyle)</option>
+                      <option value="goal">เป้าหมายในโครงการ (goal)</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="form-group" id="survey-q-options-group" style="display: none;">
+                  <label for="survey-q-options">ตัวเลือกคำตอบ (คั่นด้วยเครื่องหมายจุลภาค ,) *</label>
+                  <input type="text" id="survey-q-options" placeholder="เช่น เป็นประจำ, 2-3 วันครั้ง, ไม่เลย">
+                </div>
+                
+                <div class="flex gap-2">
+                  <button type="submit" class="btn btn-primary btn-sm" id="survey-q-save-btn">บันทึกคำถาม</button>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="resetSurveyQuestionForm()">ยกเลิก</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- List of current questions managed -->
+            <div id="admin-questions-list" class="q-manager-list">
+              <!-- Dynamically rendered questions items -->
+            </div>
+          </div>
+
+          <!-- Executive Reports Dashboards -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3>5. สรุปรายงานผลโครงการสำหรับเสนอผู้บริหาร</h3>
+                <p class="subtitle m-b-0" style="font-size:0.8rem;">กราฟภาพรวมโครงการ สัดส่วนเฉลี่ยความสำเร็จรายสัปดาห์ และเปรียบเทียบผล</p>
+              </div>
+              
+              <div class="flex gap-2 flex-wrap">
+                <!-- Group Filters -->
+                <select id="admin-exec-dept" style="width: 170px; padding: 0.5rem;">
+                  <option value="all">ทุกแผนก (ภาพรวม)</option>
+                </select>
+                <select id="admin-exec-week-1" style="width: 140px; padding: 0.5rem;">
+                  <!-- weeks -->
+                </select>
+                <select id="admin-exec-week-2" style="width: 140px; padding: 0.5rem;">
+                  <!-- weeks -->
+                </select>
+              </div>
+            </div>
+
+            <!-- Dashboard Statistics Quick Cards -->
+            <div class="grid-3" style="margin-bottom: 2rem;">
+              <div class="stat-card">
+                <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <div class="stat-info">
+                  <span class="stat-label">พนักงานลงทะเบียนทั้งหมด</span>
+                  <span id="admin-stat-total" class="stat-value">0</span>
+                  <span class="stat-change" style="color:var(--gray-text);">คน</span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon" style="background-color: var(--primary-light); color: var(--primary-dark);"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+                <div class="stat-info">
+                  <span class="stat-label">เฉลี่ย % น้ำหนัก/BMI ลดลงสะสม</span>
+                  <span id="admin-stat-avg-loss" class="stat-value">0%</span>
+                  <span class="stat-change good">คำนวณจากน้ำหนักแรกเริ่ม</span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon" style="background-color: var(--primary-light); color: var(--primary-dark);"><svg viewBox="0 0 24 24"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                <div class="stat-info">
+                  <span class="stat-label">น้ำหนักรวมที่ลดไปแล้ว</span>
+                  <span id="admin-stat-total-lost" class="stat-value">0 กก.</span>
+                  <span class="stat-change good">จากพนักงานที่เข้าร่วมทุกคน</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Comparison Week Cards for Admin -->
+            <div id="admin-comp-stat-results" style="margin-bottom: 2rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem;">
+              <!-- Comparison values -->
+            </div>
+
+            <!-- Executive Graphs Grid -->
+            <div class="grid-2">
+              <div class="card" style="margin-bottom: 0;">
+                <h4 style="margin-bottom: 1rem;">สัดส่วนพนักงานเข้าร่วมแยกตามแผนก (Pie Chart)</h4>
+                <div style="height: 300px; position: relative;">
+                  <canvas id="adminDeptPieChart"></canvas>
+                </div>
+              </div>
+
+              <div class="card" style="margin-bottom: 0;">
+                <h4 style="margin-bottom: 1rem;">ความคืบหน้าภาพรวมรายสัปดาห์ (% การลดลงเฉลี่ยสะสม)</h4>
+                <div style="height: 300px; position: relative;">
+                  <canvas id="adminWeeklyAvgChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Correlation Trend Card -->
+          <div class="card">
+            <h3>6. ตารางวิเคราะห์ความสัมพันธ์ระหว่างการปฏิบัติพฤติกรรมกับการลด BMI (Correlation Trend)</h3>
+            <p class="subtitle" style="font-size:0.85rem; margin-bottom: 1rem;">
+              วิเคราะห์อัตราการลด BMI สำเร็จ (ลดสะสมตั้งแต่ 3% ขึ้นไป) เปรียบเทียบตามความถี่ในการรายงานพฤติกรรมแต่ละด้านของพนักงาน
+            </p>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>พฤติกรรมสุขภาพที่บันทึกรายสัปดาห์</th>
+                    <th>อัตราสำเร็จเมื่อปฏิบัติเป็นประจำ (>= 50% ของสัปดาห์)</th>
+                    <th>อัตราสำเร็จเมื่อไม่ค่อยปฏิบัติ (< 50% ของสัปดาห์)</th>
+                    <th>ผลกระทบของการปฏิบัติ (ต่างกัน)</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-correlation-table-body">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Admin Participants Management Table -->
+          <div class="card">
+            <h3>7. ข้อมูลสถานะและรายชื่อพนักงานทั้งหมด</h3>
+            <p class="subtitle">แสดงผลการติดตามความคืบหน้าส่วนบุคคล คลิกเพื่อดูกราฟของพนักงานแต่ละคนแยกกันได้ทันที</p>
+            
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>รหัสพนักงาน</th>
+                    <th>ชื่อ-นามสกุล</th>
+                    <th>แผนก</th>
+                    <th>ส่วนสูง</th>
+                    <th>น้ำหนักเริ่มต้น ➔ ปัจจุบัน</th>
+                    <th>ค่า BMI เริ่มต้น ➔ ปัจจุบัน</th>
+                    <th>รายละเอียดรายบุคคล</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-participants-table">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ---------------------------------------------------- -->
+  <!-- MODAL COMPONENT (Individual charts popup inside Admin) -->
+  <!-- ---------------------------------------------------- -->
+  <div id="details-modal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeDetailsModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h3 id="modal-user-title" style="margin-right: 2rem;">รายละเอียดข้อมูลสุขภาพ</h3>
+      <p class="subtitle" style="font-size: 0.85rem; margin-bottom: 1.5rem;">กราฟเส้นแสดงการเปรียบเทียบน้ำหนัก ค่า BMI และสัดส่วนสะโพก/เอว รายสัปดาห์</p>
+      
+      <div style="height: 350px; position: relative; width: 100%;">
+        <canvas id="modalIndividualChart"></canvas>
+      </div>
+      
+      <div style="margin-top: 1.5rem;" class="flex justify-between">
+        <button class="btn btn-secondary" onclick="closeDetailsModal()">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+  <!-- Registration Summary Modal (Self-evaluation Analysis Popup) -->
+  <div id="reg-summary-modal" class="modal">
+    <div class="modal-content" style="max-width: 600px; max-height: 85vh; overflow-y: auto; padding: 2rem; border-radius: var(--radius-md);">
+      <button class="modal-close" id="reg-modal-close-icon">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h3 style="color: var(--primary-dark); font-weight: 800; border-bottom: 2.5px solid var(--primary-light); padding-bottom: 0.5rem; margin-top:0; margin-bottom: 1.25rem;">
+        📊 ผลการประเมินพฤติกรรมและเป้าหมายสุขภาพ
+      </h3>
+      
+      <div id="reg-summary-health" style="margin-bottom: 1.5rem;">
+        <!-- Loaded dynamically from app.js -->
+      </div>
+      
+      <div id="reg-summary-behaviors" style="margin-bottom: 1.5rem;">
+        <!-- Loaded dynamically from app.js -->
+      </div>
+      
+      <div id="reg-summary-achievability" style="margin-bottom: 1.75rem;">
+        <!-- Loaded dynamically from app.js -->
+      </div>
+      
+      <div class="flex gap-4 justify-end" style="border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
+        <button id="reg-modal-edit-btn" class="btn btn-secondary">ย้อนกลับไปแก้ไข</button>
+        <button id="reg-modal-confirm-btn" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" style="margin-right:6px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          ยืนยันสมัครเข้าร่วมโครงการ
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- App Main Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>

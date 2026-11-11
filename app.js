@@ -3664,6 +3664,200 @@ async function handleBulkUploadAction() {
 }
 
 // ----------------------------------------------------
+// AUTO-FILL FINAL ROUND (LOCF) FOR NON-ATTENDEES
+// ----------------------------------------------------
+let CURRENT_AUTOFILL_CANDIDATES = [];
+let CURRENT_AUTOFILL_TARGET_WEEK = 13;
+
+function openAutofillFinalModal() {
+  const timeline = getTimelineMetrics();
+  const maxWeeks = timeline.maxWeeks || 13;
+  CURRENT_AUTOFILL_TARGET_WEEK = maxWeeks;
+  
+  const targetWeekSpan = document.getElementById("autofill-target-week-num");
+  if (targetWeekSpan) targetWeekSpan.innerText = maxWeeks;
+  
+  const measuredBadge = document.getElementById("autofill-stat-measured");
+  const candidatesBadge = document.getElementById("autofill-stat-candidates");
+  const nodataBadge = document.getElementById("autofill-stat-nodata");
+  const tableBody = document.getElementById("autofill-table-body");
+  const confirmBtn = document.getElementById("autofill-confirm-btn");
+  
+  let measuredCount = 0;
+  let noDataCount = 0;
+  const candidates = [];
+  
+  STATE.registrations.forEach(user => {
+    const empId = String(user.EmployeeID).trim();
+    const userSubs = STATE.weeklyData.filter(d => String(d.EmployeeID).trim() === empId);
+    
+    // Check if this user already has an entry for the final week with valid weight > 0
+    const finalRecord = userSubs.find(s => parseInt(s.Week) === maxWeeks && parseFloat(s.Weight) > 0);
+    if (finalRecord) {
+      measuredCount++;
+      return;
+    }
+    
+    // Find latest submission where Week < maxWeeks and Weight > 0
+    let latestSub = null;
+    let latestWeekNum = -1;
+    
+    userSubs.forEach(s => {
+      const w = parseInt(s.Week);
+      const wt = parseFloat(s.Weight);
+      if (w < maxWeeks && !isNaN(wt) && wt > 0) {
+        if (w > latestWeekNum) {
+          latestWeekNum = w;
+          latestSub = s;
+        }
+      }
+    });
+    
+    if (latestSub) {
+      candidates.push({
+        employeeId: empId,
+        name: `${user.FirstName || ''} ${user.LastName || ''}`.trim() || user.Name || empId,
+        department: user.Department || "-",
+        fromWeek: latestWeekNum,
+        weight: parseFloat(latestSub.Weight),
+        waist: parseFloat(latestSub.Waist) || 0,
+        hip: parseFloat(latestSub.Hip) || 0
+      });
+    } else {
+      noDataCount++;
+    }
+  });
+  
+  CURRENT_AUTOFILL_CANDIDATES = candidates;
+  
+  if (measuredBadge) measuredBadge.innerText = `${measuredCount} คน`;
+  if (candidatesBadge) candidatesBadge.innerText = `${candidates.length} คน`;
+  if (nodataBadge) nodataBadge.innerText = `${noDataCount} คน`;
+  
+  if (tableBody) {
+    tableBody.innerHTML = "";
+    if (candidates.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="7" class="text-center gray-text" style="padding: 2.5rem 1rem; color: #64748b; font-weight: 600;">
+        🎉 พนักงานทุกคนมีผลสัปดาห์สุดท้าย (สัปดาห์ที่ ${maxWeeks}) ครบถ้วนแล้ว หรือไม่มีข้อมูลประวัติเดิม
+      </td></tr>`;
+      if (confirmBtn) confirmBtn.disabled = true;
+    } else {
+      candidates.forEach(c => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="padding: 8px 12px; font-weight: 700; color: #0284c7;">${c.employeeId}</td>
+          <td style="padding: 8px 12px;">${c.name}</td>
+          <td style="padding: 8px 12px; color: #64748b;">${c.department}</td>
+          <td style="padding: 8px 12px; text-align: center;">
+            <span class="badge" style="background-color: #e0f2fe; color: #0369a1; font-weight: 700; padding: 2px 8px;">
+              สัปดาห์ที่ ${c.fromWeek}
+            </span>
+          </td>
+          <td style="padding: 8px 12px; text-align: right; font-weight: 600;">${c.weight.toFixed(1)}</td>
+          <td style="padding: 8px 12px; text-align: right;">${c.waist ? c.waist.toFixed(1) : '-'}</td>
+          <td style="padding: 8px 12px; text-align: right;">${c.hip ? c.hip.toFixed(1) : '-'}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+      if (confirmBtn) confirmBtn.disabled = false;
+    }
+  }
+  
+  const modal = document.getElementById("autofill-final-modal");
+  if (modal) modal.classList.add("active");
+}
+
+function closeAutofillFinalModal() {
+  const modal = document.getElementById("autofill-final-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+async function executeAutofillFinalWeek() {
+  if (!CURRENT_AUTOFILL_CANDIDATES || CURRENT_AUTOFILL_CANDIDATES.length === 0) {
+    alert("ไม่มีรายการพนักงานที่จะดึงข้อมูล");
+    return;
+  }
+  
+  const count = CURRENT_AUTOFILL_CANDIDATES.length;
+  const targetWeek = CURRENT_AUTOFILL_TARGET_WEEK;
+  
+  if (!confirm(`ยืนยันการดึงผลรอบล่าสุดมาเป็นผลสัปดาห์ที่ ${targetWeek} จำนวน ${count} คน ใช่หรือไม่?`)) {
+    return;
+  }
+  
+  toggleLoader(true);
+  
+  const rows = CURRENT_AUTOFILL_CANDIDATES.map(c => ({
+    employeeId: c.employeeId,
+    week: targetWeek,
+    weight: c.weight,
+    waist: c.waist,
+    hip: c.hip
+  }));
+  
+  const payload = {
+    action: "adminBulkUpload",
+    week: targetWeek,
+    rows: rows
+  };
+  
+  if (STATE.apiSettings.isMockMode) {
+    let added = 0;
+    let updated = 0;
+    
+    rows.forEach(row => {
+      const matchIdx = STATE.weeklyData.findIndex(d => String(d.EmployeeID).trim() === row.employeeId && parseInt(d.Week) === targetWeek);
+      if (matchIdx !== -1) {
+        STATE.weeklyData[matchIdx].Weight = row.weight;
+        STATE.weeklyData[matchIdx].Waist = row.waist;
+        STATE.weeklyData[matchIdx].Hip = row.hip;
+        STATE.weeklyData[matchIdx].SubmitDate = new Date().toISOString().replace('T', ' ').substring(0, 19);
+        updated++;
+      } else {
+        STATE.weeklyData.push({
+          EmployeeID: row.employeeId,
+          Week: targetWeek,
+          Weight: row.weight,
+          Waist: row.waist,
+          Hip: row.hip,
+          AnswersJson: "[]",
+          SubmitDate: new Date().toISOString().replace('T', ' ').substring(0, 19)
+        });
+        added++;
+      }
+    });
+    
+    saveMockState();
+    toggleLoader(false);
+    closeAutofillFinalModal();
+    alert(`ดึงผลล่าสุดเป็นผลสัปดาห์ที่ ${targetWeek} ให้พนักงาน ${count} คนเรียบร้อยแล้วค่ะ!`);
+    renderAdminPanel();
+    renderLeaderboard();
+  } else {
+    try {
+      const res = await callApiJSONP("adminBulkUploadJSONP", payload);
+      toggleLoader(false);
+      if (res.success) {
+        closeAutofillFinalModal();
+        alert(res.message || `ดึงผลล่าสุดเป็นผลสัปดาห์ที่ ${targetWeek} ให้พนักงาน ${count} คนเรียบร้อยแล้วค่ะ!`);
+        await loadData();
+        renderAdminPanel();
+        renderLeaderboard();
+      } else {
+        alert("เกิดข้อผิดพลาดในการบันทึก: " + res.error);
+      }
+    } catch (err) {
+      toggleLoader(false);
+      alert("ไม่สามารถสื่อสารกับเครือข่ายได้: " + err.message);
+    }
+  }
+}
+
+window.openAutofillFinalModal = openAutofillFinalModal;
+window.closeAutofillFinalModal = closeAutofillFinalModal;
+window.executeAutofillFinalWeek = executeAutofillFinalWeek;
+
+// ----------------------------------------------------
 // EXECUTIVE REPORT CHARTS & COMPARISONS FOR ADMIN
 // ----------------------------------------------------
 
@@ -4145,6 +4339,9 @@ function setupEventListeners() {
   
   const bulkUploadBtn = document.getElementById("admin-bulk-upload-btn");
   if(bulkUploadBtn) bulkUploadBtn.addEventListener("click", handleBulkUploadAction);
+  
+  const autofillFinalBtn = document.getElementById("admin-autofill-final-btn");
+  if(autofillFinalBtn) autofillFinalBtn.addEventListener("click", openAutofillFinalModal);
   
   const execDept = document.getElementById("admin-exec-dept");
   if(execDept) execDept.addEventListener("change", renderExecutiveReportsData);

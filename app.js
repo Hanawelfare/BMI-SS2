@@ -1737,70 +1737,28 @@ async function handleFinalBookingSubmit(e) {
 // PAGE 3: LEADERBOARD LOGIC
 // ----------------------------------------------------
 
-function renderLeaderboard() {
-  const annBox = document.getElementById("leaderboard-announcement-box");
-  const mainCard = document.getElementById("leaderboard-main-card");
-  
-  if (STATE.project.hideFinalResults) {
-    if (annBox) annBox.style.display = "flex";
-    if (mainCard) mainCard.style.display = "none";
-    return;
-  } else {
-    if (annBox) annBox.style.display = "none";
-    if (mainCard) mainCard.style.display = "block";
-  }
-
-  const container = document.getElementById("leaderboard-body");
-  const deptFilter = document.getElementById("leader-dept-filter");
-  const searchInput = document.getElementById("leader-search");
-  
-  // Clear table
-  container.innerHTML = "";
-  
-  // Collect all registered employees
+function getLeaderboardRankedData() {
   const participants = [];
   
-  // Fill department filter list dynamically
-  const departments = new Set(STATE.registrations.map(r => r.Department));
-  const currentDeptFilterVal = deptFilter.value;
-  deptFilter.innerHTML = '<option value="all">ทุกแผนก (ทั้งหมด)</option>';
-  departments.forEach(dept => {
-    if(dept) {
-      const opt = document.createElement("option");
-      opt.value = dept;
-      opt.innerText = dept;
-      deptFilter.appendChild(opt);
-    }
-  });
-  deptFilter.value = currentDeptFilterVal; // Keep previous filter selection if any
-  
-  // Loop through each registered employee to compute % BMI reduction
   STATE.registrations.forEach(user => {
-    // Get all submissions for this user
-    const userSubmissions = STATE.weeklyData.filter(d => d.EmployeeID === user.EmployeeID);
-    if (userSubmissions.length === 0) return; // No initial data from admin yet
+    const userSubmissions = STATE.weeklyData.filter(d => String(d.EmployeeID).trim() === String(user.EmployeeID).trim());
+    if (userSubmissions.length === 0) return;
     
-    // Find initial (Week 1)
     const initialRecord = userSubmissions.find(s => parseInt(s.Week) === 1);
-    if (!initialRecord) return; // Wait for admin to fill initial Week 1
+    if (!initialRecord) return;
     
     const initialWeight = parseFloat(initialRecord.Weight);
     const heightMeters = parseFloat(user.Height) / 100;
     const initialBMI = parseFloat((initialWeight / (heightMeters * heightMeters)).toFixed(1));
     
-    // Only include competitors on the leaderboard (Initial BMI >= 23.0)
     if (initialBMI < 23.0) return;
     
-    // Check if the user is using weight loss medication/pens (init_goal_3 === "ใช่")
-    // To make it fully robust for Admin overrides, the user is only excluded if BOTH the column and JSON value are "ใช่".
-    // If either is edited to "ไม่ใช่" (or anything else), we treat them as eligible.
     const assessment = getParsedAssessment(user);
     const colVal = (user.init_goal_3 || "").toString().trim();
     const jsonVal = (assessment.init_goal_3 || "").toString().trim();
     let isUsingMeds = (colVal === "ใช่" && jsonVal === "ใช่");
     if (isUsingMeds) return;
     
-    // Find latest submission week
     let latestWeek = 1;
     let latestWeight = initialWeight;
     let latestWaist = parseFloat(initialRecord.Waist);
@@ -1819,14 +1777,12 @@ function renderLeaderboard() {
     });
     
     const latestBMI = latestWeight / (heightMeters * heightMeters);
-    
-    // Compute % BMI reduction (equal to % weight reduction)
     const bmiReductionPercent = ((initialBMI - latestBMI) / initialBMI) * 100;
     const weightLostKg = initialWeight - latestWeight;
     
     participants.push({
       id: user.EmployeeID,
-      name: `${user.FirstName} ${user.LastName}`,
+      name: `${user.FirstName} ${user.LastName}`.trim(),
       department: user.Department,
       height: user.Height,
       initialWeight,
@@ -1840,7 +1796,6 @@ function renderLeaderboard() {
     });
   });
   
-  // Sort participants by % BMI reduction descending. If equal, sort by latestSubmitDate ascending (earlier submission gets higher rank)
   participants.sort((a, b) => {
     if (b.bmiReductionPercent !== a.bmiReductionPercent) {
       return b.bmiReductionPercent - a.bmiReductionPercent;
@@ -1851,6 +1806,81 @@ function renderLeaderboard() {
     };
     return parseDate(a.latestSubmitDate) - parseDate(b.latestSubmitDate);
   });
+  
+  return participants;
+}
+
+function exportLeaderboardCSV() {
+  const participants = getLeaderboardRankedData();
+  if (participants.length === 0) {
+    alert("ไม่พบข้อมูลผู้เข้าร่วมแข่งขันในทำเนียบอันดับ");
+    return;
+  }
+  
+  let csvContent = "\uFEFFอันดับ,รหัสพนักงาน,ชื่อ-นามสกุล,แผนก,ส่วนสูง (ซม.),น้ำหนักเริ่มต้น (กก.),น้ำหนักสุดท้าย (กก.),น้ำหนักลดลง (กก.),BMI แรกรับ,BMI ล่าสุด,%BMI ที่ลดลง,สัปดาห์ล่าสุดที่ส่งผล\n";
+  participants.forEach((p, idx) => {
+    csvContent += `"${idx + 1}","${p.id}","${p.name}","${p.department}","${p.height}","${p.initialWeight.toFixed(1)}","${p.latestWeight.toFixed(1)}","${p.weightLostKg.toFixed(1)}","${p.initialBMI.toFixed(1)}","${p.latestBMI.toFixed(2)}","${p.bmiReductionPercent.toFixed(2)}%","สัปดาห์ที่ ${p.latestWeek}"\n`;
+  });
+  
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `สรุปทำเนียบอันดับ_BMI_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+window.exportLeaderboardCSV = exportLeaderboardCSV;
+window.getLeaderboardRankedData = getLeaderboardRankedData;
+
+function renderLeaderboard() {
+  const annBox = document.getElementById("leaderboard-announcement-box");
+  const mainCard = document.getElementById("leaderboard-main-card");
+  const adminBanner = document.getElementById("leaderboard-admin-preview-banner");
+  
+  if (STATE.project.hideFinalResults) {
+    if (STATE.adminAuthenticated) {
+      // Admin privilege: Allow admin to preview rankings even when hidden
+      if (annBox) annBox.style.display = "none";
+      if (adminBanner) adminBanner.style.display = "block";
+      if (mainCard) mainCard.style.display = "block";
+    } else {
+      // Regular employees: Hide table and show maintenance announcement
+      if (annBox) annBox.style.display = "flex";
+      if (adminBanner) adminBanner.style.display = "none";
+      if (mainCard) mainCard.style.display = "none";
+      return;
+    }
+  } else {
+    // Normal public display
+    if (annBox) annBox.style.display = "none";
+    if (adminBanner) adminBanner.style.display = "none";
+    if (mainCard) mainCard.style.display = "block";
+  }
+
+  const container = document.getElementById("leaderboard-body");
+  const deptFilter = document.getElementById("leader-dept-filter");
+  const searchInput = document.getElementById("leader-search");
+  
+  // Clear table
+  container.innerHTML = "";
+  
+  // Fill department filter list dynamically
+  const departments = new Set(STATE.registrations.map(r => r.Department));
+  const currentDeptFilterVal = deptFilter.value;
+  deptFilter.innerHTML = '<option value="all">ทุกแผนก (ทั้งหมด)</option>';
+  departments.forEach(dept => {
+    if(dept) {
+      const opt = document.createElement("option");
+      opt.value = dept;
+      opt.innerText = dept;
+      deptFilter.appendChild(opt);
+    }
+  });
+  deptFilter.value = currentDeptFilterVal; // Keep previous filter selection if any
+  
+  const participants = getLeaderboardRankedData();
   
   // Filter participants
   const searchVal = searchInput.value.toLowerCase().trim();
